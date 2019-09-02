@@ -1,6 +1,7 @@
 
 # include "../../include/messList.h"
 
+GtkWidget *create_window(void); //创建主窗口
 /* 创建一个"信息"列表 */
 GtkWidget *create_list(void)
 {

@@ -1,5 +1,5 @@
 #include "include/chatWindow.h"
-
+#include "include/messList.h"
 #include <gtk/gtk.h>
 
 /**************************************************/

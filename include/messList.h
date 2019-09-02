@@ -3,5 +3,5 @@
 
 #include <stdio.h>
 #include <gtk/gtk.h>
-GtkWidget *create_window(void); //创建主窗口
+GtkWidget *create_list(void);
 #endif

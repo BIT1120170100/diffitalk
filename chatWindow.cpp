@@ -293,9 +293,9 @@ void createChatWindow(int argv,char *args[])
         //second-left
         //second-left-1-information\
         //需要添加别的函数
-       // scrolled_window = create_list();
-       // gtk_widget_set_size_request(scrolled_window, 400, 250);
-        //gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
+       scrolled_window = create_list();
+       gtk_widget_set_size_request(scrolled_window, 400, 250);
+       gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
 
         //second-left-2-function
         box = gtk_hbox_new(FALSE, 0);
