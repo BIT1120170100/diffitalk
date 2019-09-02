@@ -1,4 +1,5 @@
 # include "../../include/timeFunction.h"
+# include"stdio.h"
 /**************************************************/
 /*名称：timeFunction
 /*描述：时间相关的函数
