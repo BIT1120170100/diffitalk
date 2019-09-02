@@ -1,4 +1,5 @@
 #include "include/chatWindow.h"
+#include "include/messList.h"
 /**************************************************/
 /*名称： chatWindow
 /*描述：单独聊天
@@ -40,9 +41,8 @@ void change_background(GtkWidget *widget, int w, int h, const gchar *path)
     GdkPixmap *pixmap = NULL;
     gdk_pixbuf_render_pixmap_and_mask(dst, &pixmap, NULL, 100);
 
-    // 通过pixmap给widget设置一张背景图，最后一个参数必须为: FASL
-    //undo
-    //gdk_window_set_back_pixmap(widget->window, pixmap, FALSE);
+    // 通过pixmap给widget设置一张背景图，最后一个参数必须为: FASLE
+    gdk_window_set_back_pixmap(widget->window, pixmap, FALSE);
 
     g_object_unref(src);
     g_object_unref(dst);
@@ -64,7 +64,7 @@ GtkWidget *create_button_expression(void) //expression
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("apple-red.png");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -87,7 +87,7 @@ GtkWidget *create_button_image(void) //image
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("apple-red.png");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -110,7 +110,7 @@ GtkWidget *create_button_file(void) //files
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("apple-red.png");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -133,7 +133,7 @@ GtkWidget *create_button_history(void) //history
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("apple-red.png");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -231,7 +231,7 @@ void button_send_file(GtkWidget *button, gpointer userdata)
 /*作成日期：未完成
 /*参数：VOID
 /*返回值：VOID
-/*作者：卢虹羽
+/*作者：卢虹羽cl
 /***************************************************/
 void button_send_history(GtkWidget *button, gpointer userdata)
 {
@@ -280,7 +280,7 @@ void createChatWindow(int argv,char *args[])
         gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
         gtk_widget_set_size_request(window, 600, 500);
         //设置窗口图片
-        change_background(window, 600, 500, "chat_background.jpg");
+        change_background(window, 600, 500, "source/skins/chat_background_bule.jpg");
 
         //first
         hbox = gtk_hbox_new(FALSE, 3);
