@@ -8,7 +8,6 @@
 /*作者：王子嘉
 /***************************************************/ 
 //gcc -o search -g search.c  -I /usr/include/mysql/ -L /usr/lib/x86_64-linux-gnu/ -l mysqlclient
-执行命令
 void search() {  
     MYSQL *conn_ptr;  
     MYSQL_RES *res_ptr;  
