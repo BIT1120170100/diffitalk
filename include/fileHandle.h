@@ -27,6 +27,13 @@ void destroy_confirm_win(GtkWidget *a, GtkWidget *window);
 void createFileConfirmWindow(char *file_name);
 void fileRecv(struct sockaddr_in client, char *fileName);
 
+typedef struct file_argu
+{
+	char *path;
+	struct sockaddr_in client; //本地网络信息
+} file_pthread_t;
+
+
 
 #endif
 
