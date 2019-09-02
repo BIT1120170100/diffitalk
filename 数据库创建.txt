@@ -1,0 +1,60 @@
+/**************************************************/
+/*名称：数据库创建依据
+/*作成日期：2019-09-02
+/*作者：王子嘉
+/***************************************************/
+1.typedef struct user{
+    char user_name[STRING_LEN];
+    int user_id;
+    enum Gender gender;
+    char user_password[STRING_LEN];
+    char user_mail[STRING_LEN];
+    char user_avatar[STRING_LEN];   //daiding
+    char user_note[STRING_LEN];
+    char user_birth[STRING_LEN];
+}User;
+create table user (
+	user_id int(5) not null primary key,
+	user_name char(20) not null,
+	user_gender int(1) not null default'0',
+	user_password char(20) not null,
+	user_mail char(20) not null,
+	user_avatar char(20) not null,
+	user_note char(20) not null,
+	user_birth char(20) not null);
+2.typedef struct message
+{
+    int id;
+    char id_to[20];
+    char id_from[20];     //消息的标识符
+    char str[MAXLEN + 1]; //消息正文
+    time_t send_time;
+} Message;  
+create table message (
+	id int(5) not null primary key,
+	id_to char(20) not null,
+	id_from char(20) not null,
+	str char(250) not null,
+	creat_time timestamp default CURRENT_TIMESTAMP);
+3.typedef struct loginInfo{
+    int user_id;
+    char login_password;
+}LoginInfo;
+create table loginInfo (
+	user_id int(5) not null primary key,
+	login_password char(20) not null);
+4.typedef struct _group{
+    int owner_id;
+    char g_name[STRING_LEN];
+    int member_id[MAX_GROUP_NUM];
+}Group;
+create table _group (
+	owner_id int(5) not null primary key,
+	g_name char(20) not null,
+	member_id int(5) not null);
+5.create table friends (
+	creatorid int(5) not null primary key,
+	friendname char(20) not null,
+	friendid int(5) not null,
+	groupid int(5) not null,
+	avatar char(20) not null);
