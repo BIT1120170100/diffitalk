@@ -1,5 +1,6 @@
 #include "include/chatWindow.h"
 #include "include/messList.h"
+#include "include/myInfo.h"
 #include <gtk/gtk.h>
 
 /**************************************************/
@@ -11,10 +12,31 @@
 /*作者： 
 /***************************************************/
 
+#include "include/main.h"
+#include "include/login.h"
+#include "include/regist.h"
+#include "include/reset.h"
+#include "include/settings.h"
+#include "include/main_window.h"
+
+GtkWidget *main_window;
+GtkWidget *login_window;
+GtkWidget *regist_window;
+GtkWidget *reset_window;
+GtkWidget *settings_window;
+GtkWidget *exit_window;
+
 int main(int argc, char *argv[])
 {
-        //init
-        
-        createChatWindow( argc, argv);
+        gtk_init(&argc, &argv);
+        //main_window=create_main_window();
+        login_window = create_login();
+        regist_window = create_regist();
+        reset_window = create_reset();
+        settings_window = create_settings();
+        exit_window = create_exit();
+        gtk_widget_show_all(login_window);
+
+        gtk_main();
         return 0;
 }

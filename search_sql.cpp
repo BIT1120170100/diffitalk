@@ -1,6 +1,6 @@
 #include <stdio.h>  
 #include <stdlib.h>  
-#include <mysql.h> 
+#include <mysql/mysql.h> 
 /**************************************************/
 /*名称：search.c
 /*描述：连接数据库成功后,查询数据库中内容
