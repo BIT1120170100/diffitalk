@@ -8,7 +8,7 @@
 //#include"main.h"
 
 
-int loginAndRigistCheck(int userid,char *password,Kind kind, char  *c_ipAddr);
+int loginAndRigistCheck(int userid,const char *password,Kind kind, char  *c_ipAddr);
 
 int parse_packet(Packet packet,Kind *kind,Data *data);
 
