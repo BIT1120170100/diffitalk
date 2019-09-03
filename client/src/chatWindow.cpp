@@ -62,7 +62,7 @@ GtkWidget *create_button_expression(void) //expression
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -83,7 +83,7 @@ GtkWidget *create_button_image(void) //image
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -104,7 +104,7 @@ GtkWidget *create_button_file(void) //files
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -125,7 +125,7 @@ GtkWidget *create_button_history(void) //history
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -236,8 +236,7 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 /*作者：卢虹羽
 /***************************************************/
 //char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
-<<<<<<< HEAD
-=======
+
 void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
 {
     GtkWidget *window;
@@ -268,7 +267,7 @@ void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 600, 500);
     //设置窗口图片
-    change_background(window, 600, 500, "source/skins/chat_background_bule.jpg");
+    change_background(window, 600, 500, "../source/skins/chat_background_bule.jpg");
 
     //first
     hbox = gtk_hbox_new(FALSE, 3);
@@ -329,7 +328,6 @@ void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
     // gtk_main();
     // return ;
 }
->>>>>>> refs/remotes/origin/master
 //void creat_single_chat
 void createChatWindow(GtkWidget *button_ori, gpointer *data)
 {
@@ -360,7 +358,7 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 600, 500);
     //设置窗口图片
-    change_background(window, 600, 500, "source/skins/chat_background_bule.jpg");
+    change_background(window, 600, 500, "../source/skins/chat_background_bule.jpg");
 
     //first
     hbox = gtk_hbox_new(FALSE, 3);

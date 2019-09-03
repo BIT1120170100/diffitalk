@@ -123,6 +123,9 @@ GtkWidget *create_main_window()
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(on_click_close), exit_window);
     gtk_container_set_border_width(GTK_CONTAINER(window), 20); //
+  //  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+    change_background(window, 90, 700, "../source/skins/myself_background.jpg");
+
     box1 = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(window), box1);
      

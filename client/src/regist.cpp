@@ -28,7 +28,7 @@ void on_register_clicked(GtkWidget* button,regist_info* data){
 	g_print("password:%s\n",password);
     g_print("email:%s\n",email);
 	g_print("rpassword:%s\n",rpassword);
-    if(regist_check()){
+    if(login){
         gtk_widget_hide_all(regist_window);
         gtk_widget_show_all(login_window);
     }

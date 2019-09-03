@@ -1,5 +1,15 @@
 #ifndef __CHECK_H
 #define __CHECK_H
+#include <stdio.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdarg.h>
 
 #include<gtk/gtk.h>
 #include<stdio.h>

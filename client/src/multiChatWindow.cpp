@@ -62,7 +62,7 @@ GtkWidget *create_button_expression_(void) //expression
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -83,7 +83,7 @@ GtkWidget *create_button_image_(void) //image
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -104,7 +104,7 @@ GtkWidget *create_button_file_(void) //files
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -125,7 +125,7 @@ GtkWidget *create_button_history_(void) //history
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
