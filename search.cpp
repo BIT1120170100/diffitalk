@@ -159,7 +159,7 @@ void creat_search(GtkWidget *button_ori, gpointer *data)
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 300, 500);
-    change_background(window, 300, 500, "search_background.jpg");
+    change_background(window, 300, 500, "source/skins/search_background.jpg");
     gtk_container_set_border_width(GTK_CONTAINER(window), 20);
 
     //第一层整体纵向排布

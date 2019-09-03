@@ -76,7 +76,7 @@ inline GtkWidget *create_button(void)
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("apple-red.png"); //这里的图片是系统初始图片
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //这里的图片是系统初始图片
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 100, 100);
     gtk_container_add(GTK_CONTAINER(button), image);
