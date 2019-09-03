@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 #include <gtk/gtk.h>
-void creat_search(GtkWidget *button_ori, gpointer *data);
+void create_search(GtkWidget *button_ori, gpointer *data);
 
 #endif
