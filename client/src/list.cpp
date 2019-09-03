@@ -116,7 +116,7 @@ int cmp_friend(const void* a,const void* b){
     User* c = (User* )a;
 	User* d = (User* )b;
     if(c->user_online!=d->user_online){
-        if(c->online)
+        if(c->user_online)
 		return 1;
 		else
 		return -1;

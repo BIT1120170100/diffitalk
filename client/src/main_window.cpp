@@ -12,6 +12,7 @@ extern GtkWidget *regist_window;
 extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
+GtkWidget* scrolled_window;
 /**************************************************/
 /*名称：on_click_close
 /*描述：主窗口关闭按钮的回调函数
@@ -112,7 +113,7 @@ GtkWidget *create_main_window()
     GtkWidget *table1;
     GtkWidget *box2;
     //GtkWidget* box3;
-    GtkWidget *scroll;
+    //GtkWidget *scroll;
     //GtkWidget* box4;
     GtkWidget *s;
     //GtkWidget* menu;

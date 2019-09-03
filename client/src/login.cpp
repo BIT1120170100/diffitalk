@@ -24,6 +24,7 @@ extern char* str_ip;
 /***************************************************/
 void on_login_clicked(GtkWidget *button, login_info *data)
 {
+        
         const char *username = gtk_entry_get_text(GTK_ENTRY(data->user_id));
         const char *password = gtk_entry_get_text(GTK_ENTRY(data->password));
          int userid =0;
@@ -33,14 +34,14 @@ void on_login_clicked(GtkWidget *button, login_info *data)
                 userid += pow(10,(len-i))*(username[i]-'0' )  ;
         }
 
-         g_print("userid:%d\n", userid);
+        g_print("userid:%d\n", userid);
         g_print("password:%s\n", password);
         //先设置本地ip
         str_ip="127.0.0.1";
 
       if ( loginAndRigistCheck(userid,password,login, str_ip) )
         { 
-                 gtk_widget_hide_all(login_window);
+                gtk_widget_hide_all(login_window);
                 main_window = create_main_window();
                 gtk_widget_show_all(main_window);
                

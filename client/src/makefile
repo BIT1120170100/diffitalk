@@ -20,7 +20,7 @@ OBJS=${SRCS:.cpp=.o}
 OBJS2=main.o check.o  login.o main_window.o messList.o \
 	regist.o reset.o settings.o \
 	search.o myself_setting.o \
-	chatWindow.o  multiChatWindow.o  errorMess.o  myInfo.o group.o
+	chatWindow.o  multiChatWindow.o  errorMess.o  myInfo.o group.o list.o
 
 #编译GTK程序时要用到的库
 LIBS=gtk+-2.0
