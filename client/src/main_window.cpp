@@ -2,7 +2,7 @@
 #include "../include/main_window.h"
 #include "../include/settings.h"
 #include "../include/chatWindow.h"
-
+#include "../include/group.h"
 #include "../include/myself_setting.h"
 //#include"main.h"
 extern GtkWidget *main_window;
@@ -144,6 +144,8 @@ GtkWidget *create_main_window()
     gtk_box_pack_start(GTK_BOX(box1), table1, FALSE, FALSE, 3);
     searchtext = gtk_entry_new();
     searchbutton = gtk_button_new_with_label("search");
+    g_signal_connect(searchbutton, "clicked",
+                     G_CALLBACK(create_group), NULL);
     gtk_table_attach_defaults(GTK_TABLE(table1), searchtext, 0, 4, 0, 1);
     gtk_table_attach_defaults(GTK_TABLE(table1), searchbutton, 4, 5, 0, 1);
 
@@ -178,6 +180,6 @@ GtkWidget *create_main_window()
     button = gtk_button_new_with_label("跳到群组聊天界面");
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(createChatWindow), NULL);   //!!!!group chat function need to rewrite!!!
+                     G_CALLBACK(createMultiChatWindow), NULL);   //!!!!group chat function need to rewrite!!!
     return window;
 }
