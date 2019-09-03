@@ -1,12 +1,12 @@
 CC=g++
 PROG_NAME=main
 INCS=../include/main.h ../include/check.h  ../include/login.h ../include/main_window.h \
-	../include/regist.h ../include/reset.h ../include/settings.h \
+	../include/regist.h ../include/reset.h ../include/settings.h ../include/errorMess.h\
 	../include/search.h ../include/myself_setting.h \
 	../include/chatWindow.h  ../include/messList.h  ../include/myInfo.h
 SRCS=main.cpp ./process/check.cpp  login.cpp main_window.cpp \
 	regist.cpp ./process/reset.cpp settings.cpp \
-	search.cpp myself_setting.cpp \
+	search.cpp myself_setting.cpp ./process/errorMess.cpp\
 	chatWindow.cpp  multiChatWindow.cpp ./process/messList.cpp  myInfo.cpp
 
 #从xx.cpp 文件得到 xx.o 文件
@@ -16,10 +16,10 @@ OBJS=${SRCS:.cpp=.o}
 	search.o myself_setting.o \
 	chatWindow.o  multiChatWindow.o  messList.o  myInfo.o
 
-OBJS2=main.o check.o  login.o main_window.o \
+OBJS2=main.o check.o  login.o main_window.o messList.o \
 	regist.o reset.o settings.o \
 	search.o myself_setting.o \
-	chatWindow.o  multiChatWindow.o  messList.o  myInfo.o
+	chatWindow.o  multiChatWindow.o  errorMess.o  myInfo.o
 
 #编译GTK程序时要用到的库
 LIBS=gtk+-2.0

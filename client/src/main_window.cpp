@@ -2,6 +2,8 @@
 #include "../include/main_window.h"
 #include "../include/settings.h"
 #include "../include/chatWindow.h"
+
+#include "../include/myself_setting.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -123,6 +125,9 @@ GtkWidget *create_main_window()
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(on_click_close), exit_window);
     gtk_container_set_border_width(GTK_CONTAINER(window), 20); //
+  //  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+    change_background(window, 90, 700, "../source/skins/myself_background.jpg");
+
     box1 = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(window), box1);
      
@@ -162,7 +167,7 @@ GtkWidget *create_main_window()
     g_signal_connect(settingsbutton, "button_press_event",
                      G_CALLBACK(settings), settings_window);
 
-    //
+    
     // button = gtk_button_new_with_label("跳到单人聊天界面");
     // g_signal_connect(G_OBJECT(exit), "clicked",
                     //  G_CALLBACK( createChatWindow), NULL); //UNDO

@@ -1,6 +1,7 @@
 #include "../include/login.h"
 #include "../include/check.h"
 #include "../include/main_window.h"
+#include "../include/errorMess.h"
 #include <math.h>
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -9,24 +10,7 @@ extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
 login_info info;
-void showDialog(char * mess)
-{
-          GtkWidget *dialog;
-    //初始化GTK环境    
-   // gtk_init(&argc, &argv);
-    dialog = gtk_message_dialog_new(NULL,
-            GTK_DIALOG_DESTROY_WITH_PARENT,
-            GTK_MESSAGE_INFO,
-            GTK_BUTTONS_OK, argv[1], mess);
-    gtk_window_set_title(GTK_WINDOW(dialog), "系统提示");
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-    //绑定信号函数,点击退出时执行的操作 
-    //g_signal_connect(GTK_OBJECT(dialog), "destroy", GTK_SIGNAL_FUNC(close_app), NULL);
-    //gtk_widget_show_all(dialog);
-    //gtk_main();
-    return ;
-}
+extern char* str_ip; 
 
 /**************************************************/
 /*名称：on_login_clicked
@@ -42,27 +26,28 @@ void on_login_clicked(GtkWidget *button, login_info *data)
 {
         const char *username = gtk_entry_get_text(GTK_ENTRY(data->user_id));
         const char *password = gtk_entry_get_text(GTK_ENTRY(data->password));
-        g_print("username:%s\n", username);
-        g_print("password:%s\n", password);
-        int userid =0;
+         int userid =0;
         //字符转换数字
-        for(int i=4;i>=0;--i)
+        for(int i=strlen(username)-1,len =strlen(username)-1;i>=0;--i)
         {
-                userid += power(10,(4-i))*(username[i]-'0' )  ;
+                userid += pow(10,(len-i))*(username[i]-'0' )  ;
         }
 
-        if (loginAndRigistCheck(userid,password,login, char  *c_ipAddr))
+         g_print("userid:%d\n", userid);
+        g_print("password:%s\n", password);
+        //先设置本地ip
+        str_ip="127.0.0.1";
+
+      if ( loginAndRigistCheck(userid,password,login, str_ip) )
         { 
-                
-                gtk_widget_hide_all(login_window);
-                
+                 gtk_widget_hide_all(login_window);
                 main_window = create_main_window();
                 gtk_widget_show_all(main_window);
                
         }
         else
         {
-                showDialog("当前不存在该用户或密码输入错误！");//
+                showDialog("当前不存在该用户或密码输入错误");//
         }
         //g_print("username:%s\n",username);
         //g_print("password:%s\n",password);
@@ -152,8 +137,8 @@ GtkWidget *create_login()
         info.user_id = entry1;
         info.password = entry2;
         g_signal_connect(G_OBJECT(login), "clicked",
-                         G_CALLBACK(on_login_clicked), &info);
-        gtk_box_pack_start(GTK_BOX(box), login, FALSE, FALSE, 5);
+                          G_CALLBACK(on_login_clicked), &info);
+       gtk_box_pack_start(GTK_BOX(box), login, FALSE, FALSE, 5);
 
         sep = gtk_hseparator_new();
         gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 5);
@@ -164,7 +149,7 @@ GtkWidget *create_login()
         gtk_box_pack_start(GTK_BOX(box), reset, FALSE, FALSE, 5);
 
         regst = gtk_button_new_with_label("register");
-        g_signal_connect(G_OBJECT(regst), "clicked",
+       g_signal_connect(G_OBJECT(regst), "clicked",
                          G_CALLBACK(login_to_regist_clicked), window);
         gtk_box_pack_start(GTK_BOX(box), regst, FALSE, FALSE, 5);
 

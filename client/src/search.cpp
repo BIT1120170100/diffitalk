@@ -159,7 +159,7 @@ void creat_search(GtkWidget *button_ori, gpointer *data)
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 300, 500);
-    change_background(window, 300, 500, "source/skins/search_background.jpg");
+    change_background(window, 300, 500, "../source/skins/search_background.jpg");
     gtk_container_set_border_width(GTK_CONTAINER(window), 20);
 
     //第一层整体纵向排布
@@ -174,7 +174,7 @@ void creat_search(GtkWidget *button_ori, gpointer *data)
     gtk_box_pack_start(GTK_BOX(hbox), entry, FALSE, FALSE, 3);
     button_search = gtk_button_new_with_label("search"); //
     gtk_widget_set_size_request(button_search, 50, 50);
-    change_background(button_search, 50, 50, "button_search.jpg");
+    change_background(button_search, 50, 50, "../source/icon/button_search.jpg");
     g_signal_connect(G_OBJECT(button_search), "clicked", G_CALLBACK(on_click_search), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), button_search, FALSE, FALSE, 2);
 

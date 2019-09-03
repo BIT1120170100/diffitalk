@@ -26,9 +26,12 @@ GtkWidget *reset_window;
 GtkWidget *settings_window;
 GtkWidget *exit_window;
 
+char *str_ip;
+
 int main(int argc, char *argv[])
 {
         gtk_init(&argc, &argv);
+        str_ip=(char*)argv[1];
         //main_window=create_main_window();
         login_window = create_login();
         regist_window = create_regist();

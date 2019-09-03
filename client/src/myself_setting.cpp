@@ -76,7 +76,7 @@ inline GtkWidget *create_button(void)
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //这里的图片是系统初始图片
+    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //这里的图片是系统初始图片
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 100, 100);
     gtk_container_add(GTK_CONTAINER(button), image);
@@ -144,7 +144,7 @@ inline GtkWidget *create_button(void)
 // }
 
 /**************************************************/
-/*名称：creat_myself_setting
+/*名称：create_myself_setting
 /*描述：创建个人信息设置页面函数
 /*作成日期：2019/9/1
 /*参数：
@@ -153,7 +153,7 @@ inline GtkWidget *create_button(void)
 /*返回值：VOID
 /*作者：卢虹羽
 /***************************************************/
-void creat_myself_setting(GtkWidget *button_ori, gpointer *data)
+void create_myself_setting(GtkWidget *button_ori, gpointer *data)
 {
     GtkWidget *window;
     GtkWidget *box;
@@ -183,7 +183,7 @@ void creat_myself_setting(GtkWidget *button_ori, gpointer *data)
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 300, 500);
-    change_background(window, 300, 500, "myself_background.jpg");
+    change_background(window, 300, 500, "../source/skins/search_background.jpg");
     gtk_container_set_border_width(GTK_CONTAINER(window), 20);
 
     box = gtk_vbox_new(FALSE, 0);

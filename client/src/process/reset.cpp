@@ -28,7 +28,7 @@ void on_reset_clicked(GtkWidget* button,reset_info* data){
 	g_print("password:%s\n",new_password);
     g_print("email:%s\n",email);
 	g_print("vcode:%s\n",vcode);
-    if(reset_check()){
+    if(1){//UNDO
         gtk_widget_hide_all(reset_window);
         gtk_widget_show_all(login_window);
     }
