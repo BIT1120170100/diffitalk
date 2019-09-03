@@ -3,11 +3,12 @@ PROG_NAME=main
 INCS=../include/main.h ../include/check.h  ../include/login.h ../include/main_window.h \
 	../include/regist.h ../include/reset.h ../include/settings.h ../include/errorMess.h\
 	../include/search.h ../include/myself_setting.h ../include/group.h\
-	../include/chatWindow.h  ../include/messList.h  ../include/myInfo.h
+	../include/chatWindow.h  ../include/messList.h  ../include/myInfo.h\
+	../include/list.h
 SRCS=main.cpp ./process/check.cpp  login.cpp main_window.cpp \
 	regist.cpp ./process/reset.cpp settings.cpp \
 	search.cpp myself_setting.cpp ./process/errorMess.cpp\
-	chatWindow.cpp  multiChatWindow.cpp ./process/messList.cpp  myInfo.cpp group.cpp
+	chatWindow.cpp  multiChatWindow.cpp ./process/messList.cpp  myInfo.cpp group.cpp list.cpp
 
 #从xx.cpp 文件得到 xx.o 文件
 OBJS=${SRCS:.cpp=.o}

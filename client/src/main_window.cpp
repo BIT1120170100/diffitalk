@@ -4,6 +4,7 @@
 #include "../include/chatWindow.h"
 #include "../include/group.h"
 #include "../include/myself_setting.h"
+#include "../include/list.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -154,16 +155,21 @@ GtkWidget *create_main_window()
 
     box2 = gtk_hbox_new(TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 3);
-    recent = gtk_button_new_with_label("recent");
-    list = gtk_button_new_with_label("friends");
-    group = gtk_button_new_with_label("group");
-    gtk_box_pack_start(GTK_BOX(box2), recent, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box2), list, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box2), group, TRUE, TRUE, 0);
 
-    scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_box_pack_start(GTK_BOX(box1), scroll, TRUE, FALSE, 3);
+    list=gtk_button_new_with_label("friends");
+    group=gtk_button_new_with_label("group");
+    gtk_box_pack_start(GTK_BOX(box2),list,TRUE,TRUE,0);
+    gtk_box_pack_start(GTK_BOX(box2),group,TRUE,TRUE,0);
+    scrolled_window=gtk_scrolled_window_new(NULL,NULL);
+    gtk_container_set_border_width(GTK_CONTAINER(scrolled_window),10);
+    gtk_widget_set_size_request(scrolled_window,70,500);
 
+    g_signal_connect(group,"clicked",
+        G_CALLBACK(on_click_group),scrolled_window);
+    g_signal_connect(list,"clicked",
+        G_CALLBACK(on_click_friend),scrolled_window);
+    gtk_box_pack_start(GTK_BOX(box1),scrolled_window,FALSE,FALSE,3);
+    
     settingsbutton = gtk_button_new_with_label("settings");
     gtk_box_pack_start(GTK_BOX(box1), settingsbutton, FALSE, FALSE, 3);
     g_signal_connect(settingsbutton, "button_press_event",
