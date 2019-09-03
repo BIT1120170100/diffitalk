@@ -106,7 +106,7 @@ GtkWidget *create_login()
         GtkWidget *reset;
         GtkWidget *regst;
         GtkWidget *sep;
-
+        GtkWidget *image;
         window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         g_signal_connect(G_OBJECT(window), "destroy",
                          G_CALLBACK(gtk_main_quit), NULL);
@@ -117,10 +117,12 @@ GtkWidget *create_login()
 
         box = gtk_vbox_new(FALSE, 0);
         gtk_container_add(GTK_CONTAINER(window), box);
-        box1 = gtk_hbox_new(FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(box), box1, FALSE, FALSE, 5);
-        box2 = gtk_hbox_new(FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(box), box2, FALSE, FALSE, 5);
+        image=gtk_image_new_from_file("../source/skins/logingif.gif");
+	gtk_box_pack_start(GTK_BOX(box),image,FALSE,FALSE,5);
+	box1=gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(box),box1,FALSE,FALSE,5);
+	box2=gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(box),box2,FALSE,FALSE,5);
 
         label1 = gtk_label_new("userid:");
         entry1 = gtk_entry_new();
