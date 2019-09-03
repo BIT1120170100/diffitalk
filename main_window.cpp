@@ -117,7 +117,7 @@ GtkWidget *create_main_window()
     GtkWidget *button;
     //
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
+     
     gtk_window_set_default_size(GTK_WINDOW(window), 90, 700);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     g_signal_connect(G_OBJECT(window), "delete_event",
@@ -125,7 +125,7 @@ GtkWidget *create_main_window()
     gtk_container_set_border_width(GTK_CONTAINER(window), 20); //
     box1 = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(window), box1);
-
+     
     table1 = gtk_table_new(1, 5, TRUE);
     head = gtk_button_new();
     headbox = gtk_vbox_new(FALSE, 0);
@@ -165,5 +165,13 @@ GtkWidget *create_main_window()
     // button = gtk_button_new_with_label("跳到单人聊天界面");
     // g_signal_connect(G_OBJECT(exit), "clicked",
                     //  G_CALLBACK( createChatWindow), NULL); //UNDO
+    button = gtk_button_new_with_label("跳到聊天界面");
+    gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button), "clicked",
+                     G_CALLBACK(createChatWindowvoid), NULL);
+    button = gtk_button_new_with_label("跳到群组聊天界面");
+    gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button), "clicked",
+                     G_CALLBACK(createMultiChatWindowvoid), NULL);
     return window;
 }

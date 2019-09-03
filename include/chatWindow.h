@@ -8,7 +8,9 @@
 #include <gdk/gdkkeysyms.h>
 
 //这里写函数声明
-void createChatWindow( int argv,char *args[]);
+void createChatWindowvoid(GtkWidget *button_ori, gpointer *data);
+void createMultiChatWindowvoid(GtkWidget *button_ori, gpointer *data);
 void change_background(GtkWidget *widget, int w, int h, const gchar *path);
+void change_background_(GtkWidget *widget, int w, int h, const gchar *path);
 //char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
 #endif

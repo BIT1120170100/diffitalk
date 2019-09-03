@@ -7,14 +7,14 @@ INCS=include/main.h include/check.h  include/login.h include/main_window.h \
 SRCS=main.cpp lib/help/check.cpp  login.cpp main_window.cpp \
 	regist.cpp lib/help/reset.cpp settings.cpp \
 	search.cpp myself_setting.cpp \
-	chatWindow.cpp  lib/help/messList.cpp  myInfo.cpp
+	chatWindow.cpp  multiChatWindow.cpp lib/help/messList.cpp  myInfo.cpp
 
 #从xx.cpp 文件得到 xx.o 文件
 #OBJS=${SRCS:.cpp=.o}
 OBJS=main.o check.o  login.o main_window.o \
 	regist.o reset.o settings.o \
 	search.o myself_setting.o \
-	chatWindow.o  messList.o  myInfo.o
+	chatWindow.o  multiChatWindow.o  messList.o  myInfo.o
 
 
 #编译GTK程序时要用到的库

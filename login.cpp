@@ -25,10 +25,13 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         g_print("username:%s\n", username);
         g_print("password:%s\n", password);
         if (login_check())
-        {
+        { 
+                
                 gtk_widget_hide_all(login_window);
+                
                 main_window = create_main_window();
                 gtk_widget_show_all(main_window);
+               
         }
         else
         {
