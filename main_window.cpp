@@ -161,6 +161,7 @@ GtkWidget *create_main_window()
     gtk_box_pack_start(GTK_BOX(box1), settingsbutton, FALSE, FALSE, 3);
     g_signal_connect(settingsbutton, "button_press_event",
                      G_CALLBACK(settings), settings_window);
+
     //
     // button = gtk_button_new_with_label("跳到单人聊天界面");
     // g_signal_connect(G_OBJECT(exit), "clicked",
