@@ -144,7 +144,7 @@ inline GtkWidget *create_button(void)
 // }
 
 /**************************************************/
-/*名称：creat_myself_setting
+/*名称：create_myself_setting
 /*描述：创建个人信息设置页面函数
 /*作成日期：2019/9/1
 /*参数：
@@ -153,7 +153,7 @@ inline GtkWidget *create_button(void)
 /*返回值：VOID
 /*作者：卢虹羽
 /***************************************************/
-void creat_myself_setting(GtkWidget *button_ori, gpointer *data)
+void create_myself_setting(GtkWidget *button_ori, gpointer *data)
 {
     GtkWidget *window;
     GtkWidget *box;

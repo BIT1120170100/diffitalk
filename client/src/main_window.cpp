@@ -2,6 +2,8 @@
 #include "../include/main_window.h"
 #include "../include/settings.h"
 #include "../include/chatWindow.h"
+
+#include "../include/myself_setting.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -165,7 +167,7 @@ GtkWidget *create_main_window()
     g_signal_connect(settingsbutton, "button_press_event",
                      G_CALLBACK(settings), settings_window);
 
-    //
+    
     // button = gtk_button_new_with_label("跳到单人聊天界面");
     // g_signal_connect(G_OBJECT(exit), "clicked",
                     //  G_CALLBACK( createChatWindow), NULL); //UNDO
