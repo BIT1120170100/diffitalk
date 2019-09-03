@@ -250,7 +250,7 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 /*作者：卢虹羽
 /***************************************************/
 //char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
-void createChatWindow(int argv,char *args[])
+void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
 { 
         GtkWidget *window;
         GtkWidget *hbox;
@@ -273,7 +273,7 @@ void createChatWindow(int argv,char *args[])
 
         //init
         //gtk_init();
-        gtk_init( &argv,&args);
+        // gtk_init( &argv,&args);
         window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(gtk_main_quit), NULL);
         gtk_window_set_title(GTK_WINDOW(window), "单人聊天界面");
@@ -338,6 +338,6 @@ void createChatWindow(int argv,char *args[])
 
         //show
         gtk_widget_show_all(window);
-        gtk_main();
-        return ;
+        // gtk_main();
+        // return ;
 }
