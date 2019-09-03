@@ -1,6 +1,7 @@
 #include "../include/login.h"
 #include "../include/check.h"
 #include "../include/main_window.h"
+#include <math.h>
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
 extern GtkWidget *regist_window;
@@ -8,6 +9,25 @@ extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
 login_info info;
+void showDialog(char * mess)
+{
+          GtkWidget *dialog;
+    //初始化GTK环境    
+   // gtk_init(&argc, &argv);
+    dialog = gtk_message_dialog_new(NULL,
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_INFO,
+            GTK_BUTTONS_OK, argv[1], mess);
+    gtk_window_set_title(GTK_WINDOW(dialog), "系统提示");
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    //绑定信号函数,点击退出时执行的操作 
+    //g_signal_connect(GTK_OBJECT(dialog), "destroy", GTK_SIGNAL_FUNC(close_app), NULL);
+    //gtk_widget_show_all(dialog);
+    //gtk_main();
+    return ;
+}
+
 /**************************************************/
 /*名称：on_login_clicked
 /*描述：登录按钮的回调函数
@@ -24,7 +44,14 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         const char *password = gtk_entry_get_text(GTK_ENTRY(data->password));
         g_print("username:%s\n", username);
         g_print("password:%s\n", password);
-        if (login_check())
+        int userid =0;
+        //字符转换数字
+        for(int i=4;i>=0;--i)
+        {
+                userid += power(10,(4-i))*(username[i]-'0' )  ;
+        }
+
+        if (loginAndRigistCheck(userid,password,login, char  *c_ipAddr))
         { 
                 
                 gtk_widget_hide_all(login_window);
@@ -35,6 +62,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         }
         else
         {
+                showDialog("当前不存在该用户或密码输入错误！");//
         }
         //g_print("username:%s\n",username);
         //g_print("password:%s\n",password);
@@ -108,7 +136,7 @@ GtkWidget *create_login()
         box2 = gtk_hbox_new(FALSE, 0);
         gtk_box_pack_start(GTK_BOX(box), box2, FALSE, FALSE, 5);
 
-        label1 = gtk_label_new("username:");
+        label1 = gtk_label_new("userid:");
         entry1 = gtk_entry_new();
         gtk_box_pack_start(GTK_BOX(box1), label1, FALSE, FALSE, 5);
         gtk_box_pack_start(GTK_BOX(box1), entry1, FALSE, FALSE, 5);

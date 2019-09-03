@@ -17,7 +17,7 @@ void search() {
   
     conn_ptr = mysql_init(NULL);  
     if (!conn_ptr) {  
-        return EXIT_FAILURE;  
+        return ;//EXIT_FAILURE;   UNDO
     }  
     conn_ptr = mysql_real_connect(conn_ptr, "localhost", "root", "123456", "server", 0, NULL, 0);//用root运行./XXX成功 “server”-数据库名称  
     if (conn_ptr) {
