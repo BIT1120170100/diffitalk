@@ -4,10 +4,13 @@
 #include<gtk/gtk.h>
 #include<stdio.h>
 #include<strings.h>
+#include "data.h"
 //#include"main.h"
 
-int login_check();
-int regist_check();
-int reset_check();
 
+int loginAndRigistCheck(int userid,char *password,Kind kind, char  *c_ipAddr);
+
+int parse_packet(Packet packet,Kind *kind,Data *data);
+
+int build_packet(Packet *packet,Kind kind,...);
 #endif

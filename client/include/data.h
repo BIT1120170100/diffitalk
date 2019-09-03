@@ -13,10 +13,21 @@
 #include <stdarg.h>
 #include <time.h>
 
-const int MYPORT = 3440;//约定端口
-const int MAXLEN = 140;  //最大消息长度
-const int STRING_LEN = 100;
-const int MAX_GROUP_NUM = 100;
+#include <stdio.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdarg.h>
+
+extern const int MYPORT = 3440;//约定端口
+extern const int MAXLEN = 140;  //最大消息长度
+extern const int STRING_LEN = 100;
+extern const int MAX_GROUP_NUM = 100;
 enum Gender{
     WOMAN,MAN
 };
@@ -75,4 +86,10 @@ typedef struct _group{
     char g_name[STRING_LEN];
     int member_id[MAX_GROUP_NUM];
 }Group;
+
+
+typedef struct _packet{
+	Kind kind;		        //包类型
+	Data data;		        //数据包
+}Packet;					      //通信协议
 #endif

@@ -49,8 +49,6 @@ void change_background(GtkWidget *widget, int w, int h, const gchar *path)
     g_object_unref(pixmap);
 }
 
-
-
 /**************************************************/
 /*名称：create_button_expression
 /*描述：创建发送表情按钮
@@ -64,15 +62,13 @@ GtkWidget *create_button_expression(void) //expression
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
 }
-
-
 
 /**************************************************/
 /*名称：create_button_image
@@ -87,15 +83,13 @@ GtkWidget *create_button_image(void) //image
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
 }
-
-
 
 /**************************************************/
 /*名称：create_button_file
@@ -110,15 +104,13 @@ GtkWidget *create_button_file(void) //files
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
 }
-
-
 
 /**************************************************/
 /*名称：create_history
@@ -133,15 +125,13 @@ GtkWidget *create_button_history(void) //history
     GtkWidget *image;
     GtkWidget *button;
 
-    image = gtk_image_new_from_file("source/icon/apple-red.jpg");//
+    image = gtk_image_new_from_file("source/icon/apple-red.jpg"); //
     button = gtk_button_new();
     gtk_widget_set_size_request(button, 30, 30);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
 }
-
-
 
 /**************************************************/
 /*名称：button_send_expression
@@ -153,7 +143,6 @@ GtkWidget *create_button_history(void) //history
 /***************************************************/
 static void button_send_expression(GtkWidget *button, gpointer data)
 {
-
 }
 
 /**************************************************/
@@ -166,7 +155,6 @@ static void button_send_expression(GtkWidget *button, gpointer data)
 /***************************************************/
 static void button_send_image(GtkWidget *button, gpointer userdata)
 {
-
 }
 
 /**************************************************/
@@ -235,9 +223,7 @@ void button_send_file(GtkWidget *button, gpointer userdata)
 /***************************************************/
 void button_send_history(GtkWidget *button, gpointer userdata)
 {
-
 }
-
 
 /**************************************************/
 /*名称：createChatWindow
@@ -250,98 +236,97 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 /*作者：卢虹羽
 /***************************************************/
 //char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
-<<<<<<< HEAD
 void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
-{ 
-        GtkWidget *window;
-        GtkWidget *hbox;
-        GtkWidget *vbox;
-        GtkWidget *frame;
-        GtkWidget *label;
-        GtkWidget *scrolled_window;
+{
+    GtkWidget *window;
+    GtkWidget *hbox;
+    GtkWidget *vbox;
+    GtkWidget *frame;
+    GtkWidget *label;
+    GtkWidget *scrolled_window;
 
-        GtkWidget *image;
-        GtkWidget *button_expression; //expression
-        GtkWidget *button_image;      //image
-        GtkWidget *button_file;       //file
-        GtkWidget *button_history;    //history
-        GtkWidget *box;
+    GtkWidget *image;
+    GtkWidget *button_expression; //expression
+    GtkWidget *button_image;      //image
+    GtkWidget *button_file;       //file
+    GtkWidget *button_history;    //history
+    GtkWidget *box;
 
-        GtkWidget *button;
-        GtkWidget *text_view;
-        GtkTextBuffer *buffer;
-        GtkTextIter *Iter; //no use
+    GtkWidget *button;
+    GtkWidget *text_view;
+    GtkTextBuffer *buffer;
+    GtkTextIter *Iter; //no use
 
-        //init
-        //gtk_init();
-        // gtk_init( &argv,&args);
-        window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-        g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(gtk_main_quit), NULL);
-        gtk_window_set_title(GTK_WINDOW(window), "单人聊天界面");
-        gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
-        gtk_widget_set_size_request(window, 600, 500);
-        //设置窗口图片
-        change_background(window, 600, 500, "source/skins/chat_background_bule.jpg");
+    //init
+    //gtk_init();
+    // gtk_init( &argv,&args);
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_window_set_title(GTK_WINDOW(window), "单人聊天界面");
+    gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+    gtk_widget_set_size_request(window, 600, 500);
+    //设置窗口图片
+    change_background(window, 600, 500, "source/skins/chat_background_bule.jpg");
 
-        //first
-        hbox = gtk_hbox_new(FALSE, 3);
-        vbox = gtk_vbox_new(FALSE, 3);
-        gtk_widget_set_size_request(vbox, 400, 400);
-        gtk_container_add(GTK_CONTAINER(window), hbox);
-        gtk_container_set_border_width(GTK_CONTAINER(window), 10);
-        gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+    //first
+    hbox = gtk_hbox_new(FALSE, 3);
+    vbox = gtk_vbox_new(FALSE, 3);
+    gtk_widget_set_size_request(vbox, 400, 400);
+    gtk_container_add(GTK_CONTAINER(window), hbox);
+    gtk_container_set_border_width(GTK_CONTAINER(window), 10);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
-        //second-left
-        //second-left-1-information\
+    //second-left
+    //second-left-1-information\
         //需要添加别的函数
-       scrolled_window = create_list();
-       gtk_widget_set_size_request(scrolled_window, 400, 250);
-       gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
+    scrolled_window = create_list();
+    gtk_widget_set_size_request(scrolled_window, 400, 250);
+    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
 
-        //second-left-2-function
-        box = gtk_hbox_new(FALSE, 0);
-        gtk_widget_set_size_request(box, 400, 30);
-        button_expression = create_button_expression();
-        gtk_box_pack_start(GTK_BOX(box), button_expression, FALSE, FALSE, 3);
-        g_signal_connect(G_OBJECT(button_expression), "clicked", G_CALLBACK(button_send_expression), NULL);
-        button_image = create_button_image();
-        gtk_box_pack_start(GTK_BOX(box), button_image, FALSE, FALSE, 3);
-        g_signal_connect(G_OBJECT(button_image), "clicked", G_CALLBACK(button_send_image), NULL);
-        button_file = create_button_file();
-        gtk_box_pack_start(GTK_BOX(box), button_file, FALSE, FALSE, 3);
-        g_signal_connect(G_OBJECT(button_file), "clicked", G_CALLBACK(button_send_file), NULL);
-        button_history = create_button_history();
-        gtk_box_pack_start(GTK_BOX(box), button_history, FALSE, FALSE, 3);
-        g_signal_connect(G_OBJECT(button_history), "clicked", G_CALLBACK(button_send_history), NULL);
-        gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
+    //second-left-2-function
+    box = gtk_hbox_new(FALSE, 0);
+    gtk_widget_set_size_request(box, 400, 30);
+    button_expression = create_button_expression();
+    gtk_box_pack_start(GTK_BOX(box), button_expression, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button_expression), "clicked", G_CALLBACK(button_send_expression), NULL);
+    button_image = create_button_image();
+    gtk_box_pack_start(GTK_BOX(box), button_image, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button_image), "clicked", G_CALLBACK(button_send_image), NULL);
+    button_file = create_button_file();
+    gtk_box_pack_start(GTK_BOX(box), button_file, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button_file), "clicked", G_CALLBACK(button_send_file), NULL);
+    button_history = create_button_history();
+    gtk_box_pack_start(GTK_BOX(box), button_history, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button_history), "clicked", G_CALLBACK(button_send_history), NULL);
+    gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
-        //second-left-3-edit
-        text_view = gtk_text_view_new();
-        buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
-        gtk_box_pack_start(GTK_BOX(vbox), text_view, TRUE, TRUE, 0);
-        button = gtk_button_new_with_label("submit");
-        gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 3);
+    //second-left-3-edit
+    text_view = gtk_text_view_new();
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+    gtk_box_pack_start(GTK_BOX(vbox), text_view, TRUE, TRUE, 0);
+    button = gtk_button_new_with_label("submit");
+    gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 3);
 
-        //second-right
-        vbox = gtk_vbox_new(FALSE, 3);
-        gtk_widget_set_size_request(vbox, 200, 400);
-        gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 3); //when you change the size of the window, only this part will change this size and the left part will not
-        //second-right-1-another
-        frame = frame = gtk_frame_new("Normal Label");
-        label = gtk_label_new("This should be the imformation of anotherone");
-        gtk_container_add(GTK_CONTAINER(frame), label);
-        gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
-        //second-right-2-mine
-        frame = frame = gtk_frame_new("Normal Label");
-        label = gtk_label_new("This should be your imformation");
-        gtk_container_add(GTK_CONTAINER(frame), label);
-        gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
+    //second-right
+    vbox = gtk_vbox_new(FALSE, 3);
+    gtk_widget_set_size_request(vbox, 200, 400);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 3); //when you change the size of the window, only this part will change this size and the left part will not
+    //second-right-1-another
+    frame = frame = gtk_frame_new("Normal Label");
+    label = gtk_label_new("This should be the imformation of anotherone");
+    gtk_container_add(GTK_CONTAINER(frame), label);
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
+    //second-right-2-mine
+    frame = frame = gtk_frame_new("Normal Label");
+    label = gtk_label_new("This should be your imformation");
+    gtk_container_add(GTK_CONTAINER(frame), label);
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
 
-        //show
-        gtk_widget_show_all(window);
-        // gtk_main();
-        // return ;
-=======
+    //show
+    gtk_widget_show_all(window);
+    // gtk_main();
+    // return ;
+}
 //void creat_single_chat
 void createChatWindow(GtkWidget *button_ori, gpointer *data)
 {
@@ -430,5 +415,4 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     //show
     gtk_widget_show_all(window);
     // gtk_main();
->>>>>>> d69163edd8fb3c2477ca53d12cf35ad948c34c42
 }
