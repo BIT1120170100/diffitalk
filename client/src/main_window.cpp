@@ -169,10 +169,10 @@ GtkWidget *create_main_window()
     button = gtk_button_new_with_label("跳到聊天界面");
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(createChatWindowvoid), NULL);
+                     G_CALLBACK(createChatWindow), NULL);
     button = gtk_button_new_with_label("跳到群组聊天界面");
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(createMultiChatWindowvoid), NULL);
+                     G_CALLBACK(createChatWindow), NULL);   //!!!!group chat function need to rewrite!!!
     return window;
 }

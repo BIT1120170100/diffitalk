@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <time.h>
+#include <pthread.h>
 
 const int MYPORT = 3440;//约定端口
 const int MAXLEN = 140;  //最大消息长度

@@ -237,7 +237,7 @@ void button_send_history_(GtkWidget *button, gpointer userdata)
 /***************************************************/
 //char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
 //void creat_single_chat
-void createMultiChatWindowvoid(GtkWidget *button_ori, gpointer *data)
+void createMultiChatWindow(GtkWidget *button_ori, gpointer *data)
 {
     GtkWidget *window;
     GtkWidget *hbox;
