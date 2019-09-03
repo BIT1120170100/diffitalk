@@ -33,7 +33,7 @@ void on_register_clicked(GtkWidget *button, regist_info *data)
     //字符转换数字
     for (int i = strlen(username) - 1, len = strlen(username) - 1; i >= 0; --i)
     {
-        userid += pow(10, (len - i)) * (username[i] - '0');
+      //  userid += pow(10, (len - i)) * (username[i] - '0');
     }
     g_print("username:%d\n", userid);
     g_print("password:%s\n", password);
@@ -42,7 +42,8 @@ void on_register_clicked(GtkWidget *button, regist_info *data)
     //先设置本地ip
     char *str_ip = "127.0.0.1";
 
-    if (!strcmp(rpassword,password)&&loginAndRigistCheck(userid, password, regist, str_ip))
+   // if (!strcmp(rpassword,password)&&loginAndRigistCheck(userid, password, regist, str_ip))
+    if(1)
     {
         gtk_widget_hide_all(login_window);
         main_window = create_main_window();

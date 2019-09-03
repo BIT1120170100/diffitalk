@@ -236,8 +236,8 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 /*作者：卢虹羽
 /***************************************************/
 //char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 
 void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
 {
@@ -330,7 +330,7 @@ void createChatWindowvoid(GtkWidget *button_ori, gpointer *data)
     // gtk_main();
     // return ;
 }
->>>>>>> 22d3717542349ca124de58f9edc60435d44b2664
+//>>>>>>> 22d3717542349ca124de58f9edc60435d44b2664
 //void creat_single_chat
 void createChatWindow(GtkWidget *button_ori, gpointer *data)
 {
