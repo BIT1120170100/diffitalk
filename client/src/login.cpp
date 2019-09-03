@@ -1,6 +1,7 @@
 #include "../include/login.h"
 #include "../include/check.h"
 #include "../include/main_window.h"
+#include "../include/errorMess.h"
 #include <math.h>
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -9,25 +10,7 @@ extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
 login_info info;
-extern char* str_ip;
-void showDialog(char * mess)
-{
-          GtkWidget *dialog;
-    //初始化GTK环境    
-   // gtk_init(&argc, &argv);
-    dialog = gtk_message_dialog_new(NULL,
-            GTK_DIALOG_DESTROY_WITH_PARENT,
-            GTK_MESSAGE_INFO,
-            GTK_BUTTONS_OK, str_ip, mess);
-    gtk_window_set_title(GTK_WINDOW(dialog), "系统提示");
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-    //绑定信号函数,点击退出时执行的操作 
-    //g_signal_connect(GTK_OBJECT(dialog), "destroy", GTK_SIGNAL_FUNC(close_app), NULL);
-    //gtk_widget_show_all(dialog);
-    //gtk_main();
-    return ;
-}
+extern char* str_ip; 
 
 /**************************************************/
 /*名称：on_login_clicked
@@ -55,7 +38,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         //先设置本地ip
         str_ip="127.0.0.1";
 
-      if (loginAndRigistCheck(userid,password,login, str_ip) )
+      if (!loginAndRigistCheck(userid,password,login, str_ip) )
         { 
                  gtk_widget_hide_all(login_window);
                 main_window = create_main_window();

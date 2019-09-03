@@ -18,6 +18,8 @@
 extern char *str_ip;
 int client_socket;
 
+ 
+
 int init_client(int port, char *addr)
 {
 	int cli_socket;
