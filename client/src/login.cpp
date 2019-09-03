@@ -1,6 +1,6 @@
-#include "include/login.h"
-#include "include/check.h"
-#include "include/main_window.h"
+#include "../include/login.h"
+#include "../include/check.h"
+#include "../include/main_window.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
 extern GtkWidget *regist_window;

@@ -1,7 +1,7 @@
 
-#include "include/main_window.h"
-#include "include/settings.h"
-#include "include/chatWindow.h"
+#include "../include/main_window.h"
+#include "../include/settings.h"
+#include "../include/chatWindow.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;

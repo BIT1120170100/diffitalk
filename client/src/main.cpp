@@ -1,6 +1,6 @@
-#include "include/chatWindow.h"
-#include "include/messList.h"
-#include "include/myInfo.h"
+#include "../include/chatWindow.h"
+#include "../include/messList.h"
+#include "../include/myInfo.h"
 #include <gtk/gtk.h>
 
 /**************************************************/
@@ -12,12 +12,12 @@
 /*作者： 
 /***************************************************/
 
-#include "include/main.h"
-#include "include/login.h"
-#include "include/regist.h"
-#include "include/reset.h"
-#include "include/settings.h"
-#include "include/main_window.h"
+#include "../include/main.h"
+#include "../include/login.h"
+#include "../include/regist.h"
+#include "../include/reset.h"
+#include "../include/settings.h"
+#include "../include/main_window.h"
 
 GtkWidget *main_window;
 GtkWidget *login_window;

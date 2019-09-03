@@ -8,8 +8,8 @@
 /***************************************************/
 #include <gtk/gtk.h>
 
-#include "include/chatWindow.h"
-#include "include/myInfo.h"
+#include "../include/chatWindow.h"
+#include "../include/myInfo.h"
 
 static  GtkWidget *entry_username;
 static  GtkWidget *entry_image;

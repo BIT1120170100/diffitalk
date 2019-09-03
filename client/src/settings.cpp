@@ -1,5 +1,5 @@
 
-#include"include/settings.h"
+#include"../include/settings.h"
 //#include"main.h"
 extern GtkWidget* main_window;
 extern GtkWidget* login_window;

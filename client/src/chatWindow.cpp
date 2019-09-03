@@ -1,5 +1,5 @@
-#include "include/chatWindow.h"
-#include "include/messList.h"
+#include "../include/chatWindow.h"
+#include "../include/messList.h"
 /**************************************************/
 /*名称： chatWindow
 /*描述：单独聊天

@@ -7,7 +7,7 @@
 /*作者：卢虹羽
 /***************************************************/
 #include <gtk/gtk.h>
-#include "include/myself_setting.h"
+#include "../include/myself_setting.h"
 static GtkWidget *entry_username;
 static GtkWidget *entry_image;
 static GtkWidget *entry_sign;
