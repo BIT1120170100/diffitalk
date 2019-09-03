@@ -1,0 +1,1 @@
+gcc -o connect connect.c `mysql_config --cflags --libs`

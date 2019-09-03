@@ -1,7 +1,7 @@
 /**************************************************/
-/*Ãû³Æ£ºÊý¾Ý¿â´´½¨ÒÀ¾Ý
-/*×÷³ÉÈÕÆÚ£º2019-09-02
-/*×÷Õß£ºÍõ×Ó¼Î
+/*ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½Ý¿â´´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½2019-09-02
+/*ï¿½ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½Ó¼ï¿½
 /***************************************************/
 1.typedef struct user{
     char user_name[STRING_LEN];
@@ -26,8 +26,8 @@ create table user (
 {
     int id;
     char id_to[20];
-    char id_from[20];     //ÏûÏ¢µÄ±êÊ¶·û
-    char str[MAXLEN + 1]; //ÏûÏ¢ÕýÎÄ
+    char id_from[20];     //
+    char str[MAXLEN + 1]; //ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
     time_t send_time;
 } Message;  
 create table message (
@@ -53,8 +53,6 @@ create table _group (
 	g_name char(20) not null,
 	member_id int(5) not null);
 5.create table friends (
-	creatorid int(5) not null primary key,
-	friendname char(20) not null,
+	userid int(5) not null ,
 	friendid int(5) not null,
-	groupid int(5) not null,
-	avatar char(20) not null);
+	PRIMARY KEY(userid,friendid));
