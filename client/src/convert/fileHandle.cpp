@@ -1,26 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@asleepcxy 
-Learn Git and GitHub without any code!
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-
- 
-1
-1 0 BIT1120170100/diffitalk
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Security  Insights
-diffitalk/lib/convert/fileHandle.cpp
-@feczheng feczheng Update fileHandle.cpp
-fa11348 3 hours ago
-@feczheng @asleepcxy
-332 lines (290 sloc)  9.88 KB
-  
 #include <iostream>
 #include <arpa/inet.h>
 #include <cstring>

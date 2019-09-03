@@ -18,7 +18,6 @@
 extern char *str_ip;
 int client_socket;
 
- 
 
 int init_client(int port, char *addr)
 {
@@ -85,12 +84,11 @@ int loginAndRigistCheck(int userid, const char *password, Kind kind, char *c_ipA
 	Data data;
 	Packet packet;
 
-	printf("c_ip: %s", c_ipAddr);
+	printf("c_ip: %s\n", c_ipAddr);
 	client_socket = init_client(MYPORT, c_ipAddr);
 
 	printf("kkk:%d\n", client_socket);
-	//UNDO
-	/*  if(client_socket < 0)
+	if(client_socket < 0)
     {
         printf("create socket error\n");
         exit(0);
@@ -105,9 +103,10 @@ int loginAndRigistCheck(int userid, const char *password, Kind kind, char *c_ipA
     read(client_socket, &packet, sizeof(Packet));
     parse_packet(packet,&kind,&data);
     //printf("kkkk:\n%s\n%s\n",data.userinfo.account,data.userinfo.password);
+
+    //
     if(kind==regist&&data.userinfo.user_id)  return 1;
     else if(kind==login&&data.userinfo.user_id) return 1;
     else return 0;
-    */
-	return 1;
+    return 1;
 }

@@ -38,7 +38,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         //先设置本地ip
         str_ip="127.0.0.1";
 
-      if (!loginAndRigistCheck(userid,password,login, str_ip) )
+      if ( loginAndRigistCheck(userid,password,login, str_ip) )
         { 
                  gtk_widget_hide_all(login_window);
                 main_window = create_main_window();
@@ -47,7 +47,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         }
         else
         {
-                showDialog("当前不存在该用户或密码输入错误！");//
+                showDialog("当前不存在该用户或密码输入错误");//
         }
         //g_print("username:%s\n",username);
         //g_print("password:%s\n",password);
