@@ -50,6 +50,8 @@ create table message (
 	userid int(5) not null ,
 	friendid int(5) not null,
 	PRIMARY KEY(userid,friendid));
+
+insert into friends(userid,friendid) values(1,2);
 create table groups(
 	g_id int not null auto_increment,
 	owner_id int not null,
@@ -59,3 +61,5 @@ create table groupinfo (
 	g_id int not null ,
 	member_id int not null,
 	 primary key(g_id,member_id));
+select * from user where user_id in (select friendid from friends where userid=
+select * from groups where groups.g_id in (select groupinfo.g_id from groupinfo where member_id=

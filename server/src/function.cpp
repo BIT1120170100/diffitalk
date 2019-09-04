@@ -166,8 +166,8 @@ void user_register(struct client_property *prop, char *username, char *password,
 	char *ret = addUser(username, password, email);
 	// printf("ret:%s",ret);
 	if (strcmp(ret, "error"))
-	{ 
-		sprintf(sqlcmd, "{\"type\":\"register-receipt\", \"userid\":\"%s\", \"status\":1}", ret);
+	{
+		sprintf(sqlcmd, "{\"type\":\"register-receipt\", \"userid\":\"%s\", \"username\":\"%s\", \"password\":\"%s\" \"status\":1}", ret, username, password);
 	}
 	else
 	{
@@ -205,7 +205,7 @@ void user_login(struct client_property *prop, char *userid, char *password)
 	if (result == 0)
 	{
 		printf("no such user\n");
-		sprintf(jsonstr, "{\"type\":\"login-receipt\",\"status\":%d,\"username\":\"%s\"}", status, userid);
+		sprintf(jsonstr, "{\"type\":\"login-receipt\",\"status\":%d,\"userid\":\"%s\"}", status, userid);
 	}
 	else
 	{
@@ -215,7 +215,15 @@ void user_login(struct client_property *prop, char *userid, char *password)
 		//if(prop1 != NULL) {
 		//	sprintf(jsonstr, "{\"type\":\"force-logout-notif\",\"username\":\"%s\"}", username);
 		//	send_message_by_fd(prop1->client_fd, jsonstr);
-		sprintf(jsonstr, "{\"type\":\"login-receipt\",\"status\":%d,\"username\":\"%s\"}", status, userid);
+		char *username = getUserDetail(userid);
+		if (strcmp(username, error) == 0)
+		{
+			sprintf(jsonstr, "{\"type\":\"login-receipt\",\"status\":%d,\"userid\":\"%s\",\"username\":\"%s\"}", status, userid, username);
+		}
+		else
+		{
+			sprintf(jsonstr, "{\"type\":\"login-receipt\",\"status\":%d,\"userid\":\"%s\",\"username\":\"%s\"}", 0, userid, username);
+		}
 		send_message_by_fd(prop->client_fd, jsonstr);
 		//	user_logout(prop1, username);
 		return;
@@ -294,14 +302,14 @@ int send_single_message_callback(void *arg, int nr, char **values, char **names)
 //char *message should be static...
 void send_single_message(char *message)
 {
-	// cJSON *root = cJSON_Parse(message);
-	// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
-	// char *sendto = cJSON_GetObjectItem(root, "sendto")->valuestring;
-	// char *content = cJSON_GetObjectItem(root, "content")->valuestring;
-	// char sqlcmd[2048];
-	// memset(sqlcmd, '\0', sizeof(sqlcmd));
-	// sprintf(sqlcmd, "select username from alluser where username=\'%s\'", sendto);
-	// sqlite3_exec(db, sqlcmd, send_single_message_callback, message, NULL);
+	cJSON *root = cJSON_Parse(message);
+	char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+	char *sendto = cJSON_GetObjectItem(root, "sendto")->valuestring;
+	char *content = cJSON_GetObjectItem(root, "content")->valuestring;
+	char sqlcmd[2048];
+	memset(sqlcmd, '\0', sizeof(sqlcmd));
+	sprintf(sqlcmd, "select username from alluser where username=\'%s\'", sendto);
+	//sqlite3_exec(db, sqlcmd, send_single_message_callback, message, NULL);
 }
 /**************************************************/
 /*名称：send_return_message
@@ -342,48 +350,46 @@ void send_return_message(char *message)
 /*返回值：VOID
 /*作者：李妙宇
 /***************************************************/
-void send_friend_list(char *username)
+void send_friend_list(char *userid)
 {
-	// char sqlcmd[1024];
-	// memset(sqlcmd, '\0', sizeof(sqlcmd));
-	// sprintf(sqlcmd, "select contact from contacts where username=\'%s\'", username);
-	// char **res;
+	//printf("sqlmd:%s\n",userid);
+	char sqlcmd[1024];
+	memset(sqlcmd, '\0', sizeof(sqlcmd));
+	sprintf(sqlcmd, "select contact from contacts where username=\'%s\'", userid);
+	//printf("sqlmd:%s\n",sqlcmd);
 	// char *errmsg;
-	// int nrow;
-	// int ncol;
-	// if (SQLITE_OK != sqlite3_get_table(db, sqlcmd, &res, &nrow, &ncol, &errmsg))
-	// {
-	// 	printf("error while reading friend list: %s\n", errmsg);
-	// 	return;
-	// }
 	// cJSON *root = cJSON_CreateObject();
 	// cJSON *list = cJSON_CreateArray();
 
-	// char contact_name[32];
-	// int i, j;
-	// int nindex = ncol;
-	// for (i = 0; i < nrow; i++)
-	// {
-	// 	for (j = 0; j < ncol; j++)
-	// 	{
-	// 		//printf("%s ", res[nindex]);
-	// 		strcpy(contact_name, res[nindex]);
-	// 		int status = (get_user_fd(contact_name) != -1);
-	// 		cJSON *item;
-	// 		cJSON_AddItemToArray(list, item = cJSON_CreateObject());
-	// 		cJSON_AddStringToObject(item, "username", copy_string(contact_name));
-	// 		cJSON_AddNumberToObject(item, "status", status);
-	// 		nindex++;
-	// 	}
-	// 	//printf("\n");
-	// }
-	// cJSON_AddStringToObject(root, "type", "friend-list");
-	// cJSON_AddNumberToObject(root, "size", nrow);
-	// cJSON_AddItemToObject(root, "list", list);
-	// char *jsonstr = copy_string(cJSON_Print(root));
-	// send_message_by_username(username, jsonstr);
-}
+	char contact_id[32];
+	int i, j;
+	cJSON *root = cJSON_CreateObject();
+	cJSON *list = cJSON_CreateArray();
+	List friend_list;
+	memset(contact_id, 0, sizeof(contact_id));
+	get_FriendInfo(userid, friend_list);
 
+	printf("ffff %s\n", friend_list.name[0]);
+	for (i = 0; i < friend_list.len; i++)
+	{
+		printf("%s\n", friend_list.id[i]);
+		//printf("%s ", res[nindex]);
+		strcpy(contact_id, friend_list.id[i]);
+		int status = (get_user_fd(contact_id) != -1);
+		cJSON *item;
+		cJSON_AddItemToArray(list, item = cJSON_CreateObject());
+		cJSON_AddStringToObject(item, "userid", copy_string(friend_list.id[i]));
+		cJSON_AddStringToObject(item, "username", copy_string(friend_list.name[i]));
+		cJSON_AddNumberToObject(item, "status", status);
+		// 	nindex++;
+		//printf("\n");
+	}
+	cJSON_AddStringToObject(root, "type", "friend-list");
+	cJSON_AddNumberToObject(root, "size", friend_list.len);
+	cJSON_AddItemToObject(root, "list", list);
+	char *jsonstr = copy_string(cJSON_Print(root));
+	send_message_by_username(userid, jsonstr);
+}
 /**************************************************/
 /*名称：add_contact
 /*描述：发送friend list
@@ -393,52 +399,30 @@ void send_friend_list(char *username)
 /*返回值：VOID
 /*作者：李妙宇
 /***************************************************/
-void add_contact(char *ua, char *ub)
+void add_contact(struct client_property *prop, char *user_id, char *friend_id)
 {
-	// printf("%s trying to add %s as contact\n", ua, ub);
-	// cJSON *root = cJSON_CreateObject();
-	// cJSON_AddStringToObject(root, "type", "add-to-contact-receipt");
-	// cJSON_AddStringToObject(root, "username", ua);
-	// cJSON_AddStringToObject(root, "contact", ub);
-	// char sqlcmd[BUFFER_SIZE];
-	// char ** res; char * errmsg; int nrow = 0, ncol = 0;
+	printf("add_friend %s %s %s\n", user_id, friend_id);
+	char sqlcmd[2048];
+	memset(sqlcmd, '\0', sizeof(sqlcmd));
+	//sprintf(sqlcmd, "insert into alluser values(\'%s\', \'%s\')", username, password);
+	char *ret = addFriend(user_id, friend_id);
+	// printf("ret:%s",ret);
+	if (strcmp(ret, error) != 0)
+	{
+		sprintf(sqlcmd, "{\"type\":\"add-friend-receipt\", \"status\":1}");
+	}
+	else
+	{
+		sprintf(sqlcmd, "{\"type\":\"add-friend-receipt\", \"status\":0}");
+	}
 
-	// if(strcmp(ua, ub) == 0){
-	//     cJSON_AddNumberToObject(root, "status", -1);
-	// } else {
-	// 	memset(sqlcmd, '\0', sizeof(sqlcmd));
-	// 	sprintf(sqlcmd, "select username from alluser where username=\'%s\'", ub);
-	// 	sqlite3_get_table(db, sqlcmd, &res, &nrow, &ncol, &errmsg);
-	// 	//user does not exist
-	// 	printf("%d\n", nrow);
-	// 	if(nrow != 1) {
-	// 		cJSON_AddNumberToObject(root, "status", 0);
-	// 	} else {
-	// 	    memset(sqlcmd, '\0', sizeof(sqlcmd));
-	// 		//already contact?
-	// 	    sprintf(sqlcmd, "select * from contacts where username=\'%s\' and contact=\'%s\'", ua, ub);
-	// 	    sqlite3_get_table(db, sqlcmd, &res, &nrow, &ncol, &errmsg);
-	// 	    if(nrow == 1) {
-	// 	        cJSON_AddNumberToObject(root, "status", 0);
-	// 	        return ;
-	// 	    } else {
-	// 	        sprintf(sqlcmd, "insert into contacts values(\'%s\',\'%s\')", ua, ub);
-	// 	        printf("%s\n", sqlcmd);
-	// 	        if(sqlite3_exec(db, sqlcmd, NULL, NULL, NULL) == SQLITE_OK) {
-	// 	            cJSON_AddNumberToObject(root, "status", 1);
-	// 	        } else {
-	// 	            cJSON_AddNumberToObject(root, "status", 0);
-	// 	        }
-	// 	    }
-	// 	}
-	// }
-	// send_message_by_username(ua, copy_string(cJSON_Print(root)));
+	send_message_by_fd(prop->client_fd, sqlcmd);
 }
 /**************************************************/
 /*名称：create_group_callback
 /*描述：创建群组的回调函数
 /*作成日期：2019-9-3 
-/*参数：sqlite3_exec的回调函数（详见sqlite3文档）
+/*参数：
 /*返回值：VOID
 /*作者：李妙宇
 /***************************************************/
@@ -465,25 +449,29 @@ void create_group_callback(void *arg, int nr, char **values, char **names)
 /*返回值：VOID
 /*作者：李妙宇
 /***************************************************/
-void create_group(char *username)
+void create_group(char *userid, char *g_name)
 {
-	// char sqlcmd[1024];
-	// printf("creating group for %s\n", username);
-	// sprintf(sqlcmd, "insert into grouplist values(null, \'%s\')", username);
-	// int ret = sqlite3_exec(db, sqlcmd, NULL, NULL, NULL);
-	// if (ret == SQLITE_OK)
-	// {
-	// 	sprintf(sqlcmd, "select groupID from grouplist where creator=\'%s\' order by groupID desc limit 0, 1", username);
-	// 	ret = sqlite3_exec(db, sqlcmd, create_group_callback, username, NULL);
-	// }
-	// else
-	// {
-	// 	char message = (char *)malloc(sizeof(char) * BUFFER_SIZE);
-	// 	sprintf(message, "{\
-	// 	\"type\":\"group-create-receipt\",\
-	// 	\"status\":0}");
-	// 	send_message_by_username(username, message);
-	// }
+	char sqlcmd[1024];
+	printf("creating group for %s as name: %s\n", userid, g_name);
+	sprintf(sqlcmd, "insert into grouplist values(null, \'%s\')", userid);
+	int ret = addGroup(g_name, userid);
+	if (ret == 1)
+	{
+		sprintf(sqlcmd, "select groupID from grouplist where creator=\'%s\' order by groupID desc limit 0, 1", userid);
+		char *message = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+		sprintf(message, "{\
+		\"type\":\"group-create-receipt\",\
+		\"status\":1}");
+		send_message_by_username(userid, message);
+	}
+	else
+	{
+		char *message = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+		sprintf(message, "{\
+		\"type\":\"group-create-receipt\",\
+		\"status\":0}");
+		send_message_by_username(userid, message);
+	}
 }
 /**************************************************/
 /*名称：group_exist
@@ -606,36 +594,39 @@ void quit_group(char *username, int groupID)
 /*返回值：VOID
 /*作者：李妙宇
 /***************************************************/
-void send_group_list(char *username)
+void send_group_list(char *userid)
 {
-	// char sqlcmd[1024];
-	// memset(sqlcmd, '\0', sizeof(sqlcmd));
-	// sprintf(sqlcmd, "select groupID from groupmember where member=\'%s\'", username);
-	// char **res; char *errmsg; int nrow; int ncol;
-	// if(SQLITE_OK != sqlite3_get_table(db, sqlcmd, &res, &nrow, &ncol, &errmsg)) {
-	// 	printf("error while reading group list: %s\n", errmsg);
-	// 	return ;
-	// }
-	// cJSON *root = cJSON_CreateObject();
-	// cJSON *list = cJSON_CreateArray();
+	char sqlcmd[1024];
+	memset(sqlcmd, '\0', sizeof(sqlcmd));
+	//printf(sqlcmd, "select groupID from groupmember where member=\'%s\'", username);
+	List g_list;
+	getGroup(userid, g_list);
+	cJSON *root = cJSON_CreateObject();
+	cJSON *list = cJSON_CreateArray();
+	int i;
+	for (i = 0; i < g_list.len; i++)
+	{
+		printf("%s\n", g_list.id[i]);
+		//printf("%s ", res[nindex]);
+		cJSON *item;
+		cJSON_AddItemToArray(list, item = cJSON_CreateObject());
+		cJSON_AddStringToObject(item, "groupid", copy_string(g_list.id[i]));
+		cJSON_AddStringToObject(item, "username", copy_string(g_list.name[i]));
+		// 	nindex++;
+		//printf("\n");
+	}
 
-	// int groupID;
-	// int i, j; int nindex = ncol;
-	// for(i=0;i<nrow;i++){
-	// 	for(j=0;j<ncol;j++){
-	// 		sscanf(res[nindex], "%d", &groupID);
-	// 		cJSON *item;
-	// 		cJSON_AddItemToArray(list, item = cJSON_CreateObject());
-	// 		cJSON_AddNumberToObject(item, "groupID", groupID);
-	// 		nindex++;
-	// 	}
-	// 	//printf("\n");
-	// }
-	// cJSON_AddStringToObject(root, "type", "group-list");
-	// cJSON_AddNumberToObject(root, "size", nrow);
-	// cJSON_AddItemToObject(root, "list", list);
-	// char *jsonstr = copy_string(cJSON_Print(root));
-	// send_message_by_username(username, jsonstr);
+	cJSON_AddStringToObject(root, "type", "group-list");
+	cJSON_AddNumberToObject(root, "size", g_list.len);
+	cJSON_AddItemToObject(root, "list", list);
+	char *jsonstr = copy_string(cJSON_Print(root));
+	send_message_by_username(userid, jsonstr);
+
+	cJSON_AddStringToObject(root, "type", "friend-list");
+	cJSON_AddNumberToObject(root, "size", friend_list.len);
+	cJSON_AddItemToObject(root, "list", list);
+	char *jsonstr = copy_string(cJSON_Print(root));
+	send_message_by_username(userid, jsonstr);
 }
 /**************************************************/
 /*名称：send_group_message_callback
@@ -800,7 +791,7 @@ void handle_client_message(struct client_property *prop, const char *message)
 	{
 		memset(message_json, '\0', sizeof(message_json));
 		strcpy(message_json, message);
-		//send_single_message(message_json);
+		send_single_message(message_json);
 	}
 	else if (strcmp(type, "message/text/group") == 0)
 	{
@@ -810,24 +801,27 @@ void handle_client_message(struct client_property *prop, const char *message)
 	}
 	else if (strcmp(type, "friend-list-request") == 0)
 	{
-		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
-		send_friend_list(username);
+		//printf("in judge type \n");
+		char *userid = cJSON_GetObjectItem(root, "username")->valuestring;
+		//printf("in judge type %s\n",userid);
+		send_friend_list(userid);
 	}
-	else if (strcmp(type, "add-to-contact-request") == 0)
+	else if (strcmp(type, "add-friend-receipt") == 0)
 	{
-		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
-		char *contact = cJSON_GetObjectItem(root, "contact")->valuestring;
-		add_contact(username, contact);
+		char *user_id = cJSON_GetObjectItem(root, "user_id")->valuestring;
+		char *friend_id = cJSON_GetObjectItem(root, "friend_id")->valuestring;
+		add_contact(prop, user_id, friend_id);
 	}
 	else if (strcmp(type, "group-create-request") == 0)
 	{
-		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
-		create_group(username);
+		char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
+		char *groupname = cJSON_GetObjectItem(root, "groupname")->valuestring;
+		create_group(groupname, userid);
 	}
 	else if (strcmp(type, "group-list-request") == 0)
 	{
-		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
-		send_group_list(username);
+		char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
+		send_group_list(userid);
 	}
 	else if (strcmp(type, "group-profile-request") == 0)
 	{
@@ -918,9 +912,6 @@ void *client_thread_function(void *arg)
 		}
 		buf[numbytes] = '\0';
 		handle_client_message(prop, buf);
-		//log when receive a message
-		//sprintf(log_buffer, "recv %s\n", buf);
-		//write_log(logfile, log_buffer);
 		printf("BYE\n");
 	}
 	delete_client(prop);
