@@ -21,6 +21,8 @@
 //buffer size for receiving message
 #define BUFFER_SIZE 2048 //消息缓冲区长度
 
+const char error[100] = "error";
+
 //storing the clients' property
 struct client_property {
 	struct sockaddr_in addr;
