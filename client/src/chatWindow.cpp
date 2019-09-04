@@ -320,9 +320,9 @@ void on_send(GtkButton *button, gpointer data)
     gtk_text_buffer_get_end_iter(buffer, &iter);
     gtk_text_buffer_insert(buffer, &iter, get_buf, -1); //write
     
-    printf("send mess:%s\n",s);
+    printf("send mess:%s\n",mes);
     
-    char to[200]='2';
+    char to[200]="2";
     build_packet(chat, to, mes, currentUser.user_id);
 }
 /**************************************************/
