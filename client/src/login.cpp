@@ -35,7 +35,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
 
         g_print("password:%s\n", password);
 
-        build_packet(login, id, pw, NULL);
+        build_packet(login, id, pw, NULL);  
 }
 
 void doLogin()

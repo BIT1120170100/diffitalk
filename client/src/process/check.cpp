@@ -42,11 +42,14 @@ void auto_update_thread()
 {
 	while (1)
 	{
+		sleep(15);
+		build_packet(list_update,NULL,NULL,NULL); 
 		sleep(5);
-		// exec_cmd(6, NULL, NULL);
+		build_packet(group_update,NULL,NULL,NULL);
+		
 		sleep(10);
-		// exec_cmd(7, NULL, NULL);
-		sleep(10);
+
+		printf("group : %d\n friend :%d\n", group_list_size, friend_list_size);
 	}
 }
 
@@ -133,8 +136,8 @@ void handle_message(char *message)
 			char *username = cJSON_GetObjectItem(root, "username")->valuestring;
 			strcpy(currentUser.user_id, userid);
 			strcpy(currentUser.user_name, username);
-			// strcpy(currentUser.user_id,userid);
-
+			//strcpy(currentUser.user_id,userid);
+			// printf("now is : %s\n",currentUser.user_id);
 			//login_action(username);
 			gdk_threads_enter();
 			doLogin();
@@ -152,15 +155,6 @@ void handle_message(char *message)
 			exit(1);
 		}
 	}
-	// else if (strcmp(type, "force-logout-notif") == 0)
-	// {
-	// 	char *username = cJSON_GetObjectItem(root, "username");
-	// 	if (strcmp(current_username, username) == 0)
-	// 	{
-	// 		printf("user %s force logout\n", username);
-	// 		logout_action();
-	// 	}
-	// }
 	else if (strcmp(type, "message/text") == 0)
 	{
 		// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
@@ -175,22 +169,6 @@ void handle_message(char *message)
 		gdk_threads_leave();
 		//exec_cmd(13, "single", sendfrom);
 	}
-	// else if (strcmp(type, "return-message-filetransform") == 0)
-	// { //收到传文件的指令后新建线程传文件
-	// 	char *ipfd = cJSON_GetObjectItem(root, "Ipfd")->valuestring;
-	// 	char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
-	// 	if (ipfd == NULL)
-	// 	{
-	// 		exec_cmd(5, sendfrom, "Sorry your friend is not online.");
-	// 	}
-	// 	strcpy(temp_transform_information.ip, ipfd);
-	// 	strcpy(temp_transform_information.position, cJSON_GetObjectItem(root, "content")->valuestring);
-	// 	pthread_mutex_lock(&testlock);
-	// 	pthread_t client_thread;
-	// 	printf("caonima");
-	// 	int client_thread_res = pthread_create(&client_thread, NULL, send_main, (void *)&temp_transform_information);
-	// 	pthread_mutex_unlock(&testlock);
-	// }
 	else if (strcmp(type, "message/text/group") == 0)
 	{
 		// printf("[%d]\n", root == NULL);
@@ -222,7 +200,7 @@ void handle_message(char *message)
 		gdk_threads_leave();
 		//exec_cmd(13, "group", &sendto);
 	}
-	else if (strcmp(type, "friend-list") == 0)
+	else if (strcmp(type, "friend-list-receipt") == 0)
 	{
 		//friend list
 		int size = cJSON_GetObjectItem(root, "size")->valueint;
@@ -259,25 +237,27 @@ void handle_message(char *message)
 			printf("create group failed");
 		}
 	}
-	// else if (strcmp(type, "group-list") == 0)
-	// {
-	// 	//group list
-	// 	int size = cJSON_GetObjectItem(root, "size")->valueint;
-	// 	cJSON *list = cJSON_GetObjectItem(root, "list");
-	// 	int i;
-	// 	printf("groups of user %s:\n", currentUser.user_id);
-	// 	group_list_size = size;
-	// 	for (i = 0; i < size; i++)
-	// 	{
-	// 		cJSON *item = cJSON_GetArrayItem(list, i);
-	// 		int groupID = cJSON_GetObjectItem(item, "groupID")->valueint;
-	// 		printf("group %d\n", groupID);
-	// 		groupdata[i].groupID = groupID;
-	// 	}
-	// 	gdk_threads_enter();
-	// 	update_grouplist(UPDATE_GROUPLIST);
-	// 	gdk_threads_leave();
-	// } UNDO
+	else if (strcmp(type, "group-list-receipt") == 0)
+	{
+		//group list
+		int size = cJSON_GetObjectItem(root, "size")->valueint;
+		cJSON *list = cJSON_GetObjectItem(root, "list");
+		int i;
+		printf("groups of user %s:\n", currentUser.user_id);
+		group_list_size = size;
+		for (i = 0; i < size; i++)
+		{
+			cJSON *item = cJSON_GetArrayItem(list, i);
+			char *groupID = cJSON_GetObjectItem(item, "groupid")->valuestring;
+			char *groupName = cJSON_GetObjectItem(item, "groupname")->valuestring;
+			printf("group %d\n", groupID);
+			strcpy(groupdata[i].groupID, groupID);
+			strcpy(groupdata[i].g_name, groupName);
+		}
+		gdk_threads_enter();
+		// update_grouplist(UPDATE_GROUPLIST);
+		gdk_threads_leave();
+	}
 	// else if (strcmp(type, "group-profile") == 0)
 	// {
 	// 	//group profile
@@ -464,12 +444,12 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3)
 		break;
 	case list_update: //添加后更新好友列表
 		cJSON_AddStringToObject(root, "type", "friend-list-request");
-		cJSON_AddStringToObject(root, "username", currentUser.user_id);
+		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
 		send_function(cJSON_Print(root));
 		break;
 	case group_update:
 		cJSON_AddStringToObject(root, "type", "group-list-request");
-		cJSON_AddStringToObject(root, "username", currentUser.user_name);
+		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
 		send_function(cJSON_Print(root));
 		break;
 	case group_add:

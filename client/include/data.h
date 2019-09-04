@@ -86,7 +86,11 @@ typedef struct _group
     char g_name[STRING_LEN];
     int member_id[MAX_GROUP_NUM];
 } Group;
-
+typedef struct _zu
+{
+    char groupID[STRING_LEN];
+    char g_name[STRING_LEN]; 
+} zu; 
 typedef struct _packet
 {
     Kind kind; //包类型
@@ -111,6 +115,8 @@ typedef struct MyUser
 static MyUser currentUser;
 //当前用户的好友
 static MyUser friends[MAXLEN];
+static zu groupdata[MAXLEN];
+
 static int friend_list_size=0;
 static int group_list_size=0;
 // 创建的套接字

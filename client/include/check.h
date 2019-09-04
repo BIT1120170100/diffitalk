@@ -37,6 +37,7 @@ void handle_message(char *message);
 void recv_thread();
 int build_packet(Kind kind, void *arg1, void *arg2, void *arg3); //, void *arg3 = NULL
 int init_client();
+void auto_update_thread();
 //int build_packet(Kind kind, void *arg1, void *arg2, void *arg3 ) ; 
 //int addFriend(char *userid, char *c_ipAddr);
 // int listUpdate(char *userid); 
