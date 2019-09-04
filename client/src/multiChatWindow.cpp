@@ -61,10 +61,17 @@ GtkWidget *create_button_expression_(void) //expression
 {
     GtkWidget *image;
     GtkWidget *button;
+    GdkPixbuf *src_pixbuf;
+    GdkPixbuf *dest_pixbuf;
 
-    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
+    //image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
-    gtk_widget_set_size_request(button, 30, 30);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/expression.png", NULL);
+    //将src_pixbuf设置成屏幕大小
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 30, 30, GDK_INTERP_HYPER);
+    //从dest_pixbuf中读取图片存于image中
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_widget_set_size_request(button, 40, 40);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
@@ -82,10 +89,17 @@ GtkWidget *create_button_image_(void) //image
 {
     GtkWidget *image;
     GtkWidget *button;
+    GdkPixbuf *src_pixbuf;
+    GdkPixbuf *dest_pixbuf;
 
-    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
+    //image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
-    gtk_widget_set_size_request(button, 30, 30);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/image.png", NULL);
+    //将src_pixbuf设置成屏幕大小
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 30, 30, GDK_INTERP_HYPER);
+    //从dest_pixbuf中读取图片存于image中
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_widget_set_size_request(button, 40, 40);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
@@ -103,10 +117,17 @@ GtkWidget *create_button_file_(void) //files
 {
     GtkWidget *image;
     GtkWidget *button;
+    GdkPixbuf *src_pixbuf;
+    GdkPixbuf *dest_pixbuf;
 
-    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
+    //image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
-    gtk_widget_set_size_request(button, 30, 30);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/file.png", NULL);
+    //将src_pixbuf设置成屏幕大小
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 30, 30, GDK_INTERP_HYPER);
+    //从dest_pixbuf中读取图片存于image中
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_widget_set_size_request(button, 40, 40);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
@@ -124,10 +145,17 @@ GtkWidget *create_button_history_(void) //history
 {
     GtkWidget *image;
     GtkWidget *button;
+    GdkPixbuf *src_pixbuf;
+    GdkPixbuf *dest_pixbuf;
 
-    image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
+    //image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
-    gtk_widget_set_size_request(button, 30, 30);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/search.png", NULL);
+    //将src_pixbuf设置成屏幕大小
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 30, 30, GDK_INTERP_HYPER);
+    //从dest_pixbuf中读取图片存于image中
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_widget_set_size_request(button, 40, 40);
     gtk_container_add(GTK_CONTAINER(button), image);
     gtk_widget_show(image);
     return button;
@@ -258,6 +286,12 @@ void createMultiChatWindow(GtkWidget *button_ori, gpointer *data)
     GtkTextBuffer *buffer;
     GtkTextIter *Iter; //no use
 
+    GtkWidget *vbox_right;//右侧QQ秀显示
+    gchar * content_group = "This should be YOU!!!";//quanju
+    // gchar * content_self = "传入自身用户信息";//quanju
+    GdkPixbuf *src_pixbuf;
+    GdkPixbuf *dest_pixbuf; 
+
     //init
     // gtk_init(&argc, &argv);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -284,7 +318,7 @@ void createMultiChatWindow(GtkWidget *button_ori, gpointer *data)
 
     //second-left-2-function
     box = gtk_hbox_new(FALSE, 0);
-    gtk_widget_set_size_request(box, 400, 30);
+    gtk_widget_set_size_request(box, 400, 40);
     button_expression = create_button_expression_();
     gtk_box_pack_start(GTK_BOX(box), button_expression, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button_expression), "clicked", G_CALLBACK(button_send_expression_), NULL);
@@ -311,10 +345,16 @@ void createMultiChatWindow(GtkWidget *button_ori, gpointer *data)
     gtk_widget_set_size_request(vbox, 200, 400);
     gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 3);
     //second-right-1-another
+    vbox_right = gtk_vbox_new(FALSE,3);
+    gtk_box_pack_start(GTK_BOX(vbox), vbox_right, TRUE, TRUE, 1);
     frame = gtk_frame_new("Normal Label");
-    label = gtk_label_new("This should be the imformation of anotherone");
+    label = gtk_label_new(content_group);
     gtk_container_add(GTK_CONTAINER(frame), label);
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
+    gtk_box_pack_start(GTK_BOX(vbox_right), frame, TRUE, TRUE, 0);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/1.jpg", NULL); 
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 150, 150, GDK_INTERP_HYPER);
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_box_pack_start(GTK_BOX(vbox_right), image, TRUE, TRUE, 0);
     //second-right-2-mine
     // frame = gtk_frame_new("Normal Label");
     // label = gtk_label_new("This should be your imformation");
