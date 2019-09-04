@@ -10,7 +10,7 @@ extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
 login_info info;
-extern char* str_ip; 
+extern char *str_ip;
 
 /**************************************************/
 /*名称：on_login_clicked
@@ -24,29 +24,25 @@ extern char* str_ip;
 /***************************************************/
 void on_login_clicked(GtkWidget *button, login_info *data)
 {
-        
+
         const char *username = gtk_entry_get_text(GTK_ENTRY(data->user_id));
         const char *password = gtk_entry_get_text(GTK_ENTRY(data->password));
-         //int userid =0;
-       char id[10];
-       char pw[100];
-       strcpy(id,username);
-        strcpy(pw,password);
+        //int userid =0;
+        char id[10];
+        char pw[100];
+        strcpy(id, username);
+        strcpy(pw, password);
 
-        g_print("password:%s\n", password); 
-         
+        g_print("password:%s\n", password);
 
-        if ( loginAndRigistCheck(id,pw,login, str_ip,NULL) ) 
-        { 
-                gtk_widget_hide_all(login_window);
-                main_window = create_main_window();
-                gtk_widget_show_all(main_window);
-        }
-        else
-        {
-                 close(client_socket);
-                showDialog("当前不存在该用户或密码输入错误");//
-        } 
+        build_packet(login, id, pw, NULL);
+}
+
+void doLogin()
+{
+        gtk_widget_hide_all(login_window);
+        main_window = create_main_window();
+        gtk_widget_show_all(main_window);
 }
 /**************************************************/
 /*名称：login_to_regist_clicked
@@ -112,12 +108,12 @@ GtkWidget *create_login()
 
         box = gtk_vbox_new(FALSE, 0);
         gtk_container_add(GTK_CONTAINER(window), box);
-        image=gtk_image_new_from_file("../source/skins/logingif.gif");
-	gtk_box_pack_start(GTK_BOX(box),image,FALSE,FALSE,5);
-	box1=gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(box),box1,FALSE,FALSE,5);
-	box2=gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(box),box2,FALSE,FALSE,5);
+        image = gtk_image_new_from_file("../source/skins/logingif.gif");
+        gtk_box_pack_start(GTK_BOX(box), image, FALSE, FALSE, 5);
+        box1 = gtk_hbox_new(FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(box), box1, FALSE, FALSE, 5);
+        box2 = gtk_hbox_new(FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(box), box2, FALSE, FALSE, 5);
 
         label1 = gtk_label_new("userid:");
         entry1 = gtk_entry_new();
@@ -135,8 +131,8 @@ GtkWidget *create_login()
         info.user_id = entry1;
         info.password = entry2;
         g_signal_connect(G_OBJECT(login), "clicked",
-                          G_CALLBACK(on_login_clicked), &info);
-       gtk_box_pack_start(GTK_BOX(box), login, FALSE, FALSE, 5);
+                         G_CALLBACK(on_login_clicked), &info);
+        gtk_box_pack_start(GTK_BOX(box), login, FALSE, FALSE, 5);
 
         sep = gtk_hseparator_new();
         gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 5);
@@ -147,7 +143,7 @@ GtkWidget *create_login()
         gtk_box_pack_start(GTK_BOX(box), reset, FALSE, FALSE, 5);
 
         regst = gtk_button_new_with_label("register");
-       g_signal_connect(G_OBJECT(regst), "clicked",
+        g_signal_connect(G_OBJECT(regst), "clicked",
                          G_CALLBACK(login_to_regist_clicked), window);
         gtk_box_pack_start(GTK_BOX(box), regst, FALSE, FALSE, 5);
 

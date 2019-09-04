@@ -1,13 +1,10 @@
 #include "../../include/check.h"
-#include <gtk/gtk.h>
+#include "../../include/login.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-
-#include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -15,12 +12,9 @@
 #include <stdarg.h>
 
 #include <gtk/gtk.h>
-#include <stdio.h>
-#include <strings.h>
 #include "../../include/data.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -42,6 +36,20 @@
 /*作者： 
 /***************************************************/
 char buffer[BUFFER_SIZE], send_buffer[BUFFER_SIZE];
+
+//创建自动更新线程
+void auto_update_thread()
+{
+	while (1)
+	{
+		sleep(5);
+		// exec_cmd(6, NULL, NULL);
+		sleep(10);
+		// exec_cmd(7, NULL, NULL);
+		sleep(10);
+	}
+}
+
 //MyUser currentUser;
 //监听 接受线程
 //在主函数创建
@@ -52,7 +60,7 @@ void recv_thread()
 	{
 		memset(buffer, 0, BUFFER_SIZE);
 		numbytes = recv(client_socket, buffer, BUFFER_SIZE, 0);
-		printf("recv over, client_socket = %d, numbytes = %d\n", client_socket);
+
 		if (numbytes == 0)
 		{
 			printf("server offline.\n");
@@ -104,12 +112,13 @@ void handle_message(char *message)
 			strcpy(currentUser.user_password, password);
 			strcpy(currentUser.user_id, userid);
 			strcpy(currentUser.user_name, username);
+			doLogin();
 			//action undo
 		}
 		else
 		{
 			printf("register new user %s fail\n", username);
-			showDialog("注册失败");
+			// showDialog("注册失败");
 		}
 		gdk_threads_leave();
 	}
@@ -117,23 +126,29 @@ void handle_message(char *message)
 	{
 		//received the login receipt from server
 		int status = cJSON_GetObjectItem(root, "status")->valueint;
-		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
-		char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
-		// char *password = cJSON_GetObjectItem(root, "password")->valuestring;
-		//	int userimage = cJSON_GetObjectItem(root, "image")->valueint;
+		printf("%d\n", status);
 		if (status == 1)
 		{
-			//&& username != NULL
+			char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
+			char *username = cJSON_GetObjectItem(root, "username")->valuestring;
+			strcpy(currentUser.user_id, userid);
+			strcpy(currentUser.user_name, username);
+			// strcpy(currentUser.user_id,userid);
+
 			//login_action(username);
 			gdk_threads_enter();
+			doLogin();
 			//undo 改变在线状态
 			//change_my_portrait(userimage);
 			gdk_threads_leave();
 		}
 		else
 		{
+			sleep(3);
+			gdk_threads_enter();
 			showDialog("登陆失败!\n");
-			//create_new_pop_window("login failed\n");
+			gdk_threads_leave();
+			printf("登陆失败!\n");
 			exit(1);
 		}
 	}
@@ -348,42 +363,42 @@ int send_function(char *message)
 	return send(client_socket, send_buffer, BUFFER_SIZE, 0);
 }
 
-int init_client(int port, char *addr)
+int init_client()
 {
 	int try_time;
 	struct sockaddr_in server_addr;
 
-	cli_socket = socket(AF_INET, SOCK_STREAM, 0); //创建客户端套接字
-	if (cli_socket == -1)
+	client_socket = socket(AF_INET, SOCK_STREAM, 0); //创建客户端套接字
+	if (client_socket == -1)
 	{
 		return -1;
 	}
-	server_addr.sin_addr.s_addr = inet_addr(addr);
-	server_addr.sin_port = htons(port);
+	server_addr.sin_addr.s_addr = inet_addr(str_ip);
+	server_addr.sin_port = htons(MYPORT);
 	server_addr.sin_family = AF_INET;
-
 	try_time = 0; //如果不成功每隔一秒连接一次，最多10次
-	while (try_time < 10 && connect(cli_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
+
+	while (try_time < 5 && connect(client_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
 	{
 		sleep(1);
 		try_time++;
 	}
-	if (try_time >= 10)
+	if (try_time >= 5)
 		return -1;
 	else
-		return cli_socket;
+		return client_socket;
 }
 
-int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 = NULL
+int build_packet(Kind kind, void *arg1, void *arg2, void *arg3)
 {
 	cJSON *root = cJSON_CreateObject();
-	printf("build_packet init==============\n");
+	printf("build_packet init\n");
 	if (root == NULL)
 	{
 		printf("create json object failed\n");
 		return 1;
 	}
-	printf("build_packet  switch==============\n");
+	printf("build_packet  switch\n");
 	switch (kind)
 	{
 		// regist, login,  logout, chat, modify,  friend_add,chat_together
@@ -441,7 +456,6 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 		cJSON_AddStringToObject(root, "msgID", "segmentfault");
 		send_function(cJSON_Print(root));
 		break;
-		break;
 	case friend_add:
 		cJSON_AddStringToObject(root, "type", "add-friend-request");
 		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
@@ -451,6 +465,11 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 	case list_update: //添加后更新好友列表
 		cJSON_AddStringToObject(root, "type", "friend-list-request");
 		cJSON_AddStringToObject(root, "username", currentUser.user_id);
+		send_function(cJSON_Print(root));
+		break;
+	case group_update:
+		cJSON_AddStringToObject(root, "type", "group-list-request");
+		cJSON_AddStringToObject(root, "username", currentUser.user_name);
 		send_function(cJSON_Print(root));
 		break;
 	case group_add:

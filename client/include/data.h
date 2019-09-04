@@ -62,7 +62,8 @@ typedef enum _kind
     friend_add,
     chat_together,
     list_update,
-    group_add
+    group_add,
+     group_update
     //注册		登录 		 登出		 发送消息    修改用户密码
 } Kind; //用枚举变量表示
 typedef enum Operate_freind
@@ -113,8 +114,7 @@ static MyUser friends[MAXLEN];
 static int friend_list_size=0;
 static int group_list_size=0;
 // 创建的套接字
-static int cli_socket;
-static int client_socket;
+static int client_socket; 
 // 服务器id
 static char *str_ip = "192.168.43.77";
 //本机的ip

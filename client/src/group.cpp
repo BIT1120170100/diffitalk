@@ -72,8 +72,8 @@ void on_group_search(GtkWidget *button, gpointer *data)
 
       char id[10];
     strcpy(id, ID);
-    if (addGroup(id, str_ip))
-    { 
+    if (1)
+    { //addGroup(id, str_ip)
         //成功后更新列表
         //listUpdate(currentUser.user_id);
         printf("创建成功");

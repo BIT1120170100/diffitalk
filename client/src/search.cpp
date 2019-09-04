@@ -159,10 +159,11 @@ void on_click_add(GtkWidget *button, gpointer  *data)
     const char *userid = gtk_entry_get_text(GTK_ENTRY(data));
     char id[10];
     strcpy(id, userid);
-    if (addFriend(id, str_ip))
+    if(1)
+    // if (addFriend(id, str_ip))
     { 
         //成功后更新列表
-        listUpdate(currentUser.user_id);
+        // listUpdate(currentUser.user_id);
         printf("创建成功");
     }
     else
