@@ -5,6 +5,7 @@
 #include "../include/myself_setting.h"
 #include "../include/list.h"
 #include"../include/group.h"
+#include"../include/data.h"
 #include"../include/search.h"
 //#include"main.h"
 extern GtkWidget *main_window;
@@ -139,19 +140,15 @@ GtkWidget *create_main_window()
 
     gtk_fixed_put(GTK_FIXED(headbox),head,120,0);
     gtk_widget_set_size_request(head, 70, 70);
-
-    username = gtk_label_new("username");
+   // g_print("%s\n",currentUser.user_id);
+    username = gtk_label_new(currentUser.user_id);
     gtk_box_pack_start(GTK_BOX(box1), headbox, FALSE, FALSE, 3);
     gtk_box_pack_start(GTK_BOX(box1), username, FALSE, FALSE, 3);
     gtk_table_set_row_spacings(GTK_TABLE(table1), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table1), 5);
     gtk_box_pack_start(GTK_BOX(box1), table1, FALSE, FALSE, 3);
-    searchtext = gtk_entry_new();
-    searchbutton = gtk_button_new_with_label("search");
-    g_signal_connect(searchbutton, "clicked",
-                     G_CALLBACK(create_search), NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table1), searchtext, 0, 4, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table1), searchbutton, 4, 5, 0, 1);
+    
+    
 
     s = gtk_hseparator_new();
     gtk_box_pack_start(GTK_BOX(box1), s, FALSE, FALSE, 3);
@@ -173,6 +170,10 @@ GtkWidget *create_main_window()
         G_CALLBACK(on_click_friend),scrolled_window);
     gtk_box_pack_start(GTK_BOX(box1),scrolled_window,FALSE,FALSE,3);
     
+    searchbutton = gtk_button_new_with_label("search");
+    g_signal_connect(searchbutton, "clicked",
+                     G_CALLBACK(create_search), NULL);
+    gtk_box_pack_start(GTK_BOX(box1), searchbutton, FALSE, FALSE, 3);
     settingsbutton = gtk_button_new_with_label("settings");
     gtk_box_pack_start(GTK_BOX(box1), settingsbutton, FALSE, FALSE, 3);
     g_signal_connect(settingsbutton, "button_press_event",
