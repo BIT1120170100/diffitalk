@@ -1,3 +1,7 @@
+#include "../include/regist.h"
+#include"../include/check.h"
+#include "../include/data.h"
+#include "../include/errorMess.h"
 /**************************************************/
 
 /*名称：search.c
@@ -150,10 +154,21 @@ GtkWidget *create_button(void)
 
 /***************************************************/
 
-void on_click_add(GtkWidget *button, gpointer data)
-
-{
-
+void on_click_add(GtkWidget *button, gpointer  *data)
+{ 
+    const char *userid = gtk_entry_get_text(GTK_ENTRY(data));
+    char id[10];
+    strcpy(id, userid);
+    if (addFriend(id, str_ip))
+    { 
+        //成功后更新列表
+        listUpdate(currentUser.user_id);
+        printf("创建成功");
+    }
+    else
+    {
+        showDialog("创建失败"); //
+    }
     //某种数据库中的操作
 }
 
@@ -177,7 +192,7 @@ void on_click_add(GtkWidget *button, gpointer data)
 
 /***************************************************/
 
-void create_search(GtkWidget *button_ori, gpointer *data) 
+void create_search(GtkWidget *button_ori, gpointer *data)
 {
 
     GtkWidget *window;

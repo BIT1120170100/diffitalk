@@ -34,7 +34,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         strcpy(pw,password);
 
         g_print("password:%s\n", password); 
-        str_ip= SERVER_IP;
+         
 
         if ( loginAndRigistCheck(id,pw,login, str_ip,NULL) ) 
         { 

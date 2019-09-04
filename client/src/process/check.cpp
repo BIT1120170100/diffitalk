@@ -112,10 +112,39 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 		send_function(cJSON_Print(root));
 		break;
 	case chat:
+		if (strlen((char *)arg2) > 1024)
+		{
+			printf("发送内容太长，请重新发送\n");
+			break;
+		}
+		//发送类型 发送对象 发送内容 发送时间
+		cJSON_AddStringToObject(root, "type", "message/text");
+		cJSON_AddStringToObject(root, "sendto", (char *)arg1);
+		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id);
+		cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
+		cJSON_AddStringToObject(root, "content", (char *)arg2);
+		send_function(cJSON_Print(root));
+		//save the chat record while sending message
+		//save_chatrecord_single(cJSON_Print(root));
 		break;
 	case modify:
 		break;
 	case chat_together:
+		if (strlen((char *)arg2) > 1024)
+		{
+			printf("发送内容太长，请重新发送\n");
+			break;
+		}
+		//发送类型 发送对象 发送人 发送时间 发送内容  发送的群组
+		cJSON_AddStringToObject(root, "type", "message/text/group");
+		cJSON_AddNumberToObject(root, "sendto", *(int *)arg1);
+		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id);
+		cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
+		cJSON_AddStringToObject(root, "content", (char *)arg2);
+		//UNDO
+		cJSON_AddStringToObject(root, "msgID", "segmentfault");
+		send_function(cJSON_Print(root));
+		break;
 		break;
 	case friend_add:
 		cJSON_AddStringToObject(root, "type", "add-friend-request");
@@ -194,7 +223,7 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 				strcpy(currentUser.user_id, userid);
 				strcpy(currentUser.user_password, password);
 				//加载好友界面   需要发送好友信息
-
+				listUpdate(currentUser.user_id);
 				// strcpy()
 				return 1;
 			}
@@ -266,6 +295,7 @@ int addFriend(char *userid, char *c_ipAddr)
 		int status = cJSON_GetObjectItem(root, "status")->valueint;
 		if (status == 1) // 成功 返回1
 		{
+			 
 			//返回用户信息 加载回去
 			//strcpy(currentUser.user_id, userid);
 			//strcpy(currentUser.user_password, password);
@@ -290,7 +320,7 @@ int addFriend(char *userid, char *c_ipAddr)
 
 //更新好友列表
 //
-int listUpdate(char *userid, char *c_ipAddr)
+int listUpdate(char *userid)
 {
 	int port = MYPORT;
 	int MAXLINE = 4096;
@@ -309,6 +339,7 @@ int listUpdate(char *userid, char *c_ipAddr)
 
 	build_packet(list_update, userid, NULL, NULL);
 
+	//接受好友列表更新
 	while (1)
 	{
 		char recvbuf[BUFFER_SIZE];
@@ -317,7 +348,28 @@ int listUpdate(char *userid, char *c_ipAddr)
 		len = recv(client_socket, recvbuf, sizeof(recvbuf), 0);
 		cJSON *root = cJSON_Parse(recvbuf);
 		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
-		printf("%s", type);
+
+		// //friend list
+		//返回好友人数到小
+		int size = cJSON_GetObjectItem(root, "size")->valueint;
+		cJSON *list = cJSON_GetObjectItem(root, "list");
+		int i;
+		printf("friend list of user %s:\n", currentUser.user_id);
+		for (i = 0; i < size; i++)
+		{
+			cJSON *item = cJSON_GetArrayItem(list, i);
+			char *username = cJSON_GetObjectItem(item, "username")->valuestring;
+			int status = cJSON_GetObjectItem(item, "status")->valueint;
+			printf("%s [%s]\n", username, (status ? "online" : "offline"));
+			strcpy(friends[i].user_id, username); //UNDO
+			friends[i].user_online = status;
+		}
+		printf("friend list size = %d\n", size);
+		gdk_threads_enter();
+		// update_friendlist(UPDATE_FRIENDLIST);
+		gdk_threads_leave();
+
+		printf("%s:", type);
 		memset(recvbuf, 0, sizeof(recvbuf));
 		//received the   receipt from server
 		int status = cJSON_GetObjectItem(root, "status")->valueint;
@@ -338,4 +390,20 @@ int listUpdate(char *userid, char *c_ipAddr)
 		}
 	}
 	return 1;
+}
+
+int sendText(char *userid, char *recv_id) //char *c_ipAddr, char *email)
+{
+
+	// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+	// char *sendtime = cJSON_GetObjectItem(root, "sendtime")->valuestring;
+	// char *content = cJSON_GetObjectItem(root, "content")->valuestring;
+	/*
+		printf("user %s sent a message to you at %s, \nmessage is %s\n",
+			sendfrom, sendtime, content);*/
+	//save chat record when receiving new message
+	gdk_threads_enter();
+//	save_chatrecord_single(message);
+	gdk_threads_leave();
+	//exec_cmd(13, "single", sendfrom);
 }
