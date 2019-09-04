@@ -217,6 +217,7 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 		{
 			//received the login receipt from server
 			int status = cJSON_GetObjectItem(root, "status")->valueint;
+			printf("the status is : %d\n",status);
 			if (status) //登陆成功 返回1
 			{
 				//返回用户信息 加载回去
@@ -229,7 +230,7 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 			}
 			else
 			{
-				showDialog("密码输入错误或当前用户名不存在！");
+				//showDialog("密码输入错误或当前用户名不存在！");
 				return 0;
 			}
 		}
@@ -350,7 +351,7 @@ int listUpdate(char *userid)
 		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
 
 		// //friend list
-		//返回好友人数到小
+		//返回好友人数到
 		int size = cJSON_GetObjectItem(root, "size")->valueint;
 		cJSON *list = cJSON_GetObjectItem(root, "list");
 		int i;
@@ -375,17 +376,13 @@ int listUpdate(char *userid)
 		int status = cJSON_GetObjectItem(root, "status")->valueint;
 		if (status) // 成功 返回1
 		{
-			//返回用户信息 加载回去
-			//strcpy(currentUser.user_id, userid);
-			//strcpy(currentUser.user_password, password);
-			// strcpy()
 			//添加成功 在界面加载
 			printf("success!");
 			return 1;
 		}
 		else
 		{
-			showDialog("当前用户名不存在！");
+			// showDialog("当前用户名不存在！");
 			return 0;
 		}
 	}
@@ -406,4 +403,61 @@ int sendText(char *userid, char *recv_id) //char *c_ipAddr, char *email)
 //	save_chatrecord_single(message);
 	gdk_threads_leave();
 	//exec_cmd(13, "single", sendfrom);
+}
+
+int addGroup(char *groupid,char * str_ip)
+{
+	
+	int port = MYPORT;
+	int MAXLINE = 4096;
+	char buf[MAXLINE];
+	Data data;
+
+	// printf("c_ip: %s\n", c_ipAddr);
+	// client_socket = init_client(MYPORT, c_ipAddr);
+
+	printf("kkk:%d\n", client_socket);
+	if (client_socket < 0)
+	{
+		printf("create socket error\n");
+		exit(0);
+	}
+
+	build_packet(friend_add, groupid, NULL, NULL);
+
+	while (1)
+	{
+		char recvbuf[BUFFER_SIZE];
+		memset(recvbuf, 0, sizeof(BUFFER_SIZE));
+		long len;
+		len = recv(client_socket, recvbuf, sizeof(recvbuf), 0);
+		cJSON *root = cJSON_Parse(recvbuf);
+		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
+		printf("%s", type);
+		memset(recvbuf, 0, sizeof(recvbuf));
+		//received the   receipt from server
+		int status = cJSON_GetObjectItem(root, "status")->valueint;
+		if (status == 1) // 成功 返回1
+		{
+			 
+			//返回用户信息 加载回去
+			//strcpy(currentUser.user_id, userid);
+			//strcpy(currentUser.user_password, password);
+			// strcpy()
+			//添加成功 在界面加载
+			printf("success!");
+			return 1;
+		}
+		else if (!status)
+		{
+			showDialog("已经是好友了");
+			return 0;
+		}
+		else
+		{
+			showDialog("没有此用户");
+			return 0;
+		}
+	}
+	return 1;
 }

@@ -8,6 +8,9 @@
 /***************************************************/
 #include <gtk/gtk.h>
 #include "../include/group.h"
+#include"../include/check.h"
+#include "../include/data.h"
+#include "../include/errorMess.h"
 static GtkWidget *entry_new;    //新建群组的输入框
 static GtkWidget *entry_search; //搜索群组的输入框
 static GtkWidget *text_view;
@@ -63,9 +66,22 @@ inline void change_background(GtkWidget *widget, int w, int h, const gchar *path
 /*返回值：VOID(其实应该是用户信息，但是我不知道数据库那边用的什么数据结构)
 /*作者：卢虹羽
 /***************************************************/
-void on_group_search(GtkWidget *button, gpointer data)
+void on_group_search(GtkWidget *button, gpointer *data)
 {
     const gchar *ID = gtk_entry_get_text(GTK_ENTRY(entry_search)); //获取ID
+
+      char id[10];
+    strcpy(id, ID);
+    if (addGroup(id, str_ip))
+    { 
+        //成功后更新列表
+        //listUpdate(currentUser.user_id);
+        printf("创建成功");
+    }
+    else
+    {
+        showDialog("创建失败"); //
+    } 
 }
 
 /**************************************************/
