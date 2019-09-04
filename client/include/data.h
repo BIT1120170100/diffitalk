@@ -99,4 +99,5 @@ typedef struct MyUser{
     char user_birth[STRING_LEN];
     bool user_online;
 }MyUser; 
+static MyUser currentUser;
 #endif
