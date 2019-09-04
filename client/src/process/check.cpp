@@ -41,8 +41,303 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
-MyUser currentUser;
-int client_socket;
+char buffer[BUFFER_SIZE], send_buffer[BUFFER_SIZE];
+//MyUser currentUser;
+//监听 接受线程
+//在主函数创建
+void recv_thread()
+{
+	int numbytes;
+	while (1)
+	{
+		memset(buffer, 0, BUFFER_SIZE);
+		numbytes = recv(client_socket, buffer, BUFFER_SIZE, 0);
+		printf("recv over, client_socket = %d, numbytes = %d\n", client_socket);
+		if (numbytes == 0)
+		{
+			printf("server offline.\n");
+			exit(1);
+		}
+		if (numbytes == -1)
+		{
+			perror("error receiving message\n");
+			exit(1);
+		}
+		printf("recv judge over, client_socket = %d\n", client_socket);
+		//buffer[numbytes] = '\0';
+		printf("received message from server: \"%s\"\n", buffer);
+		printf("before handle message, client_socket = %d\n", client_socket);
+		//gdk_threads_enter();
+		handle_message(buffer);
+		//gdk_threads_leave();
+	}
+}
+
+//处理信息
+void handle_message(char *message)
+{
+	//gdk_threads_enter();
+	printf("handle message start, client_socket = %d\n", client_socket);
+	cJSON *root = cJSON_Parse(message);
+	if (root == NULL)
+	{
+		printf("json parse error, message is \"%s\"\n", message);
+		return;
+	}
+	char *type = cJSON_GetObjectItem(root, "type")->valuestring;
+
+	printf("handle_message: %s\n", type);
+
+	if (strcmp(type, "register-receipt") == 0)
+	{
+		int status = cJSON_GetObjectItem(root, "status")->valueint;
+		char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
+		char *password = cJSON_GetObjectItem(root, "password")->valuestring;
+		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
+		gdk_threads_enter();
+		if (status == 1)
+		{
+			char str[100] = "登陆成功 用户的ID是: \n";
+			strcat(str, userid);
+			showDialog(str);
+			printf("registered new user  successfully\n");
+			strcpy(currentUser.user_password, password);
+			strcpy(currentUser.user_id, userid);
+			strcpy(currentUser.user_name, username);
+			//action undo
+		}
+		else
+		{
+			printf("register new user %s fail\n", username);
+			showDialog("注册失败");
+		}
+		gdk_threads_leave();
+	}
+	else if (strcmp(type, "login-receipt") == 0)
+	{
+		//received the login receipt from server
+		int status = cJSON_GetObjectItem(root, "status")->valueint;
+		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
+		char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
+		// char *password = cJSON_GetObjectItem(root, "password")->valuestring;
+		//	int userimage = cJSON_GetObjectItem(root, "image")->valueint;
+		if (status == 1)
+		{
+			//&& username != NULL
+			//login_action(username);
+			gdk_threads_enter();
+			//undo 改变在线状态
+			//change_my_portrait(userimage);
+			gdk_threads_leave();
+		}
+		else
+		{
+			showDialog("登陆失败!\n");
+			//create_new_pop_window("login failed\n");
+			exit(1);
+		}
+	}
+	// else if (strcmp(type, "force-logout-notif") == 0)
+	// {
+	// 	char *username = cJSON_GetObjectItem(root, "username");
+	// 	if (strcmp(current_username, username) == 0)
+	// 	{
+	// 		printf("user %s force logout\n", username);
+	// 		logout_action();
+	// 	}
+	// }
+	else if (strcmp(type, "message/text") == 0)
+	{
+		// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+		// char *sendtime = cJSON_GetObjectItem(root, "sendtime")->valuestring;
+		// char *content = cJSON_GetObjectItem(root, "content")->valuestring;
+		/*
+		printf("user %s sent a message to you at %s, \nmessage is %s\n",
+			sendfrom, sendtime, content);*/
+		//save chat record when receiving new message
+		gdk_threads_enter();
+		// save_chatrecord_single(message);
+		gdk_threads_leave();
+		//exec_cmd(13, "single", sendfrom);
+	}
+	// else if (strcmp(type, "return-message-filetransform") == 0)
+	// { //收到传文件的指令后新建线程传文件
+	// 	char *ipfd = cJSON_GetObjectItem(root, "Ipfd")->valuestring;
+	// 	char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+	// 	if (ipfd == NULL)
+	// 	{
+	// 		exec_cmd(5, sendfrom, "Sorry your friend is not online.");
+	// 	}
+	// 	strcpy(temp_transform_information.ip, ipfd);
+	// 	strcpy(temp_transform_information.position, cJSON_GetObjectItem(root, "content")->valuestring);
+	// 	pthread_mutex_lock(&testlock);
+	// 	pthread_t client_thread;
+	// 	printf("caonima");
+	// 	int client_thread_res = pthread_create(&client_thread, NULL, send_main, (void *)&temp_transform_information);
+	// 	pthread_mutex_unlock(&testlock);
+	// }
+	else if (strcmp(type, "message/text/group") == 0)
+	{
+		// printf("[%d]\n", root == NULL);
+		// int sendto = cJSON_GetObjectItem(root, "sendto")->valueint;
+		// printf("%d\n", sendto);
+		// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+		// printf("%s\n", sendfrom);
+		// char *sendtime = cJSON_GetObjectItem(root, "sendtime")->valuestring;
+		// printf("%s\n", sendtime);
+		// char *content = cJSON_GetObjectItem(root, "content")->valuestring;
+		// printf("%s\n", content);
+
+		/*
+		char content_text[1025];
+		int i = 0;
+		putchar('\"');
+		for(i = 0; *(content+i) != 0; i++) {
+			content_text[i] = *(content+i);
+			putchar(*(content+i));
+		}
+		putchar('\"');
+		content_text[i] = '\0';
+		printf("you have a message from group %d, sent by %s at %s:%s", sendto, sendfrom, sendtime, content_text);
+		//for group message, save chat record only when receiving a new message
+		*/
+		gdk_threads_enter();
+		// save_chatrecord_group(message);
+
+		gdk_threads_leave();
+		//exec_cmd(13, "group", &sendto);
+	}
+	else if (strcmp(type, "friend-list") == 0)
+	{
+		//friend list
+		int size = cJSON_GetObjectItem(root, "size")->valueint;
+		cJSON *list = cJSON_GetObjectItem(root, "list");
+		printf("friend list of user %s:\n", currentUser.user_id);
+		friend_list_size = size;
+		for (int i = 0; i < size; i++)
+		{
+			cJSON *item = cJSON_GetArrayItem(list, i);
+			char *userid = cJSON_GetObjectItem(item, "userid")->valuestring;
+			char *username = cJSON_GetObjectItem(item, "username")->valuestring;
+			int status = cJSON_GetObjectItem(item, "status")->valueint;
+			printf("%s [%s]\n", userid, (status ? "online" : "offline"));
+			strcpy(friends[i].user_name, username);
+			strcpy(friends[i].user_id, userid);
+			friends[i].user_online = status;
+		}
+		printf("friend list size = %d \n", friend_list_size);
+		gdk_threads_enter();
+		//UNDO
+		// update_friendlist(UPDATE_FRIENDLIST);
+		gdk_threads_leave();
+	}
+	else if (strcmp(type, "group-create-receipt") == 0)
+	{
+		int status = cJSON_GetObjectItem(root, "status")->valueint;
+		if (status == 1)
+		{
+			int groupID = cJSON_GetObjectItem(root, "groupID")->valueint;
+			printf("create group success, new group ID is %d\n", groupID);
+		}
+		else
+		{
+			printf("create group failed");
+		}
+	}
+	// else if (strcmp(type, "group-list") == 0)
+	// {
+	// 	//group list
+	// 	int size = cJSON_GetObjectItem(root, "size")->valueint;
+	// 	cJSON *list = cJSON_GetObjectItem(root, "list");
+	// 	int i;
+	// 	printf("groups of user %s:\n", currentUser.user_id);
+	// 	group_list_size = size;
+	// 	for (i = 0; i < size; i++)
+	// 	{
+	// 		cJSON *item = cJSON_GetArrayItem(list, i);
+	// 		int groupID = cJSON_GetObjectItem(item, "groupID")->valueint;
+	// 		printf("group %d\n", groupID);
+	// 		groupdata[i].groupID = groupID;
+	// 	}
+	// 	gdk_threads_enter();
+	// 	update_grouplist(UPDATE_GROUPLIST);
+	// 	gdk_threads_leave();
+	// } UNDO
+	// else if (strcmp(type, "group-profile") == 0)
+	// {
+	// 	//group profile
+	// 	//FIXME: maybe there is some bug...
+	// 	int size = cJSON_GetObjectItem(root, "member-count")->valueint;
+	// 	int groupID = cJSON_GetObjectItem(root, "groupID")->valueint;
+	// 	printf("profile of group %d:\n%d members in total\n", groupID, size);
+	// 	cJSON *list = cJSON_GetObjectItem(root, "list");
+	// 	int i;
+	// 	group_member_count = size;
+	// 	printf("size = %d\n", group_member_count);
+	// 	for (i = 0; i < size; i++)
+	// 	{
+	// 		cJSON *item = cJSON_GetArrayItem(list, i);
+	// 		char *username = cJSON_GetObjectItem(item, "username")->valuestring;
+	// 		//printf("%s\n", username);
+	// 		memset(group_members[i].username, '\0', sizeof(group_members[i].username));
+	// 		if (i < 1024)
+	// 		{
+	// 			strcpy(group_members[i].username, username);
+	// 			printf("%s\n", group_members[i].username);
+	// 		}
+	// 	}
+	// 	gdk_threads_enter();
+	// 	update_group_friend_list(group_member_count, group_members);
+	// 	gdk_threads_leave();
+	// }
+	// else if (strcmp(type, "group-join-receipt") == 0)
+	// {
+	// 	int groupID = cJSON_GetObjectItem(root, "groupID")->valueint;
+	// 	int status = cJSON_GetObjectItem(root, "status")->valueint;
+	// 	printf("join group %d %s\n", groupID, (status ? "success" : "fail"));
+	// 	gdk_threads_enter();
+	// 	update_grouplist(UPDATE_GROUPLIST);
+	// 	gdk_threads_leave();
+	// }
+	// else if (strcmp(type, "group-quit-receipt") == 0)
+	// {
+	// 	int groupID = cJSON_GetObjectItem(root, "groupID")->valueint;
+	// 	int status = cJSON_GetObjectItem(root, "status")->valueint;
+	// 	printf("quit group %d %s\n", groupID, (status ? "success" : "fail"));
+	// }
+	// else if (strcmp(type, "add-to-contact-receipt") == 0)
+	// {
+	// 	char *contact = cJSON_GetObjectItem(root, "contact")->valuestring;
+	// 	int status = cJSON_GetObjectItem(root, "status")->valueint;
+	// 	printf("add contact %s %s\n", contact, (status ? "success" : "fail"));
+	// 	gdk_threads_enter();
+	// 	update_friendlist(UPDATE_FRIENDLIST);
+	// 	gdk_threads_leave();
+	// }
+	// else if (strcmp(type, "friend-image-receipt") == 0)
+	// {
+	// 	cJSON_Print(root);
+	// 	int status = cJSON_GetObjectItem(root, "image")->valueint;
+	// 	char *username = cJSON_GetObjectItem(root, "sendto")->valuestring;
+	// 	char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+	// 	if (strcmp(username, sendfrom) == 0)
+	// 	{
+	// 		printf("friend-image-receipt:\n");
+	// 		gdk_threads_enter();
+	// 		change_my_portrait(status);
+	// 		gdk_threads_leave();
+	// 	}
+	// 	else
+	// 	{
+	// 		printf("friend-image-receipt:\n");
+	// 		gdk_threads_enter();
+	// 		change_you_portrait(status);
+	// 		gdk_threads_leave();
+	// 	}
+	// }
+	printf("handle message over, client_socket = %d\n", client_socket);
+	//gdk_threads_leave();
+}
 
 int send_function(char *message)
 {
@@ -55,7 +350,6 @@ int send_function(char *message)
 
 int init_client(int port, char *addr)
 {
-	int cli_socket;
 	int try_time;
 	struct sockaddr_in server_addr;
 
@@ -114,101 +408,57 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 		send_function(cJSON_Print(root));
 		break;
 	case chat:
+		if (strlen((char *)arg2) > 1024)
+		{
+			printf("发送内容太长，请重新发送\n");
+			break;
+		}
+		//发送类型 发送对象 发送内容 发送时间
+		cJSON_AddStringToObject(root, "type", "message/text");
+		cJSON_AddStringToObject(root, "sendto", (char *)arg1);
+		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id);
+		cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
+		cJSON_AddStringToObject(root, "content", (char *)arg2);
+		send_function(cJSON_Print(root));
+		//save the chat record while sending message
+		//save_chatrecord_single(cJSON_Print(root));
 		break;
 	case modify:
 		break;
 	case chat_together:
-		break;
-	case friend_add:
-		cJSON_AddStringToObject(root, "type", "add-to-contact-request");
-		//		cJSON_AddStringToObject(root, "username", current_username);
-		cJSON_AddStringToObject(root, "contact", (char *)arg1);
-		send_function(cJSON_Print(root));
-	}
-	return 1;
-}
-int parse_packet(Packet packet, Kind *kind, Data *data)
-{
-	*kind = packet.kind;
-	*data = packet.data;
-	return 0;
-}
-//登陆 的userid是id 注册的userid 是用户名
-int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr, char *email)
-{
-	int port = MYPORT;
-	int MAXLINE = 4096;
-	char buf[MAXLINE];
-	Data data;
-
-	printf("c_ip: %s\n", c_ipAddr);
-	client_socket = init_client(MYPORT, c_ipAddr);
-
-	printf("kkk:%d\n", client_socket);
-	if (client_socket < 0)
-	{
-		printf("create socket error\n");
-		exit(0);
-	}
-	switch (kind)
-	{
-	case login:
-		build_packet(kind, userid, password, NULL);
-		break;
-	case regist:
-		build_packet(kind, userid, password, email);
-		break;
-	default:
-		perror("kind is error in bulid paclet！");
-	}
-
-	while (1)
-	{
-		char recvbuf[BUFFER_SIZE];
-		memset(recvbuf, 0, sizeof(BUFFER_SIZE));
-		long len;
-		len = recv(client_socket, recvbuf, sizeof(recvbuf), 0);
-		cJSON *root = cJSON_Parse(recvbuf);
-		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
-		printf("%s", type);
-		memset(recvbuf, 0, sizeof(recvbuf));
-		if (strcmp(type, "login-receipt") == 0)
+		if (strlen((char *)arg2) > 1024)
 		{
-			//received the login receipt from server
-			int status = cJSON_GetObjectItem(root, "status")->valueint;
-			if (status) //登陆成功 返回1
-			{
-				//返回用户信息 加载回去
-				strcpy(currentUser.user_id, userid);
-				strcpy(currentUser.user_password, password);
-				// strcpy()
-				return 1;
-			}
-			else
-			{
-				showDialog("密码输入错误或当前用户名不存在！");
-				return 0;
-			}
-		}
-		else if (strcmp(type, "register-receipt") == 0)
-		{
-			//received the login receipt from server
-			int status = cJSON_GetObjectItem(root, "status")->valueint;
-			char *user_id = cJSON_GetObjectItem(root, "userid")->valuestring;
-			if (status)
-			{
-				showDialog(user_id);
-				strcpy(currentUser.user_id, user_id);
-				strcpy(currentUser.user_password, password);
-				strcpy(currentUser.user_name, userid);
-			}
-			else
-			{
-				showDialog("注册失败！");
-			}
+			printf("发送内容太长，请重新发送\n");
 			break;
 		}
+		//发送类型 发送对象 发送人 发送时间 发送内容  发送的群组
+		cJSON_AddStringToObject(root, "type", "message/text/group");
+		cJSON_AddNumberToObject(root, "sendto", *(int *)arg1);
+		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id);
+		cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
+		cJSON_AddStringToObject(root, "content", (char *)arg2);
+		//UNDO
+		cJSON_AddStringToObject(root, "msgID", "segmentfault");
+		send_function(cJSON_Print(root));
+		break;
+		break;
+	case friend_add:
+		cJSON_AddStringToObject(root, "type", "add-friend-request");
+		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
+		cJSON_AddStringToObject(root, "friendid", (char *)arg1);
+		send_function(cJSON_Print(root));
+		break;
+	case list_update: //添加后更新好友列表
+		cJSON_AddStringToObject(root, "type", "friend-list-request");
+		cJSON_AddStringToObject(root, "username", currentUser.user_id);
+		send_function(cJSON_Print(root));
+		break;
+	case group_add:
+		cJSON_AddStringToObject(root, "type", "add-group-request");
+		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
+		cJSON_AddStringToObject(root, "groupid", (char *)arg1);
+		send_function(cJSON_Print(root));
+		break;
 	}
-	printf("????");
 	return 1;
 }

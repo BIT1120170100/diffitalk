@@ -1,4 +1,3 @@
-
 #include "../include/main_window.h"
 #include "../include/settings.h"
 #include "../include/chatWindow.h"
@@ -6,6 +5,8 @@
 #include "../include/myself_setting.h"
 #include "../include/list.h"
 #include"../include/group.h"
+#include"../include/data.h"
+#include"../include/search.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -121,8 +122,9 @@ GtkWidget *create_main_window()
     GtkWidget *button;
     //
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-     
-    gtk_window_set_default_size(GTK_WINDOW(window), 90, 700);
+    
+    gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
+    gtk_widget_set_size_request(window, 350, 780);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(on_click_close), exit_window);
@@ -134,21 +136,19 @@ GtkWidget *create_main_window()
      
     table1 = gtk_table_new(1, 5, TRUE);
     head = gtk_button_new();
-    headbox = gtk_vbox_new(FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(head), headbox);
-    gtk_widget_set_size_request(head, 30, 30);
-    username = gtk_label_new("username");
-    gtk_box_pack_start(GTK_BOX(box1), head, FALSE, FALSE, 3);
+    headbox = gtk_fixed_new();
+
+    gtk_fixed_put(GTK_FIXED(headbox),head,120,0);
+    gtk_widget_set_size_request(head, 70, 70);
+   // g_print("%s\n",currentUser.user_id);
+    username = gtk_label_new(currentUser.user_id);
+    gtk_box_pack_start(GTK_BOX(box1), headbox, FALSE, FALSE, 3);
     gtk_box_pack_start(GTK_BOX(box1), username, FALSE, FALSE, 3);
     gtk_table_set_row_spacings(GTK_TABLE(table1), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table1), 5);
     gtk_box_pack_start(GTK_BOX(box1), table1, FALSE, FALSE, 3);
-    searchtext = gtk_entry_new();
-    searchbutton = gtk_button_new_with_label("search");
-    g_signal_connect(searchbutton, "clicked",
-                     G_CALLBACK(create_group), NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table1), searchtext, 0, 4, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table1), searchbutton, 4, 5, 0, 1);
+    
+    
 
     s = gtk_hseparator_new();
     gtk_box_pack_start(GTK_BOX(box1), s, FALSE, FALSE, 3);
@@ -162,7 +162,7 @@ GtkWidget *create_main_window()
     gtk_box_pack_start(GTK_BOX(box2),group,TRUE,TRUE,0);
     scrolled_window=gtk_scrolled_window_new(NULL,NULL);
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window),10);
-    gtk_widget_set_size_request(scrolled_window,70,500);
+    gtk_widget_set_size_request(scrolled_window,70,400);
 
     g_signal_connect(group,"clicked",
         G_CALLBACK(on_click_group),scrolled_window);
@@ -170,6 +170,10 @@ GtkWidget *create_main_window()
         G_CALLBACK(on_click_friend),scrolled_window);
     gtk_box_pack_start(GTK_BOX(box1),scrolled_window,FALSE,FALSE,3);
     
+    searchbutton = gtk_button_new_with_label("search");
+    g_signal_connect(searchbutton, "clicked",
+                     G_CALLBACK(create_search), NULL);
+    gtk_box_pack_start(GTK_BOX(box1), searchbutton, FALSE, FALSE, 3);
     settingsbutton = gtk_button_new_with_label("settings");
     gtk_box_pack_start(GTK_BOX(box1), settingsbutton, FALSE, FALSE, 3);
     g_signal_connect(settingsbutton, "button_press_event",

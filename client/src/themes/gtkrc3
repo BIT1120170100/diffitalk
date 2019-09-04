@@ -1,0 +1,19 @@
+style"default"
+{
+    fg[NORMAL]="#800000"
+    fg[PRELIGHT]="#FFE4E1"
+    fg[ACTIVE]="#FFE4E1"
+    fg[INSENSITIVE]="#FFE4E1"
+    text[NORMAL]="#800000"
+
+    bg[NORMAL]="#FFE4E1"
+    bg[PRELIGHT]="#800000"
+    bg[ACTIVE]="#800000"
+    bg[INSENSITIVE]="#800000"
+    base[NORMAL]="#FFE4E1"
+
+    #bg_pixmap[NORMAL]="../source/skins/bg.jpg"
+    #bg_pixmap[ACTIVE]="../source/skins/bg.jpg"
+    #bg_pixmap[PRELIGHT]="../source/skins/bg.jpg"
+}
+class "GtkWidget" style "default"

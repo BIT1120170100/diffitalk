@@ -2,7 +2,7 @@
 #include "../include/messList.h"
 #include "../include/myInfo.h"
 #include <gtk/gtk.h>
-
+#include <stdio.h>
 #include "util/util.h" 
 #include <stdlib.h>   
 #include <arpa/inet.h>
@@ -37,7 +37,32 @@ int main(int argc, char *argv[])
 {
         gtk_init(&argc, &argv);
         str_ip=(char*)argv[1];
-        gtk_rc_parse("gtkrc");
+        FILE *fp;
+        char theme;
+        if((fp=fopen("themes/theme.txt","r"))==NULL){
+                printf("cannot open file\n");
+        }
+        theme=getc(fp);
+        fclose(fp);
+        printf("%c\n",theme);
+        switch(theme){
+                case '1':
+                        gtk_rc_parse("themes/gtkrc1");
+                        break;
+                case '2':
+                        gtk_rc_parse("themes/gtkrc2");
+                        break;
+                case '3':
+                        gtk_rc_parse("themes/gtkrc3");
+                        break;
+                case '4':
+                        gtk_rc_parse("themes/gtkrc4");
+                        break;
+                case '5':
+                        gtk_rc_parse("themes/gtkrc5");
+                        break;
+        }
+        
         //main_window=create_main_window();
         login_window = create_login();
         regist_window = create_regist();

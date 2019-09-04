@@ -1,0 +1,19 @@
+style"default"
+{
+    fg[NORMAL]="#2E8B57"
+    fg[PRELIGHT]="#A0FEA0"
+    fg[ACTIVE]="#A0FEA0"
+    fg[INSENSITIVE]="#A0FEA0"
+    text[NORMAL]="#2E8B57"
+
+    bg[NORMAL]="#A0FEA0"
+    bg[PRELIGHT]="#2E8B57"
+    bg[ACTIVE]="#2E8B57"
+    bg[INSENSITIVE]={0.26,0.73,0.30}
+    base[NORMAL]="#A0FEA0"
+
+    #bg_pixmap[NORMAL]="../source/skins/bg.jpg"
+    #bg_pixmap[ACTIVE]="../source/skins/bg.jpg"
+    #bg_pixmap[PRELIGHT]="../source/skins/bg.jpg"
+}
+class "GtkWidget" style "default"

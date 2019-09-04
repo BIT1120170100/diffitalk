@@ -4,4 +4,5 @@
 #include<stdio.h>
 #include"main.h"
 void create_group(GtkWidget *button_ori, gpointer *data);
+void on_group_search(GtkWidget *button, gpointer *data);
 #endif

@@ -32,8 +32,11 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
-int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr, char *email );
-
-int build_packet(Kind kind, void *arg1, void *arg2, void *arg3 ) ;
- 
+//int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr, char *email );
+void handle_message(char *message);
+void recv_thread();
+//int build_packet(Kind kind, void *arg1, void *arg2, void *arg3 ) ; 
+//int addFriend(char *userid, char *c_ipAddr);
+// int listUpdate(char *userid); 
+ //int addGroup(char *groupid,char * str_ip);
 #endif

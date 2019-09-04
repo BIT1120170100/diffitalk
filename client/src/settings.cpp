@@ -1,4 +1,4 @@
-
+#include<stdio.h>
 #include"../include/settings.h"
 //#include"main.h"
 extern GtkWidget* main_window;
@@ -7,6 +7,8 @@ extern GtkWidget* regist_window;
 extern GtkWidget* reset_window;
 extern GtkWidget* settings_window;
 extern GtkWidget* exit_window;
+char theme;
+FILE *fp;
 /**************************************************/
 /*名称：settings
 /*描述 设置按钮的回调函数
@@ -36,25 +38,34 @@ gint on_settings_close(GtkWidget* button,GtkWidget* data){
 }
 
 void on_radio_clicked(GtkWidget* radio,gint data){
-    GdkColor color;
+    
     switch((int)data){
         case 1:
-        color=white;
+        theme='1';
         break;
         case 2:
-        color=skyblue;
+        theme='2';
         break;
         case 3:
-        color=red;
+        theme='3';
         break;
         case 4:
-        color=blue;
+        theme='4';
         break;
         case 5:
-        color=aliceblue;
+        theme='5';
         break;
     }
     
+}
+
+void on_set_clicked(GtkWidget* button,gpointer data){
+    if((fp=fopen("themes/theme.txt","w+"))==NULL){
+        printf("cannot open file\n");
+    }
+    putc(theme,fp);
+    printf("%c\n",theme);
+    fclose(fp);
 }
 
 GtkWidget* create_settings(){
@@ -68,6 +79,7 @@ GtkWidget* create_settings(){
     GtkWidget* radio4;
     GtkWidget* radio5;
     GSList* group;
+    GtkWidget* button;
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     g_signal_connect(G_OBJECT(window),"delete_event",
@@ -76,7 +88,7 @@ GtkWidget* create_settings(){
     
     box=gtk_hbox_new(FALSE,0);
     gtk_container_add(GTK_CONTAINER(window),box);
-    frame=gtk_frame_new("style:");
+    frame=gtk_frame_new("change style after restart:");
     gtk_box_pack_start(GTK_BOX(box),frame,FALSE,FALSE,5);
     box1=gtk_vbox_new(FALSE,0);
     gtk_container_set_border_width(GTK_CONTAINER(box1),10);
@@ -100,7 +112,7 @@ GtkWidget* create_settings(){
     gtk_box_pack_start(GTK_BOX(box1),radio3,FALSE,FALSE,5);
 
     group=gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio3));
-    radio4=gtk_radio_button_new_with_label(group,"blue");
+    radio4=gtk_radio_button_new_with_label(group,"green");
     g_signal_connect(G_OBJECT(radio4),"released",
                     G_CALLBACK(on_radio_clicked),(gpointer)4);
     gtk_box_pack_start(GTK_BOX(box1),radio4,FALSE,FALSE,5);
@@ -111,6 +123,10 @@ GtkWidget* create_settings(){
                     G_CALLBACK(on_radio_clicked),(gpointer)5);
     gtk_box_pack_start(GTK_BOX(box1),radio5,FALSE,FALSE,5);
 
+    button=gtk_button_new_with_label("set");
+    g_signal_connect(G_OBJECT(button),"clicked",
+                    G_CALLBACK(on_set_clicked),NULL);
+    gtk_box_pack_start(GTK_BOX(box1),button,FALSE,FALSE,5);
     return window;
 }
 
