@@ -124,5 +124,5 @@ static int client_socket;
 // 服务器id
 static char *str_ip = "192.168.43.77";
 //本机的ip
-static char *my_ip;
+static char *my_ip="192.168.43.44";
 #endif

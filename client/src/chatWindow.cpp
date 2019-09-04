@@ -8,6 +8,7 @@
 /***************************************************/
 #include "../include/chatWindow.h"
 #include "../include/data.h"
+#include "../include/check.h"
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -17,8 +18,6 @@
 // gint sd;
 // struct sockaddr_in s_in;
 gchar username[64];
-gchar buf[1024];     //读缓冲区
-gchar get_buf[1048]; //写缓冲区
 gboolean isconnected = FALSE;
 static GtkWidget *text;
 static GtkTextBuffer *buffer;
@@ -268,6 +267,31 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 {
 }
 
+void  sendToText(char * mess) 
+{
+    printf("mess::");
+    const char *message;
+    GtkTextIter iter;
+    char str[2048];
+    // if (isconnected == FALSE)
+    //     return;
+    message = gtk_entry_get_text(GTK_ENTRY(message_entry));
+    g_print("%s\n", message); //后台打印
+
+    printf("mess::%s\n",mess);
+    strcpy(str,message);
+    strcat(str,mess);
+    sprintf(get_buf, "%s\n", str);
+    //write(sd, buf, 1024);//upload??
+    gtk_entry_set_text(GTK_ENTRY(message_entry), "");
+
+    //read(sd, buf, 1024);//download??
+    //sprintf(get_buf, "%s", buf);
+
+    gtk_text_buffer_get_end_iter(buffer, &iter);
+    gtk_text_buffer_insert(buffer, &iter, get_buf, -1); //write
+}
+
 /**************************************************/
 /*名称：on_send
 /*描述：在文本框中显示消息信息
@@ -283,16 +307,22 @@ void on_send(GtkButton *button, gpointer data)
     // if (isconnected == FALSE)
     //     return;
     message = gtk_entry_get_text(GTK_ENTRY(message_entry));
-    g_print("%s\n",message);//后台打印
+    g_print("%s\n", message); //后台打印
+     char s[50] = "1";
+    strcpy(s,message);
     sprintf(buf, "%s\n", message);
     //write(sd, buf, 1024);//upload??
-
     gtk_entry_set_text(GTK_ENTRY(message_entry), "");
-    
+
     //read(sd, buf, 1024);//download??
     sprintf(get_buf, "%s", buf);
+
     gtk_text_buffer_get_end_iter(buffer, &iter);
-    gtk_text_buffer_insert(buffer, &iter, get_buf, -1);//write
+    gtk_text_buffer_insert(buffer, &iter, get_buf, -1); //write
+    
+    printf("send mess:%s\n",s);
+    char *a =  currentUser.user_id; 
+    build_packet(chat, a, s, currentUser.user_id);
 }
 /**************************************************/
 /*名称：createChatWindow
@@ -321,17 +351,17 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     GtkWidget *button_file;       //file
     GtkWidget *button_history;    //history
     GtkWidget *box;               //中间功能区
-    GtkWidget *box_submit;//提交区
+    GtkWidget *box_submit;        //提交区
 
     GtkWidget *button;
     GtkWidget *view;
-    
+
     //new add
-    GtkWidget *vbox_right;//右侧QQ秀显示
-    gchar * content_another = (gchar*)data;//
-    gchar * content_self = currentUser.user_id;//
+    GtkWidget *vbox_right;                     //右侧QQ秀显示
+    gchar *content_another = (gchar *)data;    //
+    gchar *content_self = currentUser.user_id; //
     GdkPixbuf *src_pixbuf;
-    GdkPixbuf *dest_pixbuf; 
+    GdkPixbuf *dest_pixbuf;
 
     //g_print("%s\n",content_self);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -398,28 +428,27 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     gtk_widget_set_size_request(vbox, 200, 400);
     gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 3); //when you change the size of the window, only this part will change this size and the left part will not
     //second-right-1-another
-    vbox_right = gtk_vbox_new(FALSE,3);
+    vbox_right = gtk_vbox_new(FALSE, 3);
     gtk_box_pack_start(GTK_BOX(vbox), vbox_right, TRUE, TRUE, 1);
     frame = gtk_frame_new("对方ID:");
     label = gtk_label_new(content_another);
     gtk_container_add(GTK_CONTAINER(frame), label);
     gtk_box_pack_start(GTK_BOX(vbox_right), frame, TRUE, TRUE, 0);
-    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/2.jpg", NULL); 
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/2.jpg", NULL);
     dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 150, 150, GDK_INTERP_HYPER);
     image = gtk_image_new_from_pixbuf(dest_pixbuf);
     gtk_box_pack_start(GTK_BOX(vbox_right), image, TRUE, TRUE, 0);
     //second-right-2-mine
-    vbox_right = gtk_vbox_new(FALSE,3);
+    vbox_right = gtk_vbox_new(FALSE, 3);
     gtk_box_pack_start(GTK_BOX(vbox), vbox_right, TRUE, TRUE, 1);
     frame = gtk_frame_new("个人当前ID:");
     label = gtk_label_new(content_self);
     gtk_container_add(GTK_CONTAINER(frame), label);
     gtk_box_pack_start(GTK_BOX(vbox_right), frame, TRUE, TRUE, 0);
-    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/3.jpg", NULL); 
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/3.jpg", NULL);
     dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 150, 150, GDK_INTERP_HYPER);
     image = gtk_image_new_from_pixbuf(dest_pixbuf);
     gtk_box_pack_start(GTK_BOX(vbox_right), image, TRUE, TRUE, 0);
 
     gtk_widget_show_all(window);
-
 }

@@ -1,5 +1,6 @@
 #include "../../include/check.h"
 #include "../../include/login.h"
+#include "../../include/chatWindow.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -49,7 +50,7 @@ void auto_update_thread()
 		
 		sleep(10);
 
-		printf("group : %d\n friend :%d\n", group_list_size, friend_list_size);
+		// printf("group : %d\n friend :%d\n", group_list_size, friend_list_size);
 	}
 }
 
@@ -104,7 +105,7 @@ void handle_message(char *message)
 		int status = cJSON_GetObjectItem(root, "status")->valueint;
 		char *userid = cJSON_GetObjectItem(root, "userid")->valuestring;
 		char *password = cJSON_GetObjectItem(root, "password")->valuestring;
-		char *username = cJSON_GetObjectItem(root, "username")->valuestring;
+		char *username = cJSON_GetObjectItem(root, "username")->valuestring; 
 		gdk_threads_enter();
 		if (status == 1)
 		{
@@ -157,12 +158,12 @@ void handle_message(char *message)
 	}
 	else if (strcmp(type, "message/text") == 0)
 	{
-		// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
-		// char *sendtime = cJSON_GetObjectItem(root, "sendtime")->valuestring;
-		// char *content = cJSON_GetObjectItem(root, "content")->valuestring;
-		/*
-		printf("user %s sent a message to you at %s, \nmessage is %s\n",
-			sendfrom, sendtime, content);*/
+		char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring; 
+		char *content = cJSON_GetObjectItem(root, "content")->valuestring; 
+		printf("user %s sent a message to you  , message is %s\n",
+			sendfrom,  content);
+		sendToText(content);
+		printf("userrrr");
 		//save chat record when receiving new message
 		gdk_threads_enter();
 		// save_chatrecord_single(message);
@@ -258,33 +259,6 @@ void handle_message(char *message)
 		// update_grouplist(UPDATE_GROUPLIST);
 		gdk_threads_leave();
 	}
-	// else if (strcmp(type, "group-profile") == 0)
-	// {
-	// 	//group profile
-	// 	//FIXME: maybe there is some bug...
-	// 	int size = cJSON_GetObjectItem(root, "member-count")->valueint;
-	// 	int groupID = cJSON_GetObjectItem(root, "groupID")->valueint;
-	// 	printf("profile of group %d:\n%d members in total\n", groupID, size);
-	// 	cJSON *list = cJSON_GetObjectItem(root, "list");
-	// 	int i;
-	// 	group_member_count = size;
-	// 	printf("size = %d\n", group_member_count);
-	// 	for (i = 0; i < size; i++)
-	// 	{
-	// 		cJSON *item = cJSON_GetArrayItem(list, i);
-	// 		char *username = cJSON_GetObjectItem(item, "username")->valuestring;
-	// 		//printf("%s\n", username);
-	// 		memset(group_members[i].username, '\0', sizeof(group_members[i].username));
-	// 		if (i < 1024)
-	// 		{
-	// 			strcpy(group_members[i].username, username);
-	// 			printf("%s\n", group_members[i].username);
-	// 		}
-	// 	}
-	// 	gdk_threads_enter();
-	// 	update_group_friend_list(group_member_count, group_members);
-	// 	gdk_threads_leave();
-	// }
 	// else if (strcmp(type, "group-join-receipt") == 0)
 	// {
 	// 	int groupID = cJSON_GetObjectItem(root, "groupID")->valueint;
@@ -408,15 +382,12 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3)
 			printf("发送内容太长，请重新发送\n");
 			break;
 		}
-		//发送类型 发送对象 发送内容 发送时间
+		//发送类型 发送对象 发送内容  
 		cJSON_AddStringToObject(root, "type", "message/text");
 		cJSON_AddStringToObject(root, "sendto", (char *)arg1);
-		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id);
-		cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
+		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id); 
 		cJSON_AddStringToObject(root, "content", (char *)arg2);
-		send_function(cJSON_Print(root));
-		//save the chat record while sending message
-		//save_chatrecord_single(cJSON_Print(root));
+		send_function(cJSON_Print(root)); 
 		break;
 	case modify:
 		break;

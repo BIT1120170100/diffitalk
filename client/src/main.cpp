@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
         exit_window = create_exit();
         gtk_widget_show_all(login_window);
         g_thread_create((GThreadFunc)recv_thread, NULL, FALSE, NULL);
-        g_thread_create((GThreadFunc)auto_update_thread, NULL, FALSE, NULL);
+        // g_thread_create((GThreadFunc)auto_update_thread, NULL, FALSE, NULL);
 	
         gtk_main();
         return 0;

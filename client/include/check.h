@@ -27,6 +27,7 @@
 #include <time.h>
 #include "../src/util/util.h"
 #include "errorMess.h"
+#include "chatWindow.h"
 //#include "ui.h" 
 #include <stdlib.h>   
 #include <arpa/inet.h>
