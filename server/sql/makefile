@@ -1,1 +1,2 @@
-gcc -o connect connect.c `mysql_config --cflags --libs`
+all:
+	g++ -o database database.cpp `mysql_config --cflags --libs`

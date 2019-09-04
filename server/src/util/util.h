@@ -6,8 +6,7 @@ extern "C"
 {
 #endif
 
-#include "cJSON.h"
-#include "sqlite3.h"
+#include "../json/cJSON.h"
 #include <time.h>
 #include <stdio.h>
 #include <string.h>

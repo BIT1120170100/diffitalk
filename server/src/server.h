@@ -1,7 +1,8 @@
-#include "../include/data.h"
+
 #ifndef __SERVER_H
 #define __SERVER_H
 
+#include "../include/data.h"
 #include <stdio.h>
 #include <strings.h>
 #include <unistd.h>
@@ -13,7 +14,7 @@
 #include <memory.h>
 #include "util/util.h"
 
-#define LISTEN_PORT 1235 //监听端口
+#define LISTEN_PORT 6000 //监听端口
 #define BACKLOG 16 //记录日志
 #define MAX_CLIENT_COUNT 16 //最大连接数
 #define MAX_SEND_QUEUE_SIZE 256 //请求处理队列长度
@@ -99,7 +100,7 @@ void handle_client_message(struct client_property * prop, const char * message);
 
 int get_user_fd(char *username);
 
-void client_thread_function(void *arg);
+void *client_thread_function(void *arg);
 
 void* listen_thread_function(void *arg);
 

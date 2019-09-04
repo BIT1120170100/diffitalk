@@ -14,7 +14,7 @@
 #include <time.h>
 #include <pthread.h>
 
-const int MYPORT = 3440;//约定端口
+const int MYPORT = 6000;//约定端口
 const int MAXLEN = 140;  //最大消息长度
 const int STRING_LEN = 100;
 const int MAX_GROUP_NUM = 100;
