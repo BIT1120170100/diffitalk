@@ -269,7 +269,7 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 
 void  sendToText(char * mess) 
 {
-    printf("mess::");
+    printf("mess::%s\n");
     const char *message;
     GtkTextIter iter;
     char str[2048];
@@ -306,10 +306,10 @@ void on_send(GtkButton *button, gpointer data)
     GtkTextIter iter;
     // if (isconnected == FALSE)
     //     return;
+    char mes[200];
     message = gtk_entry_get_text(GTK_ENTRY(message_entry));
     g_print("%s\n", message); //后台打印
-     char s[50] = "1";
-    strcpy(s,message);
+    strcpy(mes,message);
     sprintf(buf, "%s\n", message);
     //write(sd, buf, 1024);//upload??
     gtk_entry_set_text(GTK_ENTRY(message_entry), "");
@@ -321,8 +321,9 @@ void on_send(GtkButton *button, gpointer data)
     gtk_text_buffer_insert(buffer, &iter, get_buf, -1); //write
     
     printf("send mess:%s\n",s);
-    char *a =  currentUser.user_id; 
-    build_packet(chat, a, s, currentUser.user_id);
+    
+    char to[200]='2';
+    build_packet(chat, to, mes, currentUser.user_id);
 }
 /**************************************************/
 /*名称：createChatWindow
