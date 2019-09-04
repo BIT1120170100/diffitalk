@@ -39,19 +39,19 @@ void on_radio_clicked(GtkWidget* radio,gint data){
     GdkColor color;
     switch((int)data){
         case 1:
-        color=white;
+        //color=pure white;
         break;
         case 2:
-        color=skyblue;
+        //color=sky blue;
         break;
         case 3:
-        color=red;
+        //color=red;
         break;
         case 4:
-        color=blue;
+        //color=blue;
         break;
         case 5:
-        color=aliceblue;
+        //color=aliceblue;
         break;
     }
     
