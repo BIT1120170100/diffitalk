@@ -188,6 +188,8 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 				//返回用户信息 加载回去
 				strcpy(currentUser.user_id, userid);
 				strcpy(currentUser.user_password, password);
+				//加载好友界面   需要发送好友信息 
+				
 				// strcpy()
 				return 1;
 			}
@@ -208,6 +210,8 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 				strcpy(currentUser.user_id, user_id);
 				strcpy(currentUser.user_password, password);
 				strcpy(currentUser.user_name, userid);
+				//加载好友界面   需要发送好友信息
+
 				return 1;
 			}
 			else
