@@ -17,7 +17,7 @@ extern GtkWidget* exit_window;
 /*返回值：VOID
 /*作者：刘梦涵
 /***************************************************/
-void settings(GtkWidget* button,gpointer data){
+void settings(GtkWidget* button,GtkWidget* data){
     gtk_widget_show_all(settings_window);
 }
 /**************************************************/
@@ -30,8 +30,9 @@ void settings(GtkWidget* button,gpointer data){
 /*返回值：VOID
 /*作者：刘梦涵
 /***************************************************/
-void on_settings_close(GtkWidget* button,GtkWidget* data){
-    gtk_widget_hide_all(data);
+gint on_settings_close(GtkWidget* button,GtkWidget* data){
+    gtk_widget_hide_all(settings_window);
+    return TRUE;
 }
 
 void on_radio_clicked(GtkWidget* radio,gint data){
@@ -69,7 +70,7 @@ GtkWidget* create_settings(){
     GSList* group;
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
-    g_signal_connect(G_OBJECT(window),"destroy",
+    g_signal_connect(G_OBJECT(window),"delete_event",
 			G_CALLBACK(on_settings_close),window);
 
     

@@ -5,6 +5,7 @@
 #include "../include/group.h"
 #include "../include/myself_setting.h"
 #include "../include/list.h"
+#include"../include/group.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -105,7 +106,6 @@ GtkWidget *create_main_window()
     GtkWidget *username;
     GtkWidget *searchtext;
     GtkWidget *searchbutton;
-    GtkWidget *recent;
     GtkWidget *list;
     GtkWidget *group;
     GtkWidget *settingsbutton;
@@ -128,7 +128,6 @@ GtkWidget *create_main_window()
                      G_CALLBACK(on_click_close), exit_window);
     gtk_container_set_border_width(GTK_CONTAINER(window), 20); //
   //  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
-    change_background(window, 90, 700, "../source/skins/myself_background.jpg");
 
     box1 = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(window), box1);
@@ -188,5 +187,9 @@ GtkWidget *create_main_window()
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(createMultiChatWindow), NULL);   //!!!!group chat function need to rewrite!!!
+    button = gtk_button_new_with_label("新建群聊");
+    gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
+    g_signal_connect(G_OBJECT(button), "clicked",
+                     G_CALLBACK(create_group), NULL);
     return window;
 }

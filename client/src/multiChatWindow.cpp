@@ -266,7 +266,7 @@ void createMultiChatWindow(GtkWidget *button_ori, gpointer *data)
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 600, 500);
     //设置窗口图片
-    change_background_(window, 600, 500, "../skins/chat_background.jpg");
+    change_background_(window, 600, 500, "../sources/skins/bg.jpg");
 
     //first
     hbox = gtk_hbox_new(FALSE, 3);

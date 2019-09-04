@@ -3,8 +3,8 @@
 #include<gtk/gtk.h>
 //#include"main.h"
 GtkWidget* create_settings();
-void on_settings_close(GtkWidget* button,GtkWidget* data);
-void settings(GtkWidget* button,gpointer data);
+gint on_settings_close(GtkWidget* button,GtkWidget* data);
+void settings(GtkWidget* button,GtkWidget* data);
 
 
 static GdkColor white= {0,0xffff,0xffff,0xffff};
