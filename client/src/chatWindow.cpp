@@ -1,5 +1,3 @@
-#include "../include/chatWindow.h"
-#include "../include/messList.h"
 /**************************************************/
 /*名称： chatWindow
 /*描述：单独聊天
@@ -8,6 +6,23 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
+#include "../include/chatWindow.h"
+#include "../include/data.h"
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+//定义端口号
+// #define OURPORT 8088
+// gint sd;
+// struct sockaddr_in s_in;
+gchar username[64];
+gchar buf[1024];     //读缓冲区
+gchar get_buf[1048]; //写缓冲区
+gboolean isconnected = FALSE;
+static GtkWidget *text;
+static GtkTextBuffer *buffer;
+static GtkWidget *message_entry;
 
 /**************************************************/
 /*名称：change_background
@@ -150,7 +165,7 @@ GtkWidget *create_button_history(void) //history
 
     //image = gtk_image_new_from_file("../source/icon/apple-red.jpg"); //
     button = gtk_button_new();
-    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/search.png", NULL);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/search.jpg", NULL);
     //将src_pixbuf设置成屏幕大小
     dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 30, 30, GDK_INTERP_HYPER);
     //从dest_pixbuf中读取图片存于image中
@@ -254,18 +269,43 @@ void button_send_history(GtkWidget *button, gpointer userdata)
 }
 
 /**************************************************/
-/*名称：createChatWindow
-/*描述：单人聊天界面主函数（之后应修改为可被其他文件调用）
+/*名称：on_send
+/*描述：在文本框中显示消息信息
 /*作成日期：2019/8/31
 /*参数：
-    int argc 参数个数 输入参数
-	char* argv[] 参数列表 输入参数
-/*返回值：int 0,表示函数退出成功
+/*返回值：VOID
 /*作者：卢虹羽
 /***************************************************/
-//char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code 
+void on_send(GtkButton *button, gpointer data)
+{
+    const char *message;
+    GtkTextIter iter;
+    // if (isconnected == FALSE)
+    //     return;
+    message = gtk_entry_get_text(GTK_ENTRY(message_entry));
+    g_print("%s\n",message);//后台打印
+    sprintf(buf, "%s\n", message);
+    //write(sd, buf, 1024);//upload??
 
-//void creat_single_chat
+    gtk_entry_set_text(GTK_ENTRY(message_entry), "");
+    
+    //read(sd, buf, 1024);//download??
+    sprintf(get_buf, "%s", buf);
+    gtk_text_buffer_get_end_iter(buffer, &iter);
+    gtk_text_buffer_insert(buffer, &iter, get_buf, -1);//write
+}
+/**************************************************/
+/*名称：createChatWindow
+/*描述：创建单人聊天界面函数
+/*作成日期：2019/8/31
+/*参数：
+    GtkWidget* button_ori 跳转按钮 输入参数
+	gpointer* data 输入参数 输入参数
+/*返回值：VOID
+/*作者：卢虹羽
+/***************************************************/
+//char *ip, char *name, char *msg, char *sig, int img_code, int avatar_code
+
 void createChatWindow(GtkWidget *button_ori, gpointer *data)
 {
     GtkWidget *window;
@@ -280,22 +320,27 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     GtkWidget *button_image;      //image
     GtkWidget *button_file;       //file
     GtkWidget *button_history;    //history
-    GtkWidget *box;
+    GtkWidget *box;               //中间功能区
+    GtkWidget *box_submit;//提交区
 
     GtkWidget *button;
-    GtkWidget *text_view;
-    GtkTextBuffer *buffer;
-    GtkTextIter *Iter; //no use
+    GtkWidget *view;
+    
+    //new add
+    GtkWidget *vbox_right;//右侧QQ秀显示
+    gchar * content_another = (gchar*)data;//
+    gchar * content_self = currentUser.user_id;//
+    GdkPixbuf *src_pixbuf;
+    GdkPixbuf *dest_pixbuf; 
 
-    //init
-    // gtk_init(&argc, &argv);
+    //g_print("%s\n",content_self);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_signal_connect_object(GTK_OBJECT(window), "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy), GTK_OBJECT(window));
     gtk_window_set_title(GTK_WINDOW(window), "单人聊天界面");
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 600, 500);
     //设置窗口图片
-    change_background(window, 600, 500, "../source/skins/bg.jpg");
+    change_background(window, 600, 500, "../source/skins/chat_background_blue.jpg");
 
     //first
     hbox = gtk_hbox_new(FALSE, 3);
@@ -306,10 +351,16 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
 
     //second-left
-    //second-left-1-information
-    scrolled_window = create_list();
-    gtk_widget_set_size_request(scrolled_window, 400, 250);
-    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
+    frame = gtk_frame_new("消息记录");
+    view = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(view),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    text = gtk_text_view_new();
+    //gtk_box_pack_start(GTK_BOX(vbox), view, TRUE, TRUE, 5);
+    gtk_container_add(GTK_CONTAINER(view), text);
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text));
+    gtk_container_add(GTK_CONTAINER(frame), view);
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 5);
 
     //second-left-2-function
     box = gtk_hbox_new(FALSE, 0);
@@ -329,28 +380,46 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
     //second-left-3-edit
-    text_view = gtk_text_view_new();
-    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
-    gtk_box_pack_start(GTK_BOX(vbox), text_view, TRUE, TRUE, 0);
-    button = gtk_button_new_with_label("submit");
-    gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 3);
+    box_submit = gtk_hbox_new(FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), box_submit, FALSE, FALSE, 5);
+    label = gtk_label_new("输入消息：");
+    gtk_box_pack_start(GTK_BOX(box_submit), label, FALSE, FALSE, 5);
+
+    message_entry = gtk_entry_new();
+    gtk_box_pack_start(GTK_BOX(box_submit), message_entry, FALSE, FALSE, 5);
+    button = gtk_button_new_with_label("发送");
+    gtk_box_pack_start(GTK_BOX(box_submit), button, FALSE, FALSE, 5);
+    g_signal_connect(G_OBJECT(button), "clicked",
+                     G_CALLBACK(on_send), NULL);
+    // do_connect();
 
     //second-right
     vbox = gtk_vbox_new(FALSE, 3);
     gtk_widget_set_size_request(vbox, 200, 400);
-    gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 3);
+    gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 3); //when you change the size of the window, only this part will change this size and the left part will not
     //second-right-1-another
-    frame = gtk_frame_new("Normal Label");
-    label = gtk_label_new("This should be the imformation of anotherone");
+    vbox_right = gtk_vbox_new(FALSE,3);
+    gtk_box_pack_start(GTK_BOX(vbox), vbox_right, TRUE, TRUE, 1);
+    frame = gtk_frame_new("对方ID:");
+    label = gtk_label_new(content_another);
     gtk_container_add(GTK_CONTAINER(frame), label);
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
+    gtk_box_pack_start(GTK_BOX(vbox_right), frame, TRUE, TRUE, 0);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/2.jpg", NULL); 
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 150, 150, GDK_INTERP_HYPER);
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_box_pack_start(GTK_BOX(vbox_right), image, TRUE, TRUE, 0);
     //second-right-2-mine
-    frame = gtk_frame_new("Normal Label");
-    label = gtk_label_new("This should be your imformation");
+    vbox_right = gtk_vbox_new(FALSE,3);
+    gtk_box_pack_start(GTK_BOX(vbox), vbox_right, TRUE, TRUE, 1);
+    frame = gtk_frame_new("个人当前ID:");
+    label = gtk_label_new(content_self);
     gtk_container_add(GTK_CONTAINER(frame), label);
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 1);
+    gtk_box_pack_start(GTK_BOX(vbox_right), frame, TRUE, TRUE, 0);
+    src_pixbuf = gdk_pixbuf_new_from_file("../source/icon/3.jpg", NULL); 
+    dest_pixbuf = gdk_pixbuf_scale_simple(src_pixbuf, 150, 150, GDK_INTERP_HYPER);
+    image = gtk_image_new_from_pixbuf(dest_pixbuf);
+    gtk_box_pack_start(GTK_BOX(vbox_right), image, TRUE, TRUE, 0);
 
-    //show
     gtk_widget_show_all(window);
-    // gtk_main();
+
 }
