@@ -61,7 +61,8 @@ typedef enum _kind
     chat,
     modify,
     friend_add,
-    chat_together
+    chat_together,
+    list_update
     //注册		登录 		 登出		 发送消息    修改用户密码
 } Kind; //用枚举变量表示
 typedef enum Operate_freind
