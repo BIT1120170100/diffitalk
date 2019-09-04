@@ -2,8 +2,9 @@
 #include "../include/main_window.h"
 #include "../include/settings.h"
 #include "../include/chatWindow.h"
-
+#include "../include/group.h"
 #include "../include/myself_setting.h"
+#include "../include/list.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -11,6 +12,7 @@ extern GtkWidget *regist_window;
 extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
+GtkWidget* scrolled_window;
 /**************************************************/
 /*名称：on_click_close
 /*描述：主窗口关闭按钮的回调函数
@@ -111,7 +113,7 @@ GtkWidget *create_main_window()
     GtkWidget *table1;
     GtkWidget *box2;
     //GtkWidget* box3;
-    GtkWidget *scroll;
+    //GtkWidget *scroll;
     //GtkWidget* box4;
     GtkWidget *s;
     //GtkWidget* menu;
@@ -144,6 +146,8 @@ GtkWidget *create_main_window()
     gtk_box_pack_start(GTK_BOX(box1), table1, FALSE, FALSE, 3);
     searchtext = gtk_entry_new();
     searchbutton = gtk_button_new_with_label("search");
+    g_signal_connect(searchbutton, "clicked",
+                     G_CALLBACK(create_group), NULL);
     gtk_table_attach_defaults(GTK_TABLE(table1), searchtext, 0, 4, 0, 1);
     gtk_table_attach_defaults(GTK_TABLE(table1), searchbutton, 4, 5, 0, 1);
 
@@ -152,16 +156,21 @@ GtkWidget *create_main_window()
 
     box2 = gtk_hbox_new(TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 3);
-    recent = gtk_button_new_with_label("recent");
-    list = gtk_button_new_with_label("friends");
-    group = gtk_button_new_with_label("group");
-    gtk_box_pack_start(GTK_BOX(box2), recent, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box2), list, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box2), group, TRUE, TRUE, 0);
 
-    scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_box_pack_start(GTK_BOX(box1), scroll, TRUE, FALSE, 3);
+    list=gtk_button_new_with_label("friends");
+    group=gtk_button_new_with_label("group");
+    gtk_box_pack_start(GTK_BOX(box2),list,TRUE,TRUE,0);
+    gtk_box_pack_start(GTK_BOX(box2),group,TRUE,TRUE,0);
+    scrolled_window=gtk_scrolled_window_new(NULL,NULL);
+    gtk_container_set_border_width(GTK_CONTAINER(scrolled_window),10);
+    gtk_widget_set_size_request(scrolled_window,70,500);
 
+    g_signal_connect(group,"clicked",
+        G_CALLBACK(on_click_group),scrolled_window);
+    g_signal_connect(list,"clicked",
+        G_CALLBACK(on_click_friend),scrolled_window);
+    gtk_box_pack_start(GTK_BOX(box1),scrolled_window,FALSE,FALSE,3);
+    
     settingsbutton = gtk_button_new_with_label("settings");
     gtk_box_pack_start(GTK_BOX(box1), settingsbutton, FALSE, FALSE, 3);
     g_signal_connect(settingsbutton, "button_press_event",
@@ -178,6 +187,6 @@ GtkWidget *create_main_window()
     button = gtk_button_new_with_label("跳到群组聊天界面");
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
-                     G_CALLBACK(createChatWindow), NULL);   //!!!!group chat function need to rewrite!!!
+                     G_CALLBACK(createMultiChatWindow), NULL);   //!!!!group chat function need to rewrite!!!
     return window;
 }

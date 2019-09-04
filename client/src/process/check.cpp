@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <strings.h>
 #include "../../include/data.h"
-//#include"main.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -28,7 +27,6 @@
 #include <stdio.h>
 #include <time.h>
 #include "../util/util.h"
-//#include "ui.h"
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <pthread.h>
@@ -43,7 +41,7 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
-
+MyUser currentUser;
 int client_socket;
 
 int send_function(char *message)
@@ -82,7 +80,7 @@ int init_client(int port, char *addr)
 		return cli_socket;
 }
 
-int build_packet(Kind kind, void *arg1, void *arg2)
+int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 = NULL
 {
 	cJSON *root = cJSON_CreateObject();
 	printf("build_packet init==============\n");
@@ -91,11 +89,11 @@ int build_packet(Kind kind, void *arg1, void *arg2)
 		printf("create json object failed\n");
 		return 1;
 	}
+	printf("build_packet  switch==============\n");
 	switch (kind)
 	{
 		// regist, login,  logout, chat, modify,  friend_add,chat_together
-		printf("build_packet  switch==============\n");
-	 
+
 	case login:
 		cJSON_AddStringToObject(root, "type", "login-message");
 		cJSON_AddStringToObject(root, "userid", (char *)arg1);
@@ -104,11 +102,16 @@ int build_packet(Kind kind, void *arg1, void *arg2)
 		break;
 	case logout:
 		cJSON_AddStringToObject(root, "type", "logout-message");
-	//	cJSON_AddStringToObject(root, "username", current_username); //当前的名字
+		//	cJSON_AddStringToObject(root, "username", current_username); //当前的名字
 		send_function(cJSON_Print(root));
-	//	logout_action();
+		//	logout_action();
 		break;
 	case regist:
+		cJSON_AddStringToObject(root, "type", "register-message");
+		cJSON_AddStringToObject(root, "username", (char *)arg1);
+		cJSON_AddStringToObject(root, "password", (char *)arg2);
+		cJSON_AddStringToObject(root, "email", (char *)arg3);
+		send_function(cJSON_Print(root));
 		break;
 	case chat:
 		break;
@@ -118,7 +121,7 @@ int build_packet(Kind kind, void *arg1, void *arg2)
 		break;
 	case friend_add:
 		cJSON_AddStringToObject(root, "type", "add-to-contact-request");
-//		cJSON_AddStringToObject(root, "username", current_username);
+		//		cJSON_AddStringToObject(root, "username", current_username);
 		cJSON_AddStringToObject(root, "contact", (char *)arg1);
 		send_function(cJSON_Print(root));
 	}
@@ -130,7 +133,8 @@ int parse_packet(Packet packet, Kind *kind, Data *data)
 	*data = packet.data;
 	return 0;
 }
-int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr)
+//登陆 的userid是id 注册的userid 是用户名
+int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr, char *email)
 {
 	int port = MYPORT;
 	int MAXLINE = 4096;
@@ -138,34 +142,73 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr)
 	Data data;
 
 	printf("c_ip: %s\n", c_ipAddr);
-//	client_socket = init_client(MYPORT, c_ipAddr);
+	client_socket = init_client(MYPORT, c_ipAddr);
 
-//	printf("kkk:%d\n", client_socket);
-//	if (client_socket < 0)
+	printf("kkk:%d\n", client_socket);
+	if (client_socket < 0)
 	{
- 		printf("create socket error\n");
+		printf("create socket error\n");
 		exit(0);
 	}
+	switch (kind)
+	{
+	case login:
+		build_packet(kind, userid, password, NULL);
+		break;
+	case regist:
+		build_packet(kind, userid, password, email);
+		break;
+	default:
+		perror("kind is error in bulid paclet！");
+	}
 
-	build_packet(kind, userid, password);
 	while (1)
 	{
 		char recvbuf[BUFFER_SIZE];
+		memset(recvbuf, 0, sizeof(BUFFER_SIZE));
 		long len;
 		len = recv(client_socket, recvbuf, sizeof(recvbuf), 0);
-		printf("%s", recvbuf);
 		cJSON *root = cJSON_Parse(recvbuf);
 		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
+		printf("%s", type);
 		memset(recvbuf, 0, sizeof(recvbuf));
 		if (strcmp(type, "login-receipt") == 0)
 		{
 			//received the login receipt from server
 			int status = cJSON_GetObjectItem(root, "status")->valueint;
-			printf("%d\n", status);
+			if (status) //登陆成功 返回1
+			{
+				//返回用户信息 加载回去
+				strcpy(currentUser.user_id, userid);
+				strcpy(currentUser.user_password, password);
+				// strcpy()
+				return 1;
+			}
+			else
+			{
+				showDialog("密码输入错误或当前用户名不存在！");
+				return 0;
+			}
+		}
+		else if (strcmp(type, "register-receipt") == 0)
+		{
+			//received the login receipt from server
+			int status = cJSON_GetObjectItem(root, "status")->valueint;
+			char *user_id = cJSON_GetObjectItem(root, "userid")->valuestring;
+			if (status)
+			{
+				showDialog(user_id);
+				strcpy(currentUser.user_id, user_id);
+				strcpy(currentUser.user_password, password);
+				strcpy(currentUser.user_name, userid);
+			}
+			else
+			{
+				showDialog("注册失败！");
+			}
 			break;
 		}
-		else
-			printf("????");
 	}
+	printf("????");
 	return 1;
 }

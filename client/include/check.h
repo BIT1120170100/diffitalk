@@ -26,13 +26,14 @@
 #include <stdio.h>
 #include <time.h>
 #include "../src/util/util.h"
+#include "errorMess.h"
 //#include "ui.h" 
 #include <stdlib.h>   
 #include <arpa/inet.h>
 #include <pthread.h>
 
-int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr);
+int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr, char *email );
 
-int build_packet(Kind kind, void *arg1, void *arg2);
+int build_packet(Kind kind, void *arg1, void *arg2, void *arg3 ) ;
  
 #endif

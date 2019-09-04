@@ -1,26 +1,24 @@
 CC=gcc
 PROG_NAME=main
-INCS=../include/main.h  ./json/cJSON.h  ./util/util.h ../include/check.h  ../include/login.h ../include/main_window.h \
+INCS=../include/main.h  ./json/cJSON.h  ./util/util.h ../include/check.h  ../include/login.h  ../include/main_window.h \
 	../include/regist.h ../include/reset.h ../include/settings.h ../include/errorMess.h\
 	../include/search.h   ../include/myself_setting.h \
 	../include/chatWindow.h  ../include/messList.h  ../include/myInfo.h\
+	../include/group.h ../include/list.h
 	
 SRCS=main.cpp  ./json/cJson.c   ./util/util.c  ./process/check.cpp  login.cpp main_window.cpp \
 	regist.cpp ./process/reset.cpp settings.cpp \
 	search.cpp myself_setting.cpp ./process/errorMess.cpp\
 	chatWindow.cpp  multiChatWindow.cpp ./process/messList.cpp  myInfo.cpp\
-	
+	group.cpp list.cpp
+	 
 #从xx.cpp 文件得到 xx.o 文件
 OBJS=${SRCS:.cpp=.o}
-#OBJS=main.o check.o  login.o main_window.o \
+OBJS2=main.o check.o  login.o group.o main_window.o list.o\
 	regist.o reset.o settings.o \
 	search.o myself_setting.o \
-	chatWindow.o  multiChatWindow.o  messList.o  myInfo.o
-
-OBJS2=main.o check.o  login.o main_window.o messList.o \
-	regist.o reset.o settings.o util.o\
-	search.o myself_setting.o cJSON.o\
-	chatWindow.o  multiChatWindow.o  errorMess.o  myInfo.o
+	chatWindow.o  multiChatWindow.o  messList.o  myInfo.o\
+	cJSON.o util.o  errorMess.o\
 
 #编译GTK程序时要用到的库
 LIBS=gtk+-2.0

@@ -34,14 +34,82 @@ void on_settings_close(GtkWidget* button,GtkWidget* data){
     gtk_widget_hide_all(data);
 }
 
+void on_radio_clicked(GtkWidget* radio,gint data){
+    GdkColor color;
+    switch((int)data){
+        case 1:
+        color=white;
+        break;
+        case 2:
+        color=skyblue;
+        break;
+        case 3:
+        color=red;
+        break;
+        case 4:
+        color=blue;
+        break;
+        case 5:
+        color=aliceblue;
+        break;
+    }
+    
+}
+
 GtkWidget* create_settings(){
     GtkWidget* window;
+    GtkWidget* box;
+    GtkWidget* box1;
+    GtkWidget* frame;
+    GtkWidget* radio1;
+    GtkWidget* radio2;
+    GtkWidget* radio3;
+    GtkWidget* radio4;
+    GtkWidget* radio5;
+    GSList* group;
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position(GTK_WINDOW(window),GTK_WIN_POS_CENTER);
     g_signal_connect(G_OBJECT(window),"destroy",
 			G_CALLBACK(on_settings_close),window);
 
     
+    box=gtk_hbox_new(FALSE,0);
+    gtk_container_add(GTK_CONTAINER(window),box);
+    frame=gtk_frame_new("style:");
+    gtk_box_pack_start(GTK_BOX(box),frame,FALSE,FALSE,5);
+    box1=gtk_vbox_new(FALSE,0);
+    gtk_container_set_border_width(GTK_CONTAINER(box1),10);
+    gtk_container_add(GTK_CONTAINER(frame),box1);
+
+    radio1=gtk_radio_button_new_with_label(NULL,"white");
+    g_signal_connect(G_OBJECT(radio1),"released",
+                    G_CALLBACK(on_radio_clicked),(gpointer)1);
+    gtk_box_pack_start(GTK_BOX(box1),radio1,FALSE,FALSE,5);
+
+    group=gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio1));
+    radio2=gtk_radio_button_new_with_label(group,"skyblue");
+    g_signal_connect(G_OBJECT(radio2),"released",
+                    G_CALLBACK(on_radio_clicked),(gpointer)2);
+    gtk_box_pack_start(GTK_BOX(box1),radio2,FALSE,FALSE,5);
+
+    group=gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio2));
+    radio3=gtk_radio_button_new_with_label(group,"red");
+    g_signal_connect(G_OBJECT(radio3),"released",
+                    G_CALLBACK(on_radio_clicked),(gpointer)3);
+    gtk_box_pack_start(GTK_BOX(box1),radio3,FALSE,FALSE,5);
+
+    group=gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio3));
+    radio4=gtk_radio_button_new_with_label(group,"blue");
+    g_signal_connect(G_OBJECT(radio4),"released",
+                    G_CALLBACK(on_radio_clicked),(gpointer)4);
+    gtk_box_pack_start(GTK_BOX(box1),radio4,FALSE,FALSE,5);
+
+    group=gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio4));
+    radio5=gtk_radio_button_new_with_label(group,"aliceblue");
+    g_signal_connect(G_OBJECT(radio5),"released",
+                    G_CALLBACK(on_radio_clicked),(gpointer)5);
+    gtk_box_pack_start(GTK_BOX(box1),radio5,FALSE,FALSE,5);
+
     return window;
 }
 

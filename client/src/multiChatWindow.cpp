@@ -261,7 +261,7 @@ void createMultiChatWindow(GtkWidget *button_ori, gpointer *data)
     //init
     // gtk_init(&argc, &argv);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_signal_connect_object(GTK_OBJECT(window), "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy), GTK_OBJECT(window));
     gtk_window_set_title(GTK_WINDOW(window), "单人聊天界面");
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_widget_set_size_request(window, 600, 500);
