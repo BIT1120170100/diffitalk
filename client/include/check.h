@@ -37,4 +37,5 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 int build_packet(Kind kind, void *arg1, void *arg2, void *arg3 ) ; 
 int addFriend(char *userid, char *c_ipAddr);
  int listUpdate(char *userid); 
+ int addGroup(char *groupid,char * str_ip);
 #endif

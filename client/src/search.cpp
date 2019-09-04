@@ -1,4 +1,4 @@
-#include "../include/regist.h"
+
 #include"../include/check.h"
 #include "../include/data.h"
 #include "../include/errorMess.h"
