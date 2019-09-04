@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "../json/cJSON.h" 
+#include "../json/cJSON.h"
 /**************************************************/
 /*名称： 检查部分
 /*描述： 
@@ -41,8 +41,8 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
-//MyUser currentUser; 
- 
+//MyUser currentUser;
+
 int send_function(char *message)
 {
 	char send_buffer[BUFFER_SIZE];
@@ -53,7 +53,7 @@ int send_function(char *message)
 }
 
 int init_client(int port, char *addr)
-{ 
+{
 	int try_time;
 	struct sockaddr_in server_addr;
 
@@ -122,6 +122,12 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
 		cJSON_AddStringToObject(root, "friendid", (char *)arg1);
 		send_function(cJSON_Print(root));
+		break;
+	case list_update: //添加后更新好友列表
+		cJSON_AddStringToObject(root, "type", "friend-list-request");
+		cJSON_AddStringToObject(root, "username", currentUser.user_id);
+		send_function(cJSON_Print(root));
+		break;
 	}
 	return 1;
 }
@@ -138,18 +144,17 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 	int MAXLINE = 4096;
 	char buf[MAXLINE];
 	Data data;
-	
-	//设置一个管理员权限
-	if(!strcmp(userid,"diffitalk"))
-	{
-		return  1;
-	}
 
+	//设置一个管理员权限
+	if (!strcmp(userid, "diffitalk"))
+	{
+		return 1;
+	}
 
 	printf("c_ip: %s\n", c_ipAddr);
 	client_socket = init_client(MYPORT, c_ipAddr);
 
-	//连接成功后获取用户当前的ip 
+	//连接成功后获取用户当前的ip
 
 	printf("kkk:%d\n", client_socket);
 	if (client_socket < 0)
@@ -188,8 +193,8 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 				//返回用户信息 加载回去
 				strcpy(currentUser.user_id, userid);
 				strcpy(currentUser.user_password, password);
-				//加载好友界面   需要发送好友信息 
-				
+				//加载好友界面   需要发送好友信息
+
 				// strcpy()
 				return 1;
 			}
@@ -228,15 +233,15 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 
 // 查找好友
 //输入id 返回是否添加成功  可能已经是好友，可能不能是好友，也可能不存在这个用户
-int add_friend(char *userid, char *c_ipAddr)
+int addFriend(char *userid, char *c_ipAddr)
 {
 	int port = MYPORT;
 	int MAXLINE = 4096;
 	char buf[MAXLINE];
 	Data data;
 
-	printf("c_ip: %s\n", c_ipAddr);
-	client_socket = init_client(MYPORT, c_ipAddr);
+	// printf("c_ip: %s\n", c_ipAddr);
+	// client_socket = init_client(MYPORT, c_ipAddr);
 
 	printf("kkk:%d\n", client_socket);
 	if (client_socket < 0)
@@ -246,6 +251,63 @@ int add_friend(char *userid, char *c_ipAddr)
 	}
 
 	build_packet(friend_add, userid, NULL, NULL);
+
+	while (1)
+	{
+		char recvbuf[BUFFER_SIZE];
+		memset(recvbuf, 0, sizeof(BUFFER_SIZE));
+		long len;
+		len = recv(client_socket, recvbuf, sizeof(recvbuf), 0);
+		cJSON *root = cJSON_Parse(recvbuf);
+		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
+		printf("%s", type);
+		memset(recvbuf, 0, sizeof(recvbuf));
+		//received the   receipt from server
+		int status = cJSON_GetObjectItem(root, "status")->valueint;
+		if (status == 1) // 成功 返回1
+		{
+			//返回用户信息 加载回去
+			//strcpy(currentUser.user_id, userid);
+			//strcpy(currentUser.user_password, password);
+			// strcpy()
+			//添加成功 在界面加载
+			printf("success!");
+			return 1;
+		}
+		else if (!status)
+		{
+			showDialog("已经是好友了");
+			return 0;
+		}
+		else
+		{
+			showDialog("没有此用户");
+			return 0;
+		}
+	}
+	return 1;
+}
+
+//更新好友列表
+//
+int listUpdate(char *userid, char *c_ipAddr)
+{
+	int port = MYPORT;
+	int MAXLINE = 4096;
+	char buf[MAXLINE];
+	Data data;
+
+	// printf("c_ip: %s\n", c_ipAddr);
+	// client_socket = init_client(MYPORT, c_ipAddr);
+
+	printf("kkk:%d\n", client_socket);
+	if (client_socket < 0)
+	{
+		printf("create socket error\n");
+		exit(0);
+	}
+
+	build_packet(list_update, userid, NULL, NULL);
 
 	while (1)
 	{
@@ -271,7 +333,7 @@ int add_friend(char *userid, char *c_ipAddr)
 		}
 		else
 		{
-			showDialog("密码输入错误或当前用户名不存在！");
+			showDialog("当前用户名不存在！");
 			return 0;
 		}
 	}
