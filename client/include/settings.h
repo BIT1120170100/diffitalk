@@ -5,7 +5,7 @@
 GtkWidget* create_settings();
 gint on_settings_close(GtkWidget* button,GtkWidget* data);
 void settings(GtkWidget* button,GtkWidget* data);
-
+void on_set_clicked(GtkWidget* button,gpointer data);
 /*
 static GdkColor white= {0,0xffff,0xffff,0xffff};
 static GdkColor focus={0,0xf4f4,0xa4a4,0x6060};
