@@ -41,7 +41,7 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
-MyUser currentUser;
+//MyUser currentUser;
 int client_socket;
 
 int send_function(char *message)
@@ -120,9 +120,9 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 	case chat_together:
 		break;
 	case friend_add:
-		cJSON_AddStringToObject(root, "type", "add-to-contact-request");
-		//		cJSON_AddStringToObject(root, "username", current_username);
-		cJSON_AddStringToObject(root, "contact", (char *)arg1);
+		cJSON_AddStringToObject(root, "type", "add-friend-request");
+		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
+		cJSON_AddStringToObject(root, "friendid", (char *)arg1); 
 		send_function(cJSON_Print(root));
 	}
 	return 1;
@@ -201,14 +201,75 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 				strcpy(currentUser.user_id, user_id);
 				strcpy(currentUser.user_password, password);
 				strcpy(currentUser.user_name, userid);
+				return 1;
 			}
 			else
 			{
 				showDialog("注册失败！");
+				return 0;
 			}
 			break;
-		}
+		} 
 	}
 	printf("????");
+	return 1;
+}
+
+
+// 查找好友
+//输入id 返回是否添加成功  可能已经是好友，可能不能是好友，也可能不存在这个用户
+int add_friend(char *userid,  char *c_ipAddr)
+{
+	int port = MYPORT;
+	int MAXLINE = 4096;
+	char buf[MAXLINE];
+	Data data;
+
+	printf("c_ip: %s\n", c_ipAddr);
+	client_socket = init_client(MYPORT, c_ipAddr);
+
+	printf("kkk:%d\n", client_socket);
+	if (client_socket < 0)
+	{
+		printf("create socket error\n");
+		exit(0);
+	}
+	 
+	build_packet(friend_add, userid,NULL,NULL); 
+
+	while (1)
+	{
+		char recvbuf[BUFFER_SIZE];
+		memset(recvbuf, 0, sizeof(BUFFER_SIZE));
+		long len;
+		len = recv(client_socket, recvbuf, sizeof(recvbuf), 0);
+		cJSON *root = cJSON_Parse(recvbuf);
+		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
+		printf("%s", type);
+		memset(recvbuf, 0, sizeof(recvbuf));
+		if (strcmp(type, "add-friend-receipt") == 0)
+		{
+			//received the   receipt from server
+			int status = cJSON_GetObjectItem(root, "status")->valueint;
+			if (status) // 成功 返回1
+			{
+				//返回用户信息 加载回去
+				//strcpy(currentUser.user_id, userid);
+				//strcpy(currentUser.user_password, password);
+				// strcpy()
+				//添加成功 在界面加载
+				printf("success!");
+				return 1;
+			}
+			else
+			{
+				showDialog("密码输入错误或当前用户名不存在！");
+				return 0;
+			}
+		} 
+		else 
+		{
+			showDialog("添加出错啦！");
+		}
 	return 1;
 }
