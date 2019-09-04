@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "../json/cJSON.h"
+#include "../json/cJSON.h" 
 /**************************************************/
 /*名称： 检查部分
 /*描述： 
@@ -41,9 +41,8 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
-//MyUser currentUser;
-int client_socket;
-
+//MyUser currentUser; 
+ 
 int send_function(char *message)
 {
 	char send_buffer[BUFFER_SIZE];
@@ -54,8 +53,7 @@ int send_function(char *message)
 }
 
 int init_client(int port, char *addr)
-{
-	int cli_socket;
+{ 
 	int try_time;
 	struct sockaddr_in server_addr;
 
@@ -142,7 +140,7 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 	Data data;
 	
 	//设置一个管理员权限
-	if(strcmp(userid,"diffitalk"))
+	if(!strcmp(userid,"diffitalk"))
 	{
 		return  1;
 	}
@@ -150,6 +148,8 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 
 	printf("c_ip: %s\n", c_ipAddr);
 	client_socket = init_client(MYPORT, c_ipAddr);
+
+	//连接成功后获取用户当前的ip 
 
 	printf("kkk:%d\n", client_socket);
 	if (client_socket < 0)

@@ -4,8 +4,8 @@
 #include "../include/regist.h"
 #include "../include/check.h"
 #include "../include/errorMess.h"
-#include "../include/main_window.h"
-//#include"main.h"
+#include "../include/main_window.h" 
+// #include <regex>
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
 extern GtkWidget *regist_window;
@@ -13,6 +13,26 @@ extern GtkWidget *reset_window;
 extern GtkWidget *settings_window;
 extern GtkWidget *exit_window;
 regist_info registinfo;
+
+/*
+int check_email(const char email_address[])
+{
+    std::regex pattern("([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)");
+    // 正则表达式，匹配规则：
+    // 第1组（即用户名），匹配规则：0至9、A至Z、a至z、下划线、点、连字符之中
+    // 的任意字符，重复一遍或以上
+    // 中间，一个“@”符号
+    // 第二组（即域名），匹配规则：0至9或a至z之中的任意字符重复一遍或以上，
+    // 接着一个点，接着a至z之中的任意字符重复2至3遍（如com或cn等），
+    // 第二组内部的一组，一个点，接着a至z之中的任意字符重复2遍（如cn或fr等）
+    // 内部一整组重复零次或一次
+    int flag=regex_match( email_address, pattern );
+    // 输入文件结尾符（Windows用Ctrl+Z，UNIX用Ctrl+D）结束循环
+    return flag;
+}
+ */
+
+
 /**************************************************/
 /*名称：on_register_clicked
 /*描述：注册按钮的回调函数
@@ -36,9 +56,14 @@ void on_register_clicked(GtkWidget *button, regist_info *data)
          showDialog("两次密码输入不相同！请重新输入"); //
          return ;
     }
+    // else if(check_email(email))
+    // {
+    //      showDialog("两次密码输入不相同！请重新输入"); //
+    //      return ;
+    // }
 
-    // //先设置本地ip
-    char *str_ip = SERVER_IP;
+
+    // //先设置本地ip 
     char ui[MAXLEN],pw[MAXLEN],rpw[MAXLEN],e[MAXLEN];
     strcpy(ui,userid);
     strcpy(pw,password);

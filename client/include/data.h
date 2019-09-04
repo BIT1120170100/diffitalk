@@ -84,9 +84,7 @@ typedef struct _packet{
 	Data data;		        //数据包
 }Packet;					      //通信协议
 
-
-extern char *str_ip;
-extern int client_socket;
+  
 
 typedef struct MyUser{
     char user_name[STRING_LEN];
@@ -99,5 +97,14 @@ typedef struct MyUser{
     char user_birth[STRING_LEN];
     bool user_online;
 }MyUser; 
+
+//登陆用户
 static MyUser currentUser;
+// 创建的套接字
+static int cli_socket;
+static int client_socket;
+// 服务器id
+static    char *str_ip = SERVER_IP;
+//本机的ip
+static char *my_ip;
 #endif
