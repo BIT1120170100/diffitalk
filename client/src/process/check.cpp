@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -15,14 +14,13 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 
-#include<gtk/gtk.h>
-#include<stdio.h>
-#include<strings.h>
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <strings.h>
 #include "../../include/data.h"
 //#include"main.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <strings.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -30,12 +28,11 @@
 #include <stdio.h>
 #include <time.h>
 #include "../util/util.h"
-//#include "ui.h" 
-#include <stdlib.h>   
+//#include "ui.h"
+#include <stdlib.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "../json/cJSON.h" 
-//#include"main.h"
+#include "../json/cJSON.h"
 /**************************************************/
 /*名称： 检查部分
 /*描述： 
@@ -46,8 +43,7 @@
 /*返回值： 
 /*作者： 
 /***************************************************/
-#define BUFFER_SIZE 2048
-extern char *str_ip;
+
 int client_socket;
 
 int send_function(char *message)
@@ -97,27 +93,34 @@ int build_packet(Kind kind, void *arg1, void *arg2)
 	}
 	switch (kind)
 	{
+		// regist, login,  logout, chat, modify,  friend_add,chat_together
 		printf("build_packet  switch==============\n");
-		//send to server:      0 <any string>
-		//  case 0:
-		//           send_function((char *)arg1);
-		//          break;
-
-	//register:            1 <username> <password>
-	// case 1:
-	//         cJSON_AddStringToObject(root, "type", "register-message");
-	//         cJSON_AddStringToObject(root, "username", (char *)arg1);
-	//         cJSON_AddStringToObject(root, "password",  (char *)arg1));
-	//         send_function(cJSON_Print(root));
-	//         break;
-
-	//login:               2 <username> <password>
+	 
 	case login:
 		cJSON_AddStringToObject(root, "type", "login-message");
-		cJSON_AddStringToObject(root, "userid",  (char *)arg1);
+		cJSON_AddStringToObject(root, "userid", (char *)arg1);
 		cJSON_AddStringToObject(root, "password", (char *)arg2);
 		send_function(cJSON_Print(root));
 		break;
+	case logout:
+		cJSON_AddStringToObject(root, "type", "logout-message");
+	//	cJSON_AddStringToObject(root, "username", current_username); //当前的名字
+		send_function(cJSON_Print(root));
+	//	logout_action();
+		break;
+	case regist:
+		break;
+	case chat:
+		break;
+	case modify:
+		break;
+	case chat_together:
+		break;
+	case friend_add:
+		cJSON_AddStringToObject(root, "type", "add-to-contact-request");
+//		cJSON_AddStringToObject(root, "username", current_username);
+		cJSON_AddStringToObject(root, "contact", (char *)arg1);
+		send_function(cJSON_Print(root));
 	}
 	return 1;
 }
@@ -135,35 +138,16 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr)
 	Data data;
 
 	printf("c_ip: %s\n", c_ipAddr);
-	client_socket = init_client(MYPORT, c_ipAddr);
+//	client_socket = init_client(MYPORT, c_ipAddr);
 
-	printf("kkk:%d\n", client_socket);
-	if (client_socket < 0)
+//	printf("kkk:%d\n", client_socket);
+//	if (client_socket < 0)
 	{
-		printf("create socket error\n");
+ 		printf("create socket error\n");
 		exit(0);
 	}
 
-	//data.userinfo.user_id = userid;
-	//strcpy(data.userinfo.user_password, password);
-	//printf("%s\n%s",data.userinfo.account,data.userinfo.password);
 	build_packet(kind, userid, password);
-	//write(client_socket, &packet, sizeof(Packet));
-	//read(client_socket, &packet, sizeof(Packet));
-	//parse_packet(packet, &kind, &data);
-	//printf("kkkk:\n%s\n%s\n",data.userinfo.account,data.userinfo.password);
-	//字符转换数字
-	// for(int i=strlen(username)-1,len =strlen(username)-1;i>=0;--i)
-	// {
-	//         userid += pow(10,(len-i))*(username[i]-'0' )  ;
-	// }
-	//
-	//if (kind == regist && data.userinfo.user_id)
-	//	return 1;
-	//else if (kind == login && data.userinfo.user_id)
-	//	return 1;
-	//else
-	//	return 0;
 	while (1)
 	{
 		char recvbuf[BUFFER_SIZE];
@@ -176,11 +160,11 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr)
 		if (strcmp(type, "login-receipt") == 0)
 		{
 			//received the login receipt from server
-			int status = cJSON_GetObjectItem(root, "status")->valueint; 
-			printf("%d\n",status);
+			int status = cJSON_GetObjectItem(root, "status")->valueint;
+			printf("%d\n", status);
 			break;
 		}
-		else 
+		else
 			printf("????");
 	}
 	return 1;

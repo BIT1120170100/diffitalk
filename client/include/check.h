@@ -34,6 +34,5 @@
 int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr);
 
 int build_packet(Kind kind, void *arg1, void *arg2);
-
-int build_packet(Packet *packet,Kind kind,...);
+ 
 #endif

@@ -1,11 +1,11 @@
-CC=g++
+CC=gcc
 PROG_NAME=main
 INCS=../include/main.h  ./json/cJSON.h  ./util/util.h ../include/check.h  ../include/login.h ../include/main_window.h \
 	../include/regist.h ../include/reset.h ../include/settings.h ../include/errorMess.h\
-	../include/search.h ../include/myself_setting.h \
+	../include/search.h   ../include/myself_setting.h \
 	../include/chatWindow.h  ../include/messList.h  ../include/myInfo.h\
 	
-SRCS=main.cpp  ./json/cJson.c  ./util/util.c  ./process/check.cpp  login.cpp main_window.cpp \
+SRCS=main.cpp  ./json/cJson.c   ./util/util.c  ./process/check.cpp  login.cpp main_window.cpp \
 	regist.cpp ./process/reset.cpp settings.cpp \
 	search.cpp myself_setting.cpp ./process/errorMess.cpp\
 	chatWindow.cpp  multiChatWindow.cpp ./process/messList.cpp  myInfo.cpp\

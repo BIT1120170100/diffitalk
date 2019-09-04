@@ -38,7 +38,8 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         //先设置本地ip
         str_ip="127.0.0.1";
 
-      if ( loginAndRigistCheck(id,pw,login, str_ip) )
+        if ( loginAndRigistCheck(id,pw,login, str_ip) )
+    //    if(1)
         { 
                  gtk_widget_hide_all(login_window);
                 main_window = create_main_window();
