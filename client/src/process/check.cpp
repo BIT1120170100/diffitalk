@@ -122,7 +122,7 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3) //, void *arg3 =
 	case friend_add:
 		cJSON_AddStringToObject(root, "type", "add-friend-request");
 		cJSON_AddStringToObject(root, "userid", currentUser.user_id);
-		cJSON_AddStringToObject(root, "friendid", (char *)arg1); 
+		cJSON_AddStringToObject(root, "friendid", (char *)arg1);
 		send_function(cJSON_Print(root));
 	}
 	return 1;
@@ -209,16 +209,15 @@ int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr,
 				return 0;
 			}
 			break;
-		} 
+		}
 	}
 	printf("????");
 	return 1;
 }
 
-
 // 查找好友
 //输入id 返回是否添加成功  可能已经是好友，可能不能是好友，也可能不存在这个用户
-int add_friend(char *userid,  char *c_ipAddr)
+int add_friend(char *userid, char *c_ipAddr)
 {
 	int port = MYPORT;
 	int MAXLINE = 4096;
@@ -234,8 +233,8 @@ int add_friend(char *userid,  char *c_ipAddr)
 		printf("create socket error\n");
 		exit(0);
 	}
-	 
-	build_packet(friend_add, userid,NULL,NULL); 
+
+	build_packet(friend_add, userid, NULL, NULL);
 
 	while (1)
 	{
@@ -247,29 +246,23 @@ int add_friend(char *userid,  char *c_ipAddr)
 		char *type = cJSON_GetObjectItem(root, "type")->valuestring;
 		printf("%s", type);
 		memset(recvbuf, 0, sizeof(recvbuf));
-		if (strcmp(type, "add-friend-receipt") == 0)
+		//received the   receipt from server
+		int status = cJSON_GetObjectItem(root, "status")->valueint;
+		if (status) // 成功 返回1
 		{
-			//received the   receipt from server
-			int status = cJSON_GetObjectItem(root, "status")->valueint;
-			if (status) // 成功 返回1
-			{
-				//返回用户信息 加载回去
-				//strcpy(currentUser.user_id, userid);
-				//strcpy(currentUser.user_password, password);
-				// strcpy()
-				//添加成功 在界面加载
-				printf("success!");
-				return 1;
-			}
-			else
-			{
-				showDialog("密码输入错误或当前用户名不存在！");
-				return 0;
-			}
-		} 
-		else 
-		{
-			showDialog("添加出错啦！");
+			//返回用户信息 加载回去
+			//strcpy(currentUser.user_id, userid);
+			//strcpy(currentUser.user_password, password);
+			// strcpy()
+			//添加成功 在界面加载
+			printf("success!");
+			return 1;
 		}
+		else
+		{
+			showDialog("密码输入错误或当前用户名不存在！");
+			return 0;
+		}
+	}
 	return 1;
 }
