@@ -76,6 +76,7 @@ void on_register_clicked(GtkWidget *button, regist_info *data)
     }
     else
     {
+         close(client_socket);
         showDialog("注册失败！"); //
     }
 } 

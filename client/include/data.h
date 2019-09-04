@@ -61,7 +61,8 @@ typedef enum _kind
     modify,
     friend_add,
     chat_together,
-    list_update
+    list_update,
+    group_add
     //注册		登录 		 登出		 发送消息    修改用户密码
 } Kind; //用枚举变量表示
 typedef enum Operate_freind
@@ -109,6 +110,8 @@ typedef struct MyUser
 static MyUser currentUser;
 //当前用户的好友
 static MyUser friends[MAXLEN];
+static int friend_list_size=0;
+static int group_list_size=0;
 // 创建的套接字
 static int cli_socket;
 static int client_socket;
