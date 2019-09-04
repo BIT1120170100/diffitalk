@@ -1,4 +1,3 @@
-
 #include "../include/main_window.h"
 #include "../include/settings.h"
 #include "../include/chatWindow.h"
@@ -6,6 +5,7 @@
 #include "../include/myself_setting.h"
 #include "../include/list.h"
 #include"../include/group.h"
+#include"../include/search.h"
 //#include"main.h"
 extern GtkWidget *main_window;
 extern GtkWidget *login_window;
@@ -149,7 +149,7 @@ GtkWidget *create_main_window()
     searchtext = gtk_entry_new();
     searchbutton = gtk_button_new_with_label("search");
     g_signal_connect(searchbutton, "clicked",
-                     G_CALLBACK(create_group), NULL);
+                     G_CALLBACK(create_search), NULL);
     gtk_table_attach_defaults(GTK_TABLE(table1), searchtext, 0, 4, 0, 1);
     gtk_table_attach_defaults(GTK_TABLE(table1), searchbutton, 4, 5, 0, 1);
 
