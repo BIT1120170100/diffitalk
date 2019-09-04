@@ -25,24 +25,25 @@ regist_info registinfo;
 /***************************************************/
 void on_register_clicked(GtkWidget *button, regist_info *data)
 {
-    const char *username = gtk_entry_get_text(GTK_ENTRY(data->user_id));
+    const char *userid = gtk_entry_get_text(GTK_ENTRY(data->user_id));
     const char *password = gtk_entry_get_text(GTK_ENTRY(data->password));
     const char *rpassword = gtk_entry_get_text(GTK_ENTRY(data->rpassword));
     const char *email = gtk_entry_get_text(GTK_ENTRY(data->email));
-    int userid = 0;
-    //字符转换数字
-    for (int i = strlen(username) - 1, len = strlen(username) - 1; i >= 0; --i)
+    
+    //密码不相同
+    if(strcmp(password,rpassword)!=0)
     {
-        userid += pow(10, (len - i)) * (username[i] - '0');
+         showDialog("两次密码输入不相同！请重新输入"); //
+         return ;
     }
-    g_print("username:%d\n", userid);
-    g_print("password:%s\n", password);
-    g_print("email:%s\n", email);
-    g_print("rpassword:%s\n", rpassword);
-    //先设置本地ip
-    char *str_ip = "127.0.0.1";
 
-    if (!strcmp(rpassword,password)&&loginAndRigistCheck(userid, password, regist, str_ip))
+    // //先设置本地ip
+    char *str_ip = SERVER_IP;
+    char ui[MAXLEN],pw[MAXLEN],rpw[MAXLEN],e[MAXLEN];
+    strcpy(ui,userid);
+    strcpy(pw,password);
+    strcpy(e,email);
+     if (loginAndRigistCheck(ui, pw, regist, str_ip,e))
     {
         gtk_widget_hide_all(login_window);
         main_window = create_main_window();

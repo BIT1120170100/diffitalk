@@ -27,19 +27,16 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         
         const char *username = gtk_entry_get_text(GTK_ENTRY(data->user_id));
         const char *password = gtk_entry_get_text(GTK_ENTRY(data->password));
-         int userid =0;
-        //字符转换数字
-        for(int i=strlen(username)-1,len =strlen(username)-1;i>=0;--i)
-        {
-                userid += pow(10,(len-i))*(username[i]-'0' )  ;
-        }
+         //int userid =0;
+       char id[10];
+       char pw[100];
+       strcpy(id,username);
+        strcpy(pw,password);
 
-        g_print("userid:%d\n", userid);
-        g_print("password:%s\n", password);
-        //先设置本地ip
-        str_ip="127.0.0.1";
+        g_print("password:%s\n", password); 
+        str_ip= SERVER_IP;
 
-      if ( loginAndRigistCheck(userid,password,login, str_ip) )
+        if ( loginAndRigistCheck(id,pw,login, str_ip,NULL) ) 
         { 
                 gtk_widget_hide_all(login_window);
                 main_window = create_main_window();
@@ -49,9 +46,7 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         else
         {
                 showDialog("当前不存在该用户或密码输入错误");//
-        }
-        //g_print("username:%s\n",username);
-        //g_print("password:%s\n",password);
+        } 
 }
 /**************************************************/
 /*名称：login_to_regist_clicked

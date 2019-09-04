@@ -12,7 +12,8 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <time.h>
-
+#define BUFFER_SIZE 2048
+#define SERVER_IP    "192.168.43.189"
 //extern
  const int MYPORT = 6000;//约定端口
  const int MAXLEN = 140;  //最大消息长度
@@ -82,4 +83,20 @@ typedef struct _packet{
 	Kind kind;		        //包类型
 	Data data;		        //数据包
 }Packet;					      //通信协议
+
+
+extern char *str_ip;
+extern int client_socket;
+
+typedef struct MyUser{
+    char user_name[STRING_LEN];
+    char user_id[5];//修改为字符串
+    enum Gender gender;
+    char user_password[STRING_LEN];
+    char user_mail[STRING_LEN];
+    char user_avatar[STRING_LEN];   //daiding
+    char user_note[STRING_LEN];
+    char user_birth[STRING_LEN];
+    bool user_online;
+}MyUser; 
 #endif

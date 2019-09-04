@@ -16,11 +16,24 @@
 #include<strings.h>
 #include "data.h"
 //#include"main.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <time.h>
+#include "../src/util/util.h"
+#include "errorMess.h"
+//#include "ui.h" 
+#include <stdlib.h>   
+#include <arpa/inet.h>
+#include <pthread.h>
 
+int loginAndRigistCheck(char *userid, char *password, Kind kind, char *c_ipAddr, char *email );
 
-int loginAndRigistCheck(int userid,const char *password,Kind kind, char  *c_ipAddr);
-
-int parse_packet(Packet packet,Kind *kind,Data *data);
-
-int build_packet(Packet *packet,Kind kind,...);
+int build_packet(Kind kind, void *arg1, void *arg2, void *arg3 ) ;
+ 
 #endif

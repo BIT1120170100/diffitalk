@@ -3,6 +3,11 @@
 #include "../include/myInfo.h"
 #include <gtk/gtk.h>
 
+#include "util/util.h" 
+#include <stdlib.h>   
+#include <arpa/inet.h>
+#include <pthread.h>
+#include "json/cJSON.h" 
 /**************************************************/
 /*名称： 
 /*描述：主界面函数，定义主调函数，初始化函数等功能主函数
