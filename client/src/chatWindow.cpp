@@ -328,12 +328,12 @@ void createChatWindow(GtkWidget *button_ori, gpointer *data)
     
     //new add
     GtkWidget *vbox_right;//右侧QQ秀显示
-    gchar * content_another = data;//
+    gchar * content_another = (gchar*)data;//
     gchar * content_self = currentUser.user_id;//
     GdkPixbuf *src_pixbuf;
     GdkPixbuf *dest_pixbuf; 
 
-
+    //g_print("%s\n",content_self);
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_signal_connect_object(GTK_OBJECT(window), "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy), GTK_OBJECT(window));
     gtk_window_set_title(GTK_WINDOW(window), "单人聊天界面");

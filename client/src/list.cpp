@@ -1,5 +1,6 @@
 #include"../include/list.h"
-
+#include"../include/chatWindow.h"
+//#include"../include/multiChatWindow"
 //#include"get_listinfo.h"
 #include<stdio.h>
 #include<algorithm>
@@ -36,6 +37,7 @@ Group* get_group_info(){
 MyUser* get_friend_info(){
     return test2;
 }
+
 //测试数据部分结束
 GtkWidget* groupbox[1005];
 GtkWidget* groupname[1005];
@@ -232,6 +234,7 @@ GtkWidget* update_friendlist(int oldnum,int num,MyUser* info,GtkWidget* scrolled
 		
 		friendname[i]=gtk_label_new(info[i].user_name);
         friendid[i]=gtk_button_new_with_label(info[i].user_id);
+        g_signal_connect(friendid[i],"clicked",G_CALLBACK(createChatWindow),info[i].user_id);
 		//groupid[i]=gtk_button_new_with_label("group");
 		gtk_box_pack_start(GTK_BOX(friendbox[i]),friendid[i],TRUE,TRUE,0);
         gtk_box_pack_start(GTK_BOX(friendbox[i]),friendname[i],TRUE,TRUE,0);
