@@ -121,8 +121,9 @@ GtkWidget *create_main_window()
     GtkWidget *button;
     //
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-     
-    gtk_window_set_default_size(GTK_WINDOW(window), 90, 700);
+    
+    gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
+    gtk_widget_set_size_request(window, 350, 780);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(on_click_close), exit_window);
@@ -134,11 +135,13 @@ GtkWidget *create_main_window()
      
     table1 = gtk_table_new(1, 5, TRUE);
     head = gtk_button_new();
-    headbox = gtk_vbox_new(FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(head), headbox);
-    gtk_widget_set_size_request(head, 30, 30);
+    headbox = gtk_fixed_new();
+
+    gtk_fixed_put(GTK_FIXED(headbox),head,120,0);
+    gtk_widget_set_size_request(head, 70, 70);
+
     username = gtk_label_new("username");
-    gtk_box_pack_start(GTK_BOX(box1), head, FALSE, FALSE, 3);
+    gtk_box_pack_start(GTK_BOX(box1), headbox, FALSE, FALSE, 3);
     gtk_box_pack_start(GTK_BOX(box1), username, FALSE, FALSE, 3);
     gtk_table_set_row_spacings(GTK_TABLE(table1), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table1), 5);
@@ -162,7 +165,7 @@ GtkWidget *create_main_window()
     gtk_box_pack_start(GTK_BOX(box2),group,TRUE,TRUE,0);
     scrolled_window=gtk_scrolled_window_new(NULL,NULL);
     gtk_container_set_border_width(GTK_CONTAINER(scrolled_window),10);
-    gtk_widget_set_size_request(scrolled_window,70,500);
+    gtk_widget_set_size_request(scrolled_window,70,400);
 
     g_signal_connect(group,"clicked",
         G_CALLBACK(on_click_group),scrolled_window);

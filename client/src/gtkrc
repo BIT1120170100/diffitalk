@@ -12,8 +12,8 @@ style"default"
     bg[INSENSITIVE]={0.26,0.73,0.30}
     base[NORMAL]="#F0F8FF"
 
-    bg_pixmap[NORMAL]="../source/skins/bg.jpg"
-    bg_pixmap[ACTIVE]="../source/skins/bg.jpg"
-    bg_pixmap[PRELIGHT]="../source/skins/bg.jpg"
+    #bg_pixmap[NORMAL]="../source/skins/bg.jpg"
+    #bg_pixmap[ACTIVE]="../source/skins/bg.jpg"
+    #bg_pixmap[PRELIGHT]="../source/skins/bg.jpg"
 }
 class "GtkWidget" style "default"
