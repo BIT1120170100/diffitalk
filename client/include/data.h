@@ -95,7 +95,7 @@ typedef struct MyUser
 {
     char user_name[STRING_LEN];
     char user_id[5]; //修改为字符串
-    enum Gender gender;
+    //enum Gender gender;
     char user_password[STRING_LEN];
     char user_mail[STRING_LEN];
     char user_avatar[STRING_LEN]; //daiding

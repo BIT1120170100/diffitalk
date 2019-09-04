@@ -8,41 +8,41 @@
 using namespace std;
 extern GtkWidget* scrolled_window;
 //以下为测试数据
-Group* test1=(Group*)malloc(sizeof(Group)*1005);
-User* test2=(User*)malloc(sizeof(User)*1005);
+Group test1[10]={{1,"group1",{1,2,3}},{1,"groupa",{1,2,3}},{1,"groupg",{1,2,3}},{1,"groupa",{1,2,3}},{1,"groupv",{1,2,3}}};
+MyUser test2[20]={
+    {"sada","1234","111","111","111","111","1213",TRUE},
+    {"sagsa","1214","111","111","111","111","1213",TRUE},
+    {"sadsaa","1224","111","111","111","111","1213",TRUE},
+    {"sadvxc","1234","111","111","111","111","1213",TRUE},
+    {"sdasa","1244","111","111","111","111","1213",TRUE},
+    {"sa1a","1254","111","111","111","111","1213",TRUE},
+    {"sabfd","1264","111","111","111","111","1213",TRUE},
+    {"sabbh","1234","111","111","111","111","1213",TRUE},
+    {"sazc","1234","111","111","111","111","1213",TRUE}
+};
 char a[20]="group";
 char* label[1005];
 
 int get_group_num(){
-    return 10;
+    return 3;
 }
 int get_friend_num(){
-    return 20;
+    return 5;
 }
-Group* get_group_info(){
-    int n=get_group_num();
-    for(int i=1;i<=n;i++){
-	stpcpy(test1[i].g_name,a);
-    }
 
-	a[1]+=1;
+Group* get_group_info(){
     return test1;
 }
-User* get_friend_info(){
-    int n=get_friend_num();
-    for(int i=1;i<=n;i++){
-	stpcpy(test2[i].user_name,a);
-    }
-
-	a[1]+=1;
+MyUser* get_friend_info(){
     return test2;
 }
 //测试数据部分结束
 GtkWidget* groupbox[1005];
+GtkWidget* groupname[1005];
 GtkWidget* groupid[1005];
 GtkWidget* groupboxsum;
 GtkWidget* friendbox[1005];
-GtkWidget* friendavatar[1005];
+GtkWidget* friendname[1005];
 GtkWidget* friendid[1005];
 GtkWidget* friendboxsum;
 
@@ -113,8 +113,8 @@ int cmp_group(const void * a,const void * b){
 }
 
 int cmp_friend(const void* a,const void* b){
-    User* c = (User* )a;
-	User* d = (User* )b;
+    MyUser* c = (MyUser* )a;
+	MyUser* d = (MyUser* )b;
     if(c->user_online!=d->user_online){
         if(c->user_online)
 		return 1;
@@ -138,9 +138,11 @@ int cmp_friend(const void* a,const void* b){
 /*作者：刘梦涵
 /***************************************************/
 GtkWidget* update_grouplist(int oldnum,int num,Group* info,GtkWidget* scrolled_window) {
-	if(groupboxsum!=NULL){
+	
+    if(groupboxsum!=NULL){
 		for(int i=1;i<=(oldnum);i++){
 			gtk_widget_destroy(groupid[i]);
+            gtk_widget_destroy(groupname[i]);
 			gtk_widget_destroy(groupbox[i]);
 		}
 		gtk_widget_destroy(groupboxsum);
@@ -150,6 +152,7 @@ GtkWidget* update_grouplist(int oldnum,int num,Group* info,GtkWidget* scrolled_w
 		for(int i=1;i<=(oldnum);i++){
 			gtk_widget_destroy(friendid[i]);
 			gtk_widget_destroy(friendbox[i]);
+            gtk_widget_destroy(friendname[i]);
 		}
 		gtk_widget_destroy(friendboxsum);
 	}
@@ -158,16 +161,16 @@ GtkWidget* update_grouplist(int oldnum,int num,Group* info,GtkWidget* scrolled_w
 		label[i]=(char*)malloc(STRING_LEN*sizeof(char));//
 	}
 	
-	qsort(info,(num),sizeof(Group),cmp_group);
+	//qsort(info,(num),sizeof(Group),cmp_group);
 	groupboxsum=gtk_vbox_new(FALSE,0);
 	for(int i=1;i<=(num);i++){
 		groupbox[i]=gtk_hbox_new(FALSE,0);
 		
-		label[i]=info[i].g_name;
-		
-		groupid[i]=gtk_button_new_with_label(label[i]);
-		//groupid[i]=gtk_button_new_with_label("group");
-		gtk_box_pack_start(GTK_BOX(groupbox[i]),groupid[i],TRUE,TRUE,0);
+		//label[i]=info[i].g_name;
+		groupname[i]=gtk_button_new_with_label(info[i].g_name);
+		//groupid[i]=gtk_label_new(info[i].g_id);
+		gtk_box_pack_start(GTK_BOX(groupbox[i]),groupname[i],TRUE,TRUE,0);
+        //gtk_box_pack_start(GTK_BOX(groupbox[i]),groupid[i],TRUE,TRUE,0);
 		gtk_box_pack_start(GTK_BOX(groupboxsum),groupbox[i],FALSE,FALSE,5);
 		
 	}
@@ -198,10 +201,11 @@ void on_click_group(GtkWidget* widget,GtkWidget* scrolled_window){
 /*返回值：GtkWidget*
 /*作者：刘梦涵
 /***************************************************/
-GtkWidget* update_friendlist(int oldnum,int num,User* info,GtkWidget* scrolled_window) {
+GtkWidget* update_friendlist(int oldnum,int num,MyUser* info,GtkWidget* scrolled_window) {
 	if(friendboxsum!=NULL){
 		for(int i=1;i<=(oldnum);i++){
 			gtk_widget_destroy(friendid[i]);
+            gtk_widget_destroy(friendname[i]);
 			gtk_widget_destroy(friendbox[i]);
 		}
 		gtk_widget_destroy(friendboxsum);
@@ -210,6 +214,7 @@ GtkWidget* update_friendlist(int oldnum,int num,User* info,GtkWidget* scrolled_w
 		for(int i=1;i<=(oldnum);i++){
 			gtk_widget_destroy(groupid[i]);
 			gtk_widget_destroy(groupbox[i]);
+            gtk_widget_destroy(groupname[i]);
 		}
 		gtk_widget_destroy(groupboxsum);
 	
@@ -219,15 +224,17 @@ GtkWidget* update_friendlist(int oldnum,int num,User* info,GtkWidget* scrolled_w
 		label[i]=(char*)malloc(STRING_LEN*sizeof(char));//
 	}
 
-	qsort(info,(num),sizeof(User),cmp_friend);
+	//qsort(info,(num),sizeof(User),cmp_friend);
 	friendboxsum=gtk_vbox_new(FALSE,0);
 	for(int i=1;i<=(num);i++){
-		friendbox[i]=gtk_hbox_new(FALSE,0);
+		friendbox[i]=gtk_hbox_new(TRUE,0);
 		label[i]=info[i].user_name;
 		
-		friendid[i]=gtk_button_new_with_label(label[i]);
+		friendname[i]=gtk_label_new(info[i].user_name);
+        friendid[i]=gtk_button_new_with_label(info[i].user_id);
 		//groupid[i]=gtk_button_new_with_label("group");
 		gtk_box_pack_start(GTK_BOX(friendbox[i]),friendid[i],TRUE,TRUE,0);
+        gtk_box_pack_start(GTK_BOX(friendbox[i]),friendname[i],TRUE,TRUE,0);
 		gtk_box_pack_start(GTK_BOX(friendboxsum),friendbox[i],FALSE,FALSE,5);
 	}
 
@@ -242,7 +249,7 @@ void on_click_friend(GtkWidget* widget,GtkWidget* scrolled_window){
 	int num;
     num=get_friend_num();
 	g_print("%d\n",num);
-	User* friendinfo=get_friend_info();
+	MyUser* friendinfo=get_friend_info();
 	int oldnum;
     oldnum=numnow;
 	numnow=num;

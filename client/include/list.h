@@ -13,7 +13,7 @@ Group* get_group_info();
 GtkWidget* update_friendlist(int oldnum,int num,User* info,GtkWidget* scrolled_window);
 void on_click_friend(GtkWidget* widget,GtkWidget* scrolled_window);
 int get_friend_num();
-User* get_friend_info();
+MyUser* get_friend_info();
 
 
 #endif
