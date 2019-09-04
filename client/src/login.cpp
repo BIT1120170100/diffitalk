@@ -34,17 +34,17 @@ void on_login_clicked(GtkWidget *button, login_info *data)
         strcpy(pw,password);
 
         g_print("password:%s\n", password); 
-        str_ip= SERVER_IP;
+         
 
         if ( loginAndRigistCheck(id,pw,login, str_ip,NULL) ) 
         { 
                 gtk_widget_hide_all(login_window);
                 main_window = create_main_window();
                 gtk_widget_show_all(main_window);
-               
         }
         else
         {
+                 close(client_socket);
                 showDialog("当前不存在该用户或密码输入错误");//
         } 
 }

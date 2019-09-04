@@ -1,14 +1,14 @@
 style"default"
 {
-    fg[NORMAL]="#191970"
+    fg[NORMAL]="#5F9EA0"
     fg[PRELIGHT]="#F0F8FF"
     fg[ACTIVE]="#F0F8FF"
     fg[INSENSITIVE]="#F0F8FF"
-    text[NORMAL]="#191970"
+    text[NORMAL]="#5F9EA0"
 
-    bg[NORMAL]="#D3E7EF"
-    bg[PRELIGHT]="#5F9EC0"
-    bg[ACTIVE]="#5F9EC0"
+    bg[NORMAL]="#F0F8FF"
+    bg[PRELIGHT]="#5F9EA0"
+    bg[ACTIVE]="#5F9EA0"
     bg[INSENSITIVE]={0.26,0.73,0.30}
     base[NORMAL]="#F0F8FF"
 
