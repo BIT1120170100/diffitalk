@@ -112,7 +112,7 @@ GtkWidget* create_settings(){
     gtk_box_pack_start(GTK_BOX(box1),radio3,FALSE,FALSE,5);
 
     group=gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio3));
-    radio4=gtk_radio_button_new_with_label(group,"blue");
+    radio4=gtk_radio_button_new_with_label(group,"green");
     g_signal_connect(G_OBJECT(radio4),"released",
                     G_CALLBACK(on_radio_clicked),(gpointer)4);
     gtk_box_pack_start(GTK_BOX(box1),radio4,FALSE,FALSE,5);

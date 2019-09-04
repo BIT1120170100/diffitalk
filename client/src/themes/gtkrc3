@@ -1,16 +1,16 @@
 style"default"
 {
-    fg[NORMAL]="#191970"
-    fg[PRELIGHT]="#F0F8FF"
-    fg[ACTIVE]="#F0F8FF"
-    fg[INSENSITIVE]="#F0F8FF"
-    text[NORMAL]="#191970"
+    fg[NORMAL]="#800000"
+    fg[PRELIGHT]="#FFE4E1"
+    fg[ACTIVE]="#FFE4E1"
+    fg[INSENSITIVE]="#FFE4E1"
+    text[NORMAL]="#800000"
 
-    bg[NORMAL]="#D3E7EF"
-    bg[PRELIGHT]="#5F9EC0"
-    bg[ACTIVE]="#5F9EC0"
-    bg[INSENSITIVE]={0.26,0.73,0.30}
-    base[NORMAL]="#F0F8FF"
+    bg[NORMAL]="#FFE4E1"
+    bg[PRELIGHT]="#800000"
+    bg[ACTIVE]="#800000"
+    bg[INSENSITIVE]="#800000"
+    base[NORMAL]="#FFE4E1"
 
     #bg_pixmap[NORMAL]="../source/skins/bg.jpg"
     #bg_pixmap[ACTIVE]="../source/skins/bg.jpg"
