@@ -115,18 +115,18 @@ GtkWidget *create_login()
         box2 = gtk_hbox_new(FALSE, 0);
         gtk_box_pack_start(GTK_BOX(box), box2, FALSE, FALSE, 5);
 
-        label1 = gtk_label_new("userid:");
+        label1 = gtk_label_new("用户:");
         entry1 = gtk_entry_new();
         gtk_box_pack_start(GTK_BOX(box1), label1, FALSE, FALSE, 5);
         gtk_box_pack_start(GTK_BOX(box1), entry1, FALSE, FALSE, 5);
 
-        label2 = gtk_label_new("password:");
+        label2 = gtk_label_new("密码:");
         entry2 = gtk_entry_new();
         gtk_entry_set_visibility(GTK_ENTRY(entry2), FALSE);
         gtk_box_pack_start(GTK_BOX(box2), label2, FALSE, FALSE, 5);
         gtk_box_pack_start(GTK_BOX(box2), entry2, FALSE, FALSE, 5);
 
-        login = gtk_button_new_with_label("log in");
+        login = gtk_button_new_with_label("登陆账号");
 
         info.user_id = entry1;
         info.password = entry2;
@@ -137,12 +137,12 @@ GtkWidget *create_login()
         sep = gtk_hseparator_new();
         gtk_box_pack_start(GTK_BOX(box), sep, FALSE, FALSE, 5);
 
-        reset = gtk_button_new_with_label("password reset");
+        reset = gtk_button_new_with_label("密码重置");
         g_signal_connect(G_OBJECT(reset), "clicked",
                          G_CALLBACK(login_to_reset_clicked), window);
         gtk_box_pack_start(GTK_BOX(box), reset, FALSE, FALSE, 5);
 
-        regst = gtk_button_new_with_label("register");
+        regst = gtk_button_new_with_label("注册账号");
         g_signal_connect(G_OBJECT(regst), "clicked",
                          G_CALLBACK(login_to_regist_clicked), window);
         gtk_box_pack_start(GTK_BOX(box), regst, FALSE, FALSE, 5);

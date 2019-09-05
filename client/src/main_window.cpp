@@ -156,8 +156,8 @@ GtkWidget *create_main_window()
     box2 = gtk_hbox_new(TRUE, 0);
     gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 3);
 
-    list=gtk_button_new_with_label("friends");
-    group=gtk_button_new_with_label("group");
+    list=gtk_button_new_with_label("朋友");
+    group=gtk_button_new_with_label("小组");
     gtk_box_pack_start(GTK_BOX(box2),list,TRUE,TRUE,0);
     gtk_box_pack_start(GTK_BOX(box2),group,TRUE,TRUE,0);
     scrolled_window=gtk_scrolled_window_new(NULL,NULL);
@@ -170,11 +170,11 @@ GtkWidget *create_main_window()
         G_CALLBACK(on_click_friend),scrolled_window);
     gtk_box_pack_start(GTK_BOX(box1),scrolled_window,FALSE,FALSE,3);
     
-    searchbutton = gtk_button_new_with_label("search");
+    searchbutton = gtk_button_new_with_label("搜索");
     g_signal_connect(searchbutton, "clicked",
                      G_CALLBACK(create_search), NULL);
     gtk_box_pack_start(GTK_BOX(box1), searchbutton, FALSE, FALSE, 3);
-    settingsbutton = gtk_button_new_with_label("settings");
+    settingsbutton = gtk_button_new_with_label("设置");
     gtk_box_pack_start(GTK_BOX(box1), settingsbutton, FALSE, FALSE, 3);
     g_signal_connect(settingsbutton, "button_press_event",
                      G_CALLBACK(settings), settings_window);
@@ -183,11 +183,11 @@ GtkWidget *create_main_window()
     // button = gtk_button_new_with_label("跳到单人聊天界面");
     // g_signal_connect(G_OBJECT(exit), "clicked",
                     //  G_CALLBACK( createChatWindow), NULL); //UNDO
-    button = gtk_button_new_with_label("跳到聊天界面");
+    button = gtk_button_new_with_label("聊天界面");
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(createChatWindow), NULL);
-    button = gtk_button_new_with_label("跳到群组聊天界面");
+    button = gtk_button_new_with_label("群组聊天界面");
     gtk_box_pack_start(GTK_BOX(box1), button, FALSE, FALSE, 3);
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(createMultiChatWindow), NULL);   //!!!!group chat function need to rewrite!!!

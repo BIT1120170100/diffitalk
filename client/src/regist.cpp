@@ -119,7 +119,7 @@ GtkWidget *create_regist()
     registinfo.password = entry2;
     registinfo.rpassword = entry3;
     registinfo.email = entry4;
-    regst = gtk_button_new_with_label("register");
+    regst = gtk_button_new_with_label("注册");
     g_signal_connect(G_OBJECT(regst), "clicked",
                      G_CALLBACK(on_register_clicked), &registinfo);
     gtk_box_pack_start(GTK_BOX(box), regst, FALSE, FALSE, 5);

@@ -112,7 +112,7 @@ GtkWidget* create_reset(){
     resetinfo.email=entry2;
     resetinfo.vcode=entry3;
     resetinfo.new_password=entry4;
-	reset=gtk_button_new_with_label("reset");
+	reset=gtk_button_new_with_label("重置");
 	g_signal_connect(G_OBJECT(reset),"clicked",
                     G_CALLBACK(on_reset_clicked),&resetinfo);
     gtk_box_pack_start(GTK_BOX(box),reset,FALSE,FALSE,5);

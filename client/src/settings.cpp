@@ -123,7 +123,7 @@ GtkWidget* create_settings(){
                     G_CALLBACK(on_radio_clicked),(gpointer)5);
     gtk_box_pack_start(GTK_BOX(box1),radio5,FALSE,FALSE,5);
 
-    button=gtk_button_new_with_label("set");
+    button=gtk_button_new_with_label("设置");
     g_signal_connect(G_OBJECT(button),"clicked",
                     G_CALLBACK(on_set_clicked),NULL);
     gtk_box_pack_start(GTK_BOX(box1),button,FALSE,FALSE,5);
