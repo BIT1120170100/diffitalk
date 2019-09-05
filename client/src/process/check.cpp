@@ -61,7 +61,7 @@ void recv_thread()
 {
 	int numbytes;
 	while (1)
-	{
+	{ 
 		memset(buffer, 0, BUFFER_SIZE);
 		numbytes = recv(client_socket, buffer, BUFFER_SIZE, 0);
 
@@ -78,7 +78,7 @@ void recv_thread()
 		printf("recv judge over, client_socket = %d\n", client_socket);
 		//buffer[numbytes] = '\0';
 		printf("received message from server: \"%s\"\n", buffer);
-		printf("before handle message, client_socket = %d\n", client_socket);
+		printf("before handle message, numbytes= %d\n", numbytes);
 		//gdk_threads_enter();
 		handle_message(buffer);
 		//gdk_threads_leave();
@@ -158,7 +158,8 @@ void handle_message(char *message)
 	}
 	else if (strcmp(type, "message/text") == 0)
 	{
-		char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring; 
+		char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+		char *sendto = cJSON_GetObjectItem(root, "sendto")->valuestring; 
 		char *content = cJSON_GetObjectItem(root, "content")->valuestring; 
 		printf("user %s sent a message to you  , message is %s\n",
 			sendfrom,  content);
@@ -172,15 +173,18 @@ void handle_message(char *message)
 	}
 	else if (strcmp(type, "message/text/group") == 0)
 	{
-		// printf("[%d]\n", root == NULL);
-		// int sendto = cJSON_GetObjectItem(root, "sendto")->valueint;
-		// printf("%d\n", sendto);
-		// char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
-		// printf("%s\n", sendfrom);
-		// char *sendtime = cJSON_GetObjectItem(root, "sendtime")->valuestring;
-		// printf("%s\n", sendtime);
-		// char *content = cJSON_GetObjectItem(root, "content")->valuestring;
-		// printf("%s\n", content);
+		char *sendfrom = cJSON_GetObjectItem(root, "sendfrom")->valuestring;
+		char *sendto = cJSON_GetObjectItem(root, "sendto")->valuestring; 
+		char *content = cJSON_GetObjectItem(root, "content")->valuestring; 
+		printf("user %s sent a message to you  , message is %s\n",
+			sendfrom,  content);
+		sendToText(content);
+		printf("userrrr");
+		//save chat record when receiving new message
+		gdk_threads_enter();
+		// save_chatrecord_single(message);
+		gdk_threads_leave();
+		//exec_cmd(13, "single", sendfrom);
 
 		/*
 		char content_text[1025];
@@ -401,10 +405,10 @@ int build_packet(Kind kind, void *arg1, void *arg2, void *arg3)
 		cJSON_AddStringToObject(root, "type", "message/text/group");
 		cJSON_AddNumberToObject(root, "sendto", *(int *)arg1);
 		cJSON_AddStringToObject(root, "sendfrom", currentUser.user_id);
-		cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
+		//cJSON_AddStringToObject(root, "sendtime", get_formatted_time());
 		cJSON_AddStringToObject(root, "content", (char *)arg2);
 		//UNDO
-		cJSON_AddStringToObject(root, "msgID", "segmentfault");
+		//cJSON_AddStringToObject(root, "msgID", "segmentfault");
 		send_function(cJSON_Print(root));
 		break;
 	case friend_add:
